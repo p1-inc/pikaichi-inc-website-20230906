@@ -1,0 +1,107 @@
+$breakpoint: (
+    sp: "screen and (max-width: 599px)",
+    tab: "screen and (max-width: 1024px)",
+    pc: "screen and (max-width: 1425px)",
+    max: "screen and (min-width: 1426px)",
+);
+
+@mixin mq($bp) {
+    @media #{map-get($breakpoint, $bp)} {
+        @content;
+    }
+}
+
+$orange: #e36234;
+$yellow: #eca71c;
+$green: #5ebc92;
+$yellowgreen: #83d193;
+$blue: #3eafbf;
+$purple: #8082b0;
+$redpurple: #91465f;
+
+$l_purple: #f9cec7;
+$l_pink: #eca71c;
+$l_green: #b4efd3;
+$l_blue: #a2d7dd;
+$l_yellow: #f9d28c;
+$l_yellowbrown: #e5d590;
+
+$l2_purple: #e7dce4;
+$l2_pink: #fce6e3;
+$l2_green: #d9f7e9;
+$l2_blue: #d0ebee;
+$l2_yellow: #fce8c5;
+$l2_yellowbrown: #f2eac7;
+
+.backgroundIllustration {
+    background-image: url(../../public//img/backgroundIllustration.png);
+    background-size: 50%;
+}
+
+.button {
+    margin: 0 auto;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 1rem;
+    color: #fff;
+    font-size: 1.8rem;
+}
+
+.topview {
+    width: 100%;
+    margin: 0 auto;
+    background-image: url(../../public//img/background_01.svg);
+    background-repeat: no-repeat;
+
+    .fix {
+        position: fixed;
+    }
+
+    //     @keyframes fluffy {
+    //         0% {
+    //             transform: translate(-50%, -50%) scale(1);
+    //         }
+    //
+    //         25% {
+    //             transform: translate(-50%, -50%) scale(1.02, 1.06);
+    //         }
+    //
+    //         50% {
+    //             transform: translate(-50%, -50%) scale(1, 1);
+    //         }
+    //
+    //         75% {
+    //             transform: translate(-50%, -50%) scale(1.06, 1.02);
+    //         }
+    //
+    //         100% {
+    //             transform: translate(-50%, -50%) scale(1);
+    //         }
+    //     }
+    //
+    //     @keyframes vibrate-1 {
+    //         0% {
+    //             transform: translate(-50%, -50%) scale(1);
+    //         }
+    //
+    //         20% {
+    //             transform: translate(-52%, -48%) scale(1);
+    //         }
+    //
+    //         40% {
+    //             transform: translate(-52%, -52%) scale(1);
+    //         }
+    //
+    //         60% {
+    //             transform: translate(-48%, -48%) scale(1);
+    //         }
+    //
+    //         80% {
+    //             transform: translate(-48%, -52%) scale(1);
+    //         }
+    //
+    //         100% {
+    //             transform: translate(-50%, -50%) scale(1);
+    //         }
+    //     }
+}

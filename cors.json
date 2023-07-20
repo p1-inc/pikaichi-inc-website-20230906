@@ -1,0 +1,14 @@
+[
+    {
+        "origin": [
+            "https://p1-script-2021-11.firebaseapp.com",
+            "https://p1-script-2021-11.web.app",
+            "https://p1-script.com",
+            "http://localhost:5000",
+            "http://localhost:3000"
+        ],
+        "responseHeader": ["*"],
+        "method": ["GET"],
+        "maxAgeSeconds": 86400
+    }
+]
