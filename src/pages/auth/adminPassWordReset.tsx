@@ -1,5 +1,7 @@
 import NextLink from "next/link";
 
+import { AlertComp, BigDialog, BigDialog2, ConfirmComp } from "../../components/commonComponents/alertComp";
+
 import { sendPasswordReset } from "../../firebase/firebaseAuth";
 
 import { useState } from "react";
@@ -91,12 +93,7 @@ const AdminPassWordReset = () => {
 			<AdminHeader title={"パスワードのリセット"} />
 
 			<Container size="xs">
-				<Box
-					component="form"
-					onSubmit={handleSubmit}
-					mt="3em"
-					sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-				>
+				<Box component="form" onSubmit={handleSubmit} mt="3em" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 					<Title fz="1.2em" fw="normal" order={1} color={c.mainBlack}>
 						パスワードリセット
 					</Title>
@@ -104,16 +101,7 @@ const AdminPassWordReset = () => {
 					{errMsg && <ErrMsg msg={errMsg} />}
 
 					<Box w="100%" sx={{ display: "flex", flexDirection: "column" }}>
-						<FloatingLabelInput
-							id="email"
-							w="100%"
-							mt="2em"
-							size="md"
-							withAsterisk={true}
-							label="メールアドレス"
-							placeholder="メールアドレス"
-							form={form}
-						/>
+						<FloatingLabelInput id="email" w="100%" mt="2em" size="md" withAsterisk={true} label="メールアドレス" placeholder="メールアドレス" form={form} />
 					</Box>
 					<Button type="submit" w="100%" mt="2em">
 						パスワードリセット
@@ -129,6 +117,10 @@ const AdminPassWordReset = () => {
 					<LoadingOverlay visible={loading} />
 				</Box>
 			</Container>
+			<AlertComp />
+			<ConfirmComp />
+			<BigDialog />
+			<BigDialog2 />
 		</>
 	);
 };

@@ -107,7 +107,6 @@ export const signupFunc = async (email: string, password: string) => {
 
 	try {
 		const res = await sendEmailVerification(auth.currentUser);
-
 		return userCredential;
 	} catch (error) {
 		console.log(error);

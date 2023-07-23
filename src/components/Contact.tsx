@@ -8,6 +8,8 @@ import { FormEvent, useEffect, useState } from "react";
 import { useDialogState } from "../hooks/useDialogState";
 import { ExButton } from "./UILib/extendMantine";
 
+import dayjs from "dayjs";
+
 const optionItems: SelectItem[] = [
 	{ value: "hidden", label: "選択してください", hidden: true },
 	{ value: "application", label: "サービスのお申込み", hidden: false },
@@ -53,14 +55,41 @@ export default function Contact() {
 		setIsFirstValidation(true);
 		const { hasErrors, errors } = form.validate();
 		if (hasErrors) {
-			console.log("form.errors: ", form.errors);
 			// const errorKey = Object.keys(errors);
 			// console.log("errorKey: ", errorKey);
 			await displayAlert("記入した内容をご確認ください", Object.values(form.errors).join(" "), "red");
 			return;
 		}
 
-		console.log(form.values);
+		sendEmail(form.values);
+	};
+
+	const sendEmail = async (data: any) => {
+		//
+		const day = dayjs();
+
+		const nData = { ...data, date: day.format("YYYY-MM-DD HH:mm") };
+		const path = "/api/sendEmail";
+
+		const param = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+			},
+			body: JSON.stringify(nData),
+		};
+		// setShowWaitDialog(true);
+		let res;
+		try {
+			await fetch(path, param);
+			res = true;
+		} catch (e) {
+			console.error("Error adding document: ", e);
+			res = false;
+		}
+		// setShowWaitDialog(false);
+		// setOpenModal(true);
+		// setShowSuccessDialog(true);
 	};
 
 	return (

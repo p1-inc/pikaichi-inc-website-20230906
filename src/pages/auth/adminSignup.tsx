@@ -83,7 +83,6 @@ const AdminSignup = () => {
 		setLoading(false);
 
 		if (res === "auth/email-already-in-use") {
-			console.log("aaaaa");
 			await displayAlert(
 				"",
 				"入力したメールアドレスは既に登録されています。このメールアドレスを使用される場合は、ログイン画面に戻ってログインしてください。パスワードがお忘れの方はログイン画面からパスワードの再発行をお願いします",
