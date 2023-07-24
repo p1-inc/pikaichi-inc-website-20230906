@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-import s from "../../components/Main.module.scss";
 import { Select, SelectItem, TextInput, Textarea, createStyles, rem } from "@mantine/core";
 
 type CreateStylesType = { floating: boolean; borderWeight: string; borderColor: string; fontSize: string; textColor: string };

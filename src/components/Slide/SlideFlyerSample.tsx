@@ -43,7 +43,7 @@ export const SlideFlyerSample = ({ setWinOpen }: { setWinOpen: boolean }) => {
 							width={1190}
 							height={1684}
 							w="90%"
-							h="90%"
+							h="75vh"
 							src="/img/flyer_front.jpg"
 							alt="webサイトのイメージ"
 							sx={{ objectFit: "contain" }}
@@ -55,7 +55,7 @@ export const SlideFlyerSample = ({ setWinOpen }: { setWinOpen: boolean }) => {
 							width={1190}
 							height={1684}
 							w="90%"
-							h="90%"
+							h="75vh"
 							src="/img/flyer_back.jpg"
 							alt="webサイトのイメージ"
 							sx={{ objectFit: "contain" }}

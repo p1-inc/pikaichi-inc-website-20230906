@@ -126,7 +126,7 @@ export const Slide3 = ({ toggleOpenFlyerSample }: { toggleOpenFlyerSample: (valu
 						<ExButton
 							component="a"
 							display="block"
-							bc={c.green}
+							color={c.green}
 							radius="0.6em"
 							w="80%"
 							h="2.5em"
@@ -154,7 +154,7 @@ export const Slide3 = ({ toggleOpenFlyerSample }: { toggleOpenFlyerSample: (valu
 					</Box>
 					<ExButton
 						display="block"
-						bc={c.orange}
+						color={c.orange}
 						radius="0.6em"
 						w="80%"
 						h="2.5em"

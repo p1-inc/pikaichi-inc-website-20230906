@@ -12,8 +12,8 @@ import dayjs from "dayjs";
 
 const optionItems: SelectItem[] = [
 	{ value: "hidden", label: "選択してください", hidden: true },
-	{ value: "application", label: "サービスのお申込み", hidden: false },
-	{ value: "inquiry", label: "サービスのお問い合わせ", hidden: false },
+	{ value: "application", label: "サービスのお申込みについて", hidden: false },
+	{ value: "inquiry", label: "サービスのお問い合わせについて", hidden: false },
 	{ value: "other", label: "その他", hidden: false },
 ];
 
@@ -64,11 +64,11 @@ export default function Contact() {
 		sendEmail(form.values);
 	};
 
-	const sendEmail = async (data: any) => {
+	const sendEmail = async (data: ContactType) => {
 		//
 		const day = dayjs();
-
-		const nData = { ...data, date: day.format("YYYY-MM-DD HH:mm") };
+		const typeObj = optionItems.find((d) => d.value === data.type);
+		const nData = { ...data, date: day.format("YYYY-MM-DD HH:mm"), type: typeObj.label };
 		const path = "/api/sendEmail";
 
 		const param = {
@@ -82,6 +82,13 @@ export default function Contact() {
 		let res;
 		try {
 			await fetch(path, param);
+			console.log("param: ", param);
+			await displayAlert(
+				"お問合わせありがとうございます",
+				`お問い合わせメールを送信しました、内容を確認できしだいご連絡いたします。※システムの不具合等によりメールが送信されない場合があります。2〜3日返信がない場合は、大変お手数ですが次のメールアドレスまで、再度お問い合わせいただけますか？ ${process.env.NEXT_PUBLIC_STUDIO_EMAIL}`,
+				"",
+			);
+			form.reset();
 			res = true;
 		} catch (e) {
 			console.error("Error adding document: ", e);
@@ -155,7 +162,7 @@ export default function Contact() {
 					form={form.getInputProps("message")}
 				/>
 			</Flex>
-			<ExButton type="submit" bc={c.blue} w="100%" size="lg" radius="0.7em" mt="1em">
+			<ExButton type="submit" color={c.blue} w="100%" size="lg" radius="0.7em" mt="1em">
 				お申し込み＆お問合わせ
 			</ExButton>
 		</Box>

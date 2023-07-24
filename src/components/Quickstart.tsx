@@ -73,7 +73,7 @@ export default function Quickstart({ toggleOpenFlyerSample }: { toggleOpenFlyerS
 
 				<ArrowSVG color={c.orange} width="5em" height="2em" />
 				<ExButton
-					bc={c.orange}
+					color={c.orange}
 					w="100%"
 					size="lg"
 					onClick={() => {

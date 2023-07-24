@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
+import Image from "next/future/image";
+import { c } from "../../styles/eStyle";
 
-import { Box, Button, Container, createStyles, Flex, LoadingOverlay, Title } from "@mantine/core";
-import { FloatingLabelInput, FloatingLabelInputForPassWord } from "../../components/commonComponents/formComponent";
+import { Box, Button, Flex, Text } from "@mantine/core";
 
-import { FirebaseApp, initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 import { applyActionCode, Auth, getAuth } from "firebase/auth";
+
+import { IconAlertTriangle } from "@tabler/icons-react";
 
 export type FormValuesType = {
 	email: string;
@@ -13,18 +16,35 @@ export type FormValuesType = {
 };
 
 const handleVerifyEmail = async ({ auth, actionCode }: { auth: Auth; actionCode: string }) => {
-	console.log("actionCode: ", actionCode);
-	console.log("auth: ", auth);
 	try {
 		const res = await applyActionCode(auth, actionCode);
-		console.log("res: ", res);
 	} catch (error) {
 		console.log("error: ", error);
 	}
 };
 
+const ActionContainer = ({ children }) => {
+	return (
+		<Box w="100vw" h="100vh" pt="3em" sx={{ backgroundColor: "#F6F6F6" }}>
+			<Flex
+				direction="column"
+				w="25em"
+				p="2em"
+				m="0 auto"
+				align="center"
+				justify="center"
+				gap="1em"
+				sx={{ borderRadius: "0.5em", backgroundColor: "#FFF", boxShadow: "0.4em 0.4em 0.4em 0px rgba(0, 0, 0, 0.2);" }}
+			>
+				{children}
+			</Flex>
+		</Box>
+	);
+};
 const Action = () => {
 	//
+
+	const [actionMode, setActionMode] = useState<"verifyEmail" | "">("");
 
 	const firebaseConfig = {
 		apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -41,29 +61,55 @@ const Action = () => {
 	const router = useRouter(); //useRouterフックを定義
 
 	if (router.query.mode === "verifyEmail") {
+		setActionMode("verifyEmail");
 		handleVerifyEmail({ auth, actionCode: router.query.oobCode as string });
 	}
+	if (actionMode === "verifyEmail") {
+		return (
+			<ActionContainer>
+				<Box w="4em">
+					<Box component={Image} src="/img/verifyEmail.svg" width={101} height={102} alt="メール" w="100%" h="100%" sx={{ objectFit: "cover" }} />
+				</Box>
+				<Flex direction="column" fz="1em">
+					<Box>メールアドレスを確認しました</Box>
+					<Box>新規アカウントでログインできます</Box>
+				</Flex>
+				<Button
+					px="4em"
+					onClick={() => {
+						router.push("/admin/index/");
+					}}
+				>
+					ログイン
+				</Button>
 
-	return (
-		<Box>
-			<Box>メールアドレスを確認しました</Box>
-			<Box>新規アカウントでログインできます</Box>
-			<Button
-				onClick={() => {
-					router.push("/admin/index/");
-				}}
-			>
-				ログイン
-			</Button>
-			<Button
-				onClick={() => {
-					console.log("auth: ", auth.currentUser);
-				}}
-			>
-				TEST
-			</Button>
-		</Box>
-	);
+				<Text component="a" fz="0.8em">
+					{process.env.NEXT_PUBLIC_STUDIO_EMAIL}
+				</Text>
+			</ActionContainer>
+		);
+	} else {
+		return (
+			<ActionContainer>
+				<IconAlertTriangle color="red" />
+				<Flex direction="column" fz="1em">
+					<Box>エラーが発生しました</Box>
+					<Box>再度やり直してください</Box>
+				</Flex>
+				<Button
+					px="4em"
+					onClick={() => {
+						router.push("/admin/index/");
+					}}
+				>
+					ログイン
+				</Button>
+				<Text component="a" fz="0.8em">
+					{process.env.NEXT_PUBLIC_STUDIO_EMAIL}
+				</Text>
+			</ActionContainer>
+		);
+	}
 };
 
 export default Action;

@@ -127,31 +127,6 @@ export const SlideBase = ({ children, index, displayPage, slideList, setSlideLis
 				}}
 			/> */}
 				<Box sx={innner}>{children}</Box>
-				{/* <Flex mt="2em" justify="flex-end" gap="1em"> */}
-				{/* {btnBack && (
-					<Button w="10em" color={color} onClick={handleBackSlide}>
-						戻 る
-					</Button>
-				)}
-				{btnNext && (
-					<Button w="10em" color={color} onClick={handleNextSlide}>
-						次 へ
-					</Button>
-				)} */}
-				{/* {btnBack && (
-						<ExButton w="10em" bc={color} onClick={handleBackSlide}>
-							戻 る
-						</ExButton>
-					)}
-					{btnNext && (
-						<ExButton w="10em" bc={color} onClick={handleNextSlide}>
-							次 へ
-						</ExButton>
-					)} */}
-				{/* {btnBack && <P1Button text="戻　る" w="10em" size="1em" mr="1em" bdColor={color} color={color} bdWidth="4px" onclick={handleBackSlide} />}
-
-				{btnNext && <P1Button text="次　へ" w="10em" size="1em" bgColor={color} onclick={handleNextSlide} />} */}
-				{/* </Flex> */}
 			</Box>
 		</Box>
 	);

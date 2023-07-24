@@ -1,12 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, MutableRefObject } from "react";
 import Image from "next/future/image";
 
-import { c } from "../styles/eStyle";
+import { c, f } from "../styles/eStyle";
 
 import { useWindowSize } from "../hooks/useWindowSize";
-import { Anchor, Box, CSSObject, Flex, Text, Title, keyframes } from "@mantine/core";
+import { Anchor, Box, Button, CSSObject, Flex, Text, Title, UnstyledButton, keyframes } from "@mantine/core";
 import { useMQ } from "../hooks/useMQ";
+import { useScrollIntoView } from "@mantine/hooks";
+import { ExButton } from "./UILib/extendMantine";
 
 // import { Kiwi_Maru } from "@next/font/google";
 // const Kiwi_Maru_normal = Kiwi_Maru({
@@ -15,7 +17,7 @@ import { useMQ } from "../hooks/useMQ";
 // });
 // console.log("Kiwi_Maru_normal.className: ", Kiwi_Maru_normal.className);
 
-export default function Topview() {
+export default function Topview({ scrollIntoView, contactRef }: { scrollIntoView: any; contactRef: MutableRefObject<HTMLDivElement> }) {
 	//
 	const { windowWidth, windowHeight } = useWindowSize();
 
@@ -156,8 +158,15 @@ export default function Topview() {
 		maskSize: "100% ${windowWidth * 0.8 < 800 ? windowWidth * 0.8",
 	};
 
-	const shareTxt = {
-		fontFamily: "${f.fontfamily_en_01}",
+	const loginBtn = {
+		label: "loginBtn",
+		padding: "0.3em 1em ",
+		fontSize: "0.8em",
+		color: c.mainPurple,
+		border: `1px solid ${c.mainPurple}`,
+		borderRadius: "0.3em",
+		fontFamily: f.fontfamily_jp_01,
+		"&:hover": { textDecoration: "none", opacity: 0.5 },
 	};
 
 	const wrapper: CSSObject = {
@@ -362,22 +371,39 @@ export default function Topview() {
 
 	return (
 		<Box w="100%" m="0 auto" sx={topview} ref={ref}>
-			<Flex w="90%" align="center" justify="space-between" m="0 auto" pt="3em">
-				<Flex w={mq.sp ? "6em" : "10em"}>
-					<Box component={Image} src="/img/logo_top.svg" width={337} height={68} alt="ロゴ" w="100%" h="100%" sx={{ objectFit: "cover" }} />
+			<Flex w="90%" align="flex-start" justify="space-between" m="0 auto" pt="2em" sx={{ zIndex: 100000 }} pos="relative">
+				<Flex w={mq.sp ? "4em" : "6em"}>
+					<Box component={Image} src="/img/logo_top2.svg" width={137} height={137} alt="ロゴ" w="100%" h="100%" sx={{ objectFit: "cover" }} />
 				</Flex>
-				<Flex align="center" justify="center">
-					<Text component="p" c={c.mainPurple} fz={mq.sp ? "0.9em" : "1.5em"} sx={shareTxt}>
-						Share me!
-					</Text>
+				<Flex align="center" justify="center" mt="1em" gap="1em">
+					<UnstyledButton
+						fz={mq.sp ? "0.8em" : "1em"}
+						sx={{ color: c.mainPurple, fontFamily: f.fontfamily_en_01 }}
+						onClick={() =>
+							scrollIntoView({
+								alignment: "center",
+							})
+						}
+					>
+						CONTACT
+					</UnstyledButton>
+					<Anchor sx={{ "&:hover": { textDecoration: "none" } }} href="/posts/postIndex" target="_blank" rel="noopener noreferrer">
+						<Text fz={mq.sp ? "0.8em" : "1em"} sx={{ color: c.mainPurple, fontFamily: f.fontfamily_en_01 }}>
+							BLOG
+						</Text>
+					</Anchor>
 					<Anchor
-						sx={{ display: "flex", alignItems: "center" }}
-						ml="1em"
-						w={mq.sp ? "1.5em" : "2em"}
+						w={mq.sp ? "1.2em" : "1.8em"}
 						href="https://twitter.com/share?url=https://pick-yoga.com/&text=これからスタジオを始めるインストラクターさんのためのヨガ専門webサイト・チラシ制作サービス"
 					>
 						<Box component={Image} src="/img/sns_tw.svg" width={30} height={30} w="100%" h="100%" alt="twitter" />
 					</Anchor>
+					<Anchor sx={loginBtn} href="/admin/index" target="_blank" rel="noopener noreferrer">
+						<Box>ログイン</Box>
+					</Anchor>
+					{/* <ExButton variant="outline" size="xs" color={c.mainPurple}>
+						ログイン
+					</ExButton> */}
 				</Flex>
 			</Flex>
 			<Box sx={wrapper}>

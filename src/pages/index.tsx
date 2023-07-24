@@ -15,13 +15,18 @@ import Quickstart from "../components/Quickstart";
 
 import Footer from "../components/Footer";
 import Contact from "../components/Contact";
-import { Modal } from "@mantine/core";
+import { Box, Modal } from "@mantine/core";
 import { SlideFlyerSample } from "../components/Slide/SlideFlyerSample";
-import { useToggle } from "@mantine/hooks";
-import { useState } from "react";
+import { useScrollIntoView, useToggle } from "@mantine/hooks";
+import { AlertComp, BigDialog, BigDialog2, ConfirmComp } from "../components/commonComponents/alertComp";
 
 export default function Home() {
 	//
+
+	const { scrollIntoView, targetRef: contactRef } = useScrollIntoView<HTMLDivElement>({
+		offset: 60,
+	});
+
 	const rootSize = css`
         font-size: 1rem;
     `;
@@ -52,7 +57,7 @@ export default function Home() {
 
 			<main css={rootSize}>
 				<BackgoundIllustration>
-					<Topview />
+					<Topview scrollIntoView={scrollIntoView} contactRef={contactRef} />
 					<Price />
 					<Sample toggleOpenFlyerSample={toggleOpenFlyerSample} />
 					<WhatIs />
@@ -60,7 +65,10 @@ export default function Home() {
 					<Message2 />
 					<Question />
 					<Quickstart toggleOpenFlyerSample={toggleOpenFlyerSample} />
-					<Contact />
+
+					<Box ref={contactRef}>
+						<Contact />
+					</Box>
 					<Footer />
 				</BackgoundIllustration>
 				<Modal
@@ -76,6 +84,8 @@ export default function Home() {
 					<SlideFlyerSample setWinOpen={openFlyerSample} />
 				</Modal>
 			</main>
+			<AlertComp />
+			<ConfirmComp />
 		</div>
 	);
 }

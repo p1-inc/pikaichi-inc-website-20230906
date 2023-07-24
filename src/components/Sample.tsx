@@ -76,28 +76,6 @@ export default function Sample({ toggleOpenFlyerSample }: { toggleOpenFlyerSampl
 		filter: "drop-shadow(4px 4px 3px rgba(0,0,0,0.3))",
 		"&:hover": { opacity: 0.7 },
 	};
-	//
-	// 	const sec2_height = () => {
-	// 		if (mq.tab) {
-	// 			return "12em";
-	// 		} else if (mq.pc) {
-	// 			return "14em";
-	// 		} else if (mq.sp) {
-	// 			return "initial";
-	// 		} else {
-	// 			return "10em";
-	// 		}
-	// 	};
-	//
-	// 	const sec2_fontSize_p = () => {
-	// 		if (mq.tab) {
-	// 			return "0.8em";
-	// 		} else if (mq.pc) {
-	// 			return "1em";
-	// 		} else {
-	// 			return "1em";
-	// 		}
-	// 	};
 
 	const sec2: CSSObject = {
 		label: "sec2",
@@ -195,7 +173,7 @@ export default function Sample({ toggleOpenFlyerSample }: { toggleOpenFlyerSampl
 						<ExButton
 							component="a"
 							display="block"
-							bc={c.green}
+							color={c.green}
 							radius="0.6em"
 							w="80%"
 							h="3em"
@@ -240,7 +218,7 @@ export default function Sample({ toggleOpenFlyerSample }: { toggleOpenFlyerSampl
 						</Box>
 						<ExButton
 							display="block"
-							bc={c.orange}
+							color={c.orange}
 							radius="0.6em"
 							w="80%"
 							h="3em"

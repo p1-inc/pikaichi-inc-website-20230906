@@ -1,8 +1,9 @@
-const sgMail = require("@sendgrid/mail");
+// const sgMail = require("@sendgrid/mail");
+
+import sgMail from "@sendgrid/mail";
 import dayjs from "dayjs";
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
+sgMail.setApiKey(process.env.NEXT_PUBLIC_SENDGRID_API_KEY);
 // let sendEmail;
 
 export const sendEmail = async (req: any, res: any) => {
@@ -11,7 +12,7 @@ export const sendEmail = async (req: any, res: any) => {
 	type DataType = {
 		name: string;
 		email: string;
-		typeOfMsg: string;
+		type: string;
 		message: string;
 		date: string;
 	};
@@ -31,7 +32,7 @@ export const sendEmail = async (req: any, res: any) => {
     E-Mail：${data.email}
     
     お問い合せ日時：${data.date}
-    お問い合わの種類：${data.typeOfMsg}
+    お問い合わの種類：${data.type}
     お問い合わせ内容：${data.message}
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     `;
@@ -60,8 +61,6 @@ export const sendEmail = async (req: any, res: any) => {
 	} catch (error) {
 		console.log(error);
 	}
-
-	// console.log(res.status)
 
 	res.send(status);
 };

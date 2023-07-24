@@ -73,7 +73,7 @@ export const QuickStartSlide = ({ toggleOpenFlyerSample }: { toggleOpenFlyerSamp
 						<ExButton
 							display={index === 0 ? "none" : "block"}
 							w="10em"
-							bc={list.color}
+							color={list.color}
 							onClick={() => {
 								setDisplayPage(displayPage - 1);
 							}}
@@ -84,7 +84,7 @@ export const QuickStartSlide = ({ toggleOpenFlyerSample }: { toggleOpenFlyerSamp
 						<ExButton
 							display={index === slideListInit.length - 1 ? "none" : "block"}
 							w="10em"
-							bc={list.color}
+							color={list.color}
 							onClick={() => {
 								setDisplayPage(displayPage + 1);
 							}}
