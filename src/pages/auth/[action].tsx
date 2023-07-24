@@ -44,8 +44,6 @@ const ActionContainer = ({ children }) => {
 const Action = () => {
 	//
 
-	const [actionMode, setActionMode] = useState<"verifyEmail" | "">("");
-
 	const firebaseConfig = {
 		apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
 		authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -61,10 +59,9 @@ const Action = () => {
 	const router = useRouter(); //useRouterフックを定義
 
 	if (router.query.mode === "verifyEmail") {
-		setActionMode("verifyEmail");
 		handleVerifyEmail({ auth, actionCode: router.query.oobCode as string });
 	}
-	if (actionMode === "verifyEmail") {
+	if (router.query.mode === "verifyEmail") {
 		return (
 			<ActionContainer>
 				<Box w="4em">
