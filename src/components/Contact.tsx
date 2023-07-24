@@ -82,7 +82,6 @@ export default function Contact() {
 		let res;
 		try {
 			await fetch(path, param);
-			console.log("param: ", param);
 			await displayAlert(
 				"お問合わせありがとうございます",
 				`お問い合わせメールを送信しました、内容を確認できしだいご連絡いたします。※システムの不具合等によりメールが送信されない場合があります。2〜3日返信がない場合は、大変お手数ですが次のメールアドレスまで、再度お問い合わせいただけますか？ ${process.env.NEXT_PUBLIC_STUDIO_EMAIL}`,

@@ -35,12 +35,7 @@ export function CategoryUI({ category }: CategoryType_2) {
 	);
 }
 
-export function UpdatedAtUI({
-	updatedAt = "",
-	mt = "0px",
-	mb = "0px",
-	fullDate = false,
-}: { updatedAt: string; mt?: string; mb?: string; fullDate?: boolean }) {
+export function UpdatedAtUI({ updatedAt = "", mt = "0px", mb = "0px", fullDate = false }: { updatedAt: string; mt?: string; mb?: string; fullDate?: boolean }) {
 	const updatedAtArr: string[] = updatedAt.split("-");
 
 	const yyyymmdd = updatedAtArr.slice(0, 3).join("-");

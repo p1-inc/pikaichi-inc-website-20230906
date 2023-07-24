@@ -936,127 +936,6 @@ export const getMediaLibAsId = async ({ id }: { id: string }) => {
 	return result;
 };
 
-// export const getMediaLibrary = async () => {
-//     ///////////////////////////////////////////////////////////////
-//     ////////////使用しない予定////////////////////////////////////////
-//     ////////////代わりにgetMediaLib2を使用してください//////////////////
-//     ////////////////////////////////////////////////////////////////
-//     const result = [];
-//     let mediaLib;
-//     try {
-//         mediaLib = await getDocs(collection(db, "mediaLib"));
-//     } catch (error) {}
-//
-//     mediaLib.forEach((doc) => {
-//         result.push(doc.data());
-//     });
-//
-//     return result;
-// };
-// export const setTempMedia = async (
-// 	uploadedMediaData: [string, string, number, number, string][],
-// 	canOverWrite: boolean,
-// ) => {
-// 	//
-// 	const batch = writeBatch(db);
-// 	console.log("uploadedMediaData: ", uploadedMediaData);
-//
-// 	const regLow = new RegExp("__low__");
-// 	const regHigh = new RegExp("__high__");
-//
-// 	type MediaforSetObjType = {
-// 		[id: string]: {
-// 			widthLow: number;
-// 			heightLow: number;
-// 			widthHigh: number;
-// 			heightHigh: number;
-// 			src: string;
-// 			srcHigh: string;
-// 			typeLow: string;
-// 			typeHigh: string;
-// 		};
-// 	};
-// 	const _mediaforSetObj: MediaforSetObjType = uploadedMediaData.reduce((acc, val, index, arr) => {
-// 		const _fileName = val[0].replace(/\.[^.]*$/, "").replace(regHigh, "").replace(regLow, "");
-// 		return {
-// 			...acc,
-// 			[_fileName]: {
-// 				widthLow: undefined,
-// 				heightLow: undefined,
-// 				widthHigh: undefined,
-// 				heightHigh: undefined,
-// 				src: undefined,
-// 				srcHigh: undefined,
-// 				typeLow: undefined,
-// 				typeHigh: undefined,
-// 			},
-// 		};
-// 	}, {});
-//
-// 	uploadedMediaData.forEach((media) => {
-// 		const _fileName = media[0].replace(/\.[^.]*$/, "");
-//
-// 		const isLow = _fileName.match(regLow);
-// 		const isHigh = _fileName.match(regHigh);
-//
-// 		let mediaId;
-// 		if (isLow) {
-// 			mediaId = _fileName.replace(regLow, "");
-// 			_mediaforSetObj[mediaId].src = media[1];
-// 			_mediaforSetObj[mediaId].widthLow = media[2];
-// 			_mediaforSetObj[mediaId].heightLow = media[3];
-// 			_mediaforSetObj[mediaId].typeLow = media[4];
-// 		} else {
-// 			mediaId = _fileName.replace(regHigh, "");
-// 			_mediaforSetObj[mediaId].srcHigh = media[1];
-// 			_mediaforSetObj[mediaId].widthHigh = media[2];
-// 			_mediaforSetObj[mediaId].heightHigh = media[3];
-// 			_mediaforSetObj[mediaId].typeHigh = media[4];
-// 		}
-// 	});
-//
-// 	const _mediaArr: [
-// 		string,
-// 		{
-// 			src: string;
-// 			srcHigh: string;
-// 			widthLow: number;
-// 			heightLow: number;
-// 			widthHigh: number;
-// 			heightHigh: number;
-// 			typeLow: string;
-// 			typeHigh: string;
-// 		},
-// 	][] = Object.entries(_mediaforSetObj);
-//
-// 	const now = dayjs();
-// 	const day = now.format("YYYY-MM-DD-HH-mm-ss");
-//
-// 	const tmpImgDataArr: MediaLib[] = _mediaArr.map((d) => ({
-// 		id: d[0],
-// 		src: d[1].src,
-// 		srcHigh: d[1].srcHigh,
-// 		widthLow: d[1].widthLow,
-// 		heightLow: d[1].heightLow,
-// 		widthHigh: d[1].widthHigh,
-// 		heightHigh: d[1].heightHigh,
-// 		createdAt: day,
-// 		updatedAt: day,
-// 		contentTypeLow: d[1].typeLow,
-// 		contentTypeHigh: d[1].typeHigh,
-// 		use: {},
-// 	}));
-//
-// 	await setMediaToDB({ mediaArr: tmpImgDataArr, overWrite: canOverWrite, batch: batch });
-//
-// 	try {
-// 		await batch.commit();
-// 		return tmpImgDataArr;
-// 	} catch (error) {
-// 		console.log(error);
-// 		return "error";
-// 	}
-// };
 export const setTempMedia = async (uploadedMediaData: [string, string, number, number, string][], canOverWrite: boolean) => {
 	//
 	const batch = writeBatch(db);
@@ -1263,58 +1142,6 @@ export const setMediaToStorage = async (
 	return result;
 };
 
-// export const setFaviconStorage = async (
-// 	media: { fileName: string; width: string; height: string; blob: Blob },
-// 	setProgress: Dispatch<SetStateAction<number>>,
-// ) => {
-// 	//
-// 	let result: string[] = [];
-//
-// 	const dir = "favicon/";
-//
-// 	const uploadImages = async (file: Blob, fileName: string, width: string, height: string) => {
-// 		return new Promise<string[]>((resolve, reject) => {
-// 			const storage = getStorage();
-// 			const storageRef = ref(storage, fileName);
-//
-// 			const uploadTask = uploadBytesResumable(storageRef, file);
-//
-// 			uploadTask.on(
-// 				"state_changed",
-// 				(snapshot) => {
-// 					const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-// 					setProgress(progress);
-// 				},
-// 				(error) => {
-// 					console.log(error);
-// 					reject();
-// 				},
-// 				() => {
-// 					getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-// 						const fPath = uploadTask.snapshot.ref.fullPath;
-// 						resolve([fPath, downloadURL, width, height, file.type]);
-// 					});
-// 				},
-// 			);
-// 		});
-// 	};
-//
-// 	const { width, height } = media;
-//
-// 	const pr = uploadImages(media.blob, `${dir}${media.fileName}.png`, width, height);
-//
-// 	const imgUrls = await pr.catch(() => {
-// 		console.log("Image couldn't uploaded");
-// 		return;
-// 	});
-//
-// 	if (imgUrls) {
-// 		result = imgUrls;
-// 	}
-//
-// 	return result;
-// };
-
 export const deleteMediaLib = async (mediaLibArr: string[]) => {
 	let result;
 	const batch = writeBatch(db);
@@ -1330,36 +1157,6 @@ export const deleteMediaLib = async (mediaLibArr: string[]) => {
 	} catch (error) {
 		result = "error";
 	}
-
-	//TODO:storageから画像を削除はfunctionで一括して行う、1日に一回mediaLibとstorageの整合性を確認して削除する
-
-	////////////////////storageから削除//////////////////
-	// 	const dir = "media/images/resizedItems";
-	// 	const suffix = StringForMedia_Low;
-	// 	const suffix2 = StringForMedia_High;
-	//
-	// 	const promises: Promise<void>[] = [];
-	//
-	// 	mediaLibArr.forEach((media) => {
-	// 		const delName = `${dir}/low/${media}${suffix}`;
-	// 		const delName2 = `${dir}/high/${media}${suffix2}`;
-	//
-	// 		const desertRef = ref(storage, delName);
-	// 		const desertRef2 = ref(storage, delName2);
-	// 		try {
-	// 			promises.push(deleteObject(desertRef));
-	// 			promises.push(deleteObject(desertRef2));
-	// 		} catch (error) {
-	// 			console.log(error);
-	// 		}
-	// 	});
-	//
-	// 	try {
-	// 		await Promise.all(promises);
-	// 		result = "success";
-	// 	} catch (error) {
-	// 		result = "error";
-	// 	}
 
 	return result;
 	///////////////////////////////////////////////////////////
@@ -1385,23 +1182,6 @@ export const setNews = async (data: NewsType, node: HTMLElement, width: number, 
 	const resSetDoc = setDocDataToDB(docName, key, data, batch);
 
 	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
-
-	// const mediaArr = data.newsList.map((d) => d.mainImage);
-
-	// const resSetMedia = await setMediaUsage({
-	// 	compBlockName: docName,
-	// 	compSubName: key,
-	// 	mediaArr: mediaArr,
-	// 	batch: batch,
-	// });
-
-	// const newsIdArr = data.newsList.map((d) => d.id);
-	// const resSetPost = await setPostUsage({
-	// 	blockName: docName,
-	// 	subName: key,
-	// 	newsArr: newsIdArr,
-	// 	batch: batch,
-	// });
 
 	if (!(resSetDoc === "success" && resSetComp === "success")) {
 		return "error";
@@ -1547,21 +1327,6 @@ export const setLayoutData = async (layoutData: ContainerType[]): Promise<"succe
 
 	const resSetLayoutDoc = setDocDataToDB(docName, layoutKey, layoutData, batch);
 
-	// const useComp = layoutData.flatMap((d) => d.child);
-
-	// const resSetLayoutUsage = setlayoutUsage(useComp, batch);
-
-	///tableUsage
-	// const tableUsage = layoutData.flatMap((d) => d.child.filter((d2) => d2.match(/^table_.+/)));
-	// const tableArr = tableUsage.map((d) => d.replace("table_", ""));
-
-	// const resSetTabletUsage = await setTableUsage({
-	// 	compBlockName: "layout",
-	// 	compSubName: "layout",
-	// 	tableArr: tableArr,
-	// 	batch: batch,
-	// });
-
 	if (!(resSetLayoutDoc === "success")) {
 		return "error";
 	}
@@ -1616,13 +1381,6 @@ export const setPhotoGalleryData = async (
 	const resSetDoc = setDocDataToDB(docName, key, data, batch);
 
 	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
-
-	// const resSetMedia = await setMediaUsage({
-	// 	compBlockName: docName,
-	// 	compSubName: key,
-	// 	mediaArr: selectedMedia,
-	// 	batch: batch,
-	// });
 
 	if (!(resSetDoc === "success" && resSetComp === "success")) {
 		return "error";
@@ -1798,7 +1556,6 @@ const getDeletedTableUsageByPostId = async (postIdArr: string[]) => {
 			acc[key] = val;
 			return acc;
 		}, {});
-		console.log("res: ", res);
 
 		return res;
 	} else {
