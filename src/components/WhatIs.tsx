@@ -36,7 +36,7 @@ export default function WhatIs() {
 	};
 
 	const copy_ss: CSSObject = {
-		fontSize: mq.sp ? "1.2em" : "max(1.3vw, 1em)",
+		fontSize: clp("1em", "1.3em"),
 		lineHeight: mq.sp ? "1.5em" : "max(2vw, 1em)",
 		textAlign: "center",
 		margin: "0 auto",
@@ -45,9 +45,9 @@ export default function WhatIs() {
 
 	const copy_wrapper = {
 		display: "flex",
-		width: mq.sp ? "90vw" : "50vw",
+		// width: mq.sp ? "90vw" : "50vw",
 		margin: "0 auto",
-		marginTop: "-1em",
+		marginTop: "1em",
 	};
 
 	return (
@@ -60,22 +60,22 @@ export default function WhatIs() {
 				新しくヨガ教室を始めるインストラクターさんにとって、自身で運営する教室にビジョンや夢がある一方、どうしても集客への不安があると思います。どれだけレッスン自信があったとしても、自分を知ってもらわないと運営は安定しません。
 			</Title>
 
-			<Box mt="2em">
+			<Box mt="2em" mb="1em">
 				<Text component="p" sx={copy_ss}>
 					<span>ヨガ入会までの</span>
 					<span>一般的なプロセス</span>
 				</Text>
 			</Box>
 
-			<Box component={Image} sx={imageStyle} src="/img/pict_01.svg" width={695} height={374} w="80%" h="auto" alt="" />
+			<Box component={Image} sx={imageStyle} src="/img/flyerOrweb.png" width={1200} height={568} w="85%" h="auto" alt="" />
 
 			<Box sx={copy_wrapper}>
-				<Text component="p" sx={copy_ss}>
+				<Text component="p" sx={copy_ss} fz={clp("0.8em", "1em")}>
 					チラシで
 					<br />
 					興味をもつ
 				</Text>
-				<Text component="p" sx={copy_ss}>
+				<Text component="p" sx={copy_ss} fz={clp("0.8em", "1em")}>
 					webサイトで
 					<br />
 					じっくり検討
