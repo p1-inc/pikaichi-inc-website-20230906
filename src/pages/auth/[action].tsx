@@ -9,6 +9,7 @@ import { initializeApp } from "firebase/app";
 import { applyActionCode, Auth, getAuth } from "firebase/auth";
 
 import { IconAlertTriangle } from "@tabler/icons-react";
+import { useIdle } from "@mantine/hooks";
 
 export type FormValuesType = {
 	email: string;
@@ -58,6 +59,8 @@ const Action = () => {
 
 	const router = useRouter(); //useRouterフックを定義
 
+	const idle = useIdle(200);
+
 	if (router.query.mode === "verifyEmail") {
 		handleVerifyEmail({ auth, actionCode: router.query.oobCode as string });
 	}
@@ -85,7 +88,7 @@ const Action = () => {
 				</Text>
 			</ActionContainer>
 		);
-	} else {
+	} else if (idle && router.query.mode === "") {
 		return (
 			<ActionContainer>
 				<IconAlertTriangle color="red" />
@@ -106,6 +109,8 @@ const Action = () => {
 				</Text>
 			</ActionContainer>
 		);
+	} else {
+		return <></>;
 	}
 };
 
