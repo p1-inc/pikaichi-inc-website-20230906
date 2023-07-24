@@ -1,4 +1,3 @@
-import { OutputData } from "@editorjs/editorjs";
 import { OutputBlockData } from "../components/admin/p1_Editor/p1_EditorTypes";
 
 export type BlockNameType =
