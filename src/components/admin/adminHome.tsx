@@ -106,9 +106,12 @@ const AdminHome = () => {
 		setSubmitLoading(true);
 		const res = await deployDatabase();
 
+		const vercelDeployUrl = process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_URL;
+		if (!vercelDeployUrl) throw new Error("環境変数が設定されていません。");
+
 		if (res === "success") {
 			await displayAlert("", "設定を反映しました", "");
-			await fetch(process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_URL, { method: "POST" });
+			await fetch(vercelDeployUrl, { method: "POST" });
 		} else {
 			await displayAlert("", "反映に失敗しました", "red");
 		}
