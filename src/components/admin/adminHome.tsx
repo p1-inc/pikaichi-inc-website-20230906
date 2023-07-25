@@ -5,6 +5,7 @@ import { deployDatabase } from "../../firebase/firebase";
 import { useDialogState } from "../../hooks/useDialogState";
 import { Box, Button, Divider, Flex } from "@mantine/core";
 import { useState } from "react";
+import { useDeploy } from "../../hooks/useDeploy";
 
 export const adminPages = [
 	{
@@ -91,9 +92,9 @@ export const adminPages = [
 
 const AdminHome = () => {
 	//
-	const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+	// const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
-	const { displayAlert } = useDialogState();
+	const { handleDeploy, loading } = useDeploy();
 
 	const adminContaine = {
 		width: "90%",
@@ -102,23 +103,22 @@ const AdminHome = () => {
 		marginTop: "3em",
 	};
 
-	const handleSubmit = async () => {
-		setSubmitLoading(true);
-		const res = await deployDatabase();
-
-		const vercelDeployUrl = process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_URL;
-		if (!vercelDeployUrl) throw new Error("環境変数が設定されていません。");
-
-		if (res === "success") {
-			await displayAlert("", "設定を反映しました", "");
-			await fetch(vercelDeployUrl, { method: "POST" });
-		} else {
-			await displayAlert("", "反映に失敗しました", "red");
-		}
-		setSubmitLoading(false);
-
-		//////////vercel deploy処理必要！！！
-	};
+	// 	const handleSubmit = async () => {
+	// 		setSubmitLoading(true);
+	// 		const res = await deployDatabase();
+	//
+	// 		const vercelDeployUrl = process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_URL;
+	// 		if (!vercelDeployUrl) throw new Error("環境変数が設定されていません。");
+	//
+	// 		if (res === "success") {
+	// 			await displayAlert("", "設定を反映しました", "");
+	// 			await fetch(vercelDeployUrl, { method: "POST" });
+	// 		} else {
+	// 			await displayAlert("", "反映に失敗しました", "red");
+	// 		}
+	// 		setSubmitLoading(false);
+	//
+	// 	};
 
 	const LinkBtnList = ({ txt, url }: { txt: string; url: string }) => {
 		return (
@@ -151,7 +151,7 @@ const AdminHome = () => {
 								</NextLink>
 							</Box>
 							<Box component="li" mb="1em">
-								<Button w="100%" size="sm" variant="filled" onClick={handleSubmit} loading={submitLoading ? true : false}>
+								<Button w="100%" size="sm" variant="filled" onClick={handleDeploy} loading={loading ? true : false}>
 									設定を反映させる
 								</Button>
 							</Box>

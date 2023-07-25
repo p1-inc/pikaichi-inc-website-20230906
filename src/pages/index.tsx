@@ -18,7 +18,7 @@ import Contact from "../components/Contact";
 import { Box, Modal } from "@mantine/core";
 import { SlideFlyerSample } from "../components/Slide/SlideFlyerSample";
 import { useScrollIntoView, useToggle } from "@mantine/hooks";
-import { AlertComp, BigDialog, BigDialog2, ConfirmComp } from "../components/commonComponents/alertComp";
+// import { AlertComp, BigDialog, BigDialog2, ConfirmComp } from "../components/commonComponents/alertComp";
 
 export default function Home() {
 	//

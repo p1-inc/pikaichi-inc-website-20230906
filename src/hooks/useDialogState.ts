@@ -7,11 +7,8 @@ import {
 	dialogConfirmSaveAsState,
 	bigDialogState,
 	bigDialogState2,
-
-	// loadingOverlayState,
+	fullscreenLoadingState,
 } from "../recoil/atoms";
-
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //セルの記号の順番
 
 export const useDialogState = () => {
 	//
@@ -22,7 +19,7 @@ export const useDialogState = () => {
 	const setBigDialog = useSetRecoilState(bigDialogState);
 	const setBigDialog2 = useSetRecoilState(bigDialogState2);
 
-	// const setLoadingOverlay = useSetRecoilState(loadingOverlayState);
+	const setFullscreenLoading = useSetRecoilState(fullscreenLoadingState);
 
 	const displayAlert = (title = "", msg = "", color = "") => {
 		return new Promise<boolean>((resolve) => {
@@ -105,6 +102,17 @@ export const useDialogState = () => {
 		});
 	};
 
+	const displayFullscreenLoading = (visible = true, msg = "", color = "") => {
+		return new Promise((resolve) => {
+			setFullscreenLoading({
+				visible: visible,
+				onClose: resolve,
+				msg: msg,
+				color: color,
+			});
+		});
+	};
+
 	// const displayLoadingOverlay = (open: boolean) => {
 	// 	return new Promise((resolve) => {
 	// 		setLoadingOverlay(open);
@@ -129,6 +137,7 @@ export const useDialogState = () => {
 
 		displayBigDialog2,
 
+		displayFullscreenLoading,
 		// setLoadingOverlay,
 		// displayLoadingOverlay,
 	};

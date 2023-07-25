@@ -120,6 +120,23 @@ export const bigDialogState2 = atom<DialogType>({
 	},
 });
 
+type FullscreenLoadingType = {
+	visible: boolean;
+	onClose: (value: boolean | PromiseLike<boolean>) => void;
+	msg: string;
+	color: string;
+};
+
+export const fullscreenLoadingState = atom<FullscreenLoadingType>({
+	key: "fullscreenLoading",
+	default: {
+		visible: false,
+		onClose: undefined,
+		msg: "",
+		color: "",
+	},
+});
+
 ///////////////////////////Admin（管理・編集かどうか）　　プレビュー用の画像生成する際に必要/////////////////////////////////
 export const isAdminState = atom<boolean>({
 	key: "isAdmin",

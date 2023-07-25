@@ -1,9 +1,17 @@
 import React, { useState, useEffect, useCallback, useMemo, Fragment } from "react";
 import { useRecoilState } from "recoil";
 
-import { dialogConfirmState, dialogAlertState, dialogConfirmSaveState, dialogConfirmSaveAsState, bigDialogState, bigDialogState2 } from "../../recoil/atoms";
+import {
+	dialogConfirmState,
+	dialogAlertState,
+	dialogConfirmSaveState,
+	dialogConfirmSaveAsState,
+	bigDialogState,
+	bigDialogState2,
+	fullscreenLoadingState,
+} from "../../recoil/atoms";
 
-import { Box, Button, Flex, LoadingOverlay, Modal, Table, Text } from "@mantine/core";
+import { Affix, Box, Button, Flex, Loader, LoadingOverlay, Modal, Overlay, Table, Text } from "@mantine/core";
 
 const replaceBS = (text: string) => {
 	const nText = text.split("\n");
@@ -277,5 +285,25 @@ export const BigDialog2 = () => {
 				</Flex>
 			</Flex>
 		</Modal>
+	);
+};
+
+export const FullscreenLoading = () => {
+	//
+	const [fullscreenLoading, setFullscreenLoading] = useRecoilState(fullscreenLoadingState);
+
+	if (fullscreenLoading.onClose) {
+		fullscreenLoading.onClose(true);
+	}
+
+	return (
+		<Affix w="100vw" h="100vh" display={fullscreenLoading?.visible ? "block" : "none"}>
+			<Overlay blur={5} center color="#FFF">
+				<Flex direction="column" align="center" justify="center" gap="0.5em">
+					<Loader size="lg" />
+					<Text fz="1em">保存中...</Text>
+				</Flex>
+			</Overlay>
+		</Affix>
 	);
 };

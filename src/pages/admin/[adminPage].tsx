@@ -11,7 +11,7 @@ import { useState, useEffect, ReactNode } from "react";
 import { AlertComp, BigDialog, BigDialog2 } from "../../components/commonComponents/alertComp";
 import { ConfirmComp } from "../../components/commonComponents/alertComp";
 
-import { getApp, getApps, initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 
 import { getAuth, signOut, onAuthStateChanged, User, Auth } from "firebase/auth";
 
@@ -131,7 +131,6 @@ export default function Admin() {
 		minWidth: "700px",
 		overflow: "hidden",
 	};
-
 	return (
 		<Flex direction="column" sx={adminWrapper}>
 			<AuthWrapper>
@@ -147,10 +146,10 @@ export default function Admin() {
 				{adminPage === "login" && <AdminLogin />}
 			</AuthWrapper>
 
-			<AlertComp />
+			{/* <AlertComp />
 			<ConfirmComp />
 			<BigDialog />
-			<BigDialog2 />
+			<BigDialog2 /> */}
 		</Flex>
 	);
 }

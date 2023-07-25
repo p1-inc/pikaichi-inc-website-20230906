@@ -16,6 +16,7 @@ import { deployDatabase } from "../../firebase/firebase";
 import { useDialogState } from "../../hooks/useDialogState";
 
 import { Burger, Button, Container, Drawer, Flex, Group, Header, Menu, UnstyledButton, Navbar, NavLink, Box, Text } from "@mantine/core";
+import { useDeploy } from "../../hooks/useDeploy";
 
 type AdminHeaderType = {
 	title: string;
@@ -27,9 +28,9 @@ export const AdminHeader = ({ title, fixed = false, color = c.defaultBlue }: Adm
 	const [authUser, setAuthUser] = useRecoilState(authUserState);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [openMenu, setOpenMenu] = useState(false);
-	const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+	// const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
-	const { displayAlert } = useDialogState();
+	const { handleDeploy, loading } = useDeploy();
 
 	const handleShowMenu = (e: { currentTarget: HTMLButtonElement }) => {
 		if (anchorEl) {
@@ -53,22 +54,22 @@ export const AdminHeader = ({ title, fixed = false, color = c.defaultBlue }: Adm
 		}
 	};
 
-	const handleSubmit = async () => {
-		setSubmitLoading(true);
-
-		const res = await deployDatabase();
-
-		if (res === "success") {
-			await displayAlert("", "設定を反映しました", "");
-		} else {
-			await displayAlert("", "反映に失敗しました", "red");
-		}
-		setOpenMenu(false);
-
-		setSubmitLoading(false);
-
-		//////////vercel deploy処理必要！！！
-	};
+	// 	const handleSubmit = async () => {
+	// 		setSubmitLoading(true);
+	//
+	// 		const res = await deployDatabase();
+	//
+	// 		if (res === "success") {
+	// 			await displayAlert("", "設定を反映しました", "");
+	// 		} else {
+	// 			await displayAlert("", "反映に失敗しました", "red");
+	// 		}
+	// 		setOpenMenu(false);
+	//
+	// 		setSubmitLoading(false);
+	//
+	// 		//////////vercel deploy処理必要！！！
+	// 	};
 
 	const navList = {
 		label: "navList",
@@ -163,7 +164,7 @@ export const AdminHeader = ({ title, fixed = false, color = c.defaultBlue }: Adm
 								</Button>
 							</NextLink>
 
-							<Button size="xs" sx={{ width: "15em" }} variant="filled" onClick={handleSubmit} loading={submitLoading ? true : false}>
+							<Button size="xs" sx={{ width: "15em" }} variant="filled" onClick={handleDeploy} loading={loading ? true : false}>
 								設定を反映させる
 							</Button>
 						</Navbar.Section>

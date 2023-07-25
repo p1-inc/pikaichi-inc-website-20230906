@@ -11,6 +11,7 @@ import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
 import { globalStyle } from "../styles/globals";
 import { c, f } from "../styles/eStyle";
+import { DialogProvider } from "../components/commonComponents/dialogProvider";
 
 function MyApp({ Component, pageProps }: any) {
 	const router = useRouter();
@@ -34,7 +35,9 @@ function MyApp({ Component, pageProps }: any) {
 			withGlobalStyles
 		>
 			<RecoilRoot>
-				<Component {...pageProps} />
+				<DialogProvider>
+					<Component {...pageProps} />
+				</DialogProvider>
 			</RecoilRoot>
 		</MantineProvider>
 	);
