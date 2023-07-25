@@ -71,7 +71,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false, old = fals
 	const [metaTitle, setMetaTitle] = useState<string>("");
 	const [metaDescription, setMetaDescription] = useState<string>("");
 
-	const { displayAlert, displayConfirm } = useDialogState();
+	const { displayAlert, displayConfirm, displayFullscreenLoading } = useDialogState();
 
 	const [saveLoading, setSaveLoading] = useState<boolean>(false);
 
@@ -303,12 +303,12 @@ export default function EditPost({ id, isDuplicate, readOnly = false, old = fals
 			createdAt: createdAt || null,
 			updatedAt: updatedAt || null,
 		};
-
-		setSaveLoading(true);
-
+		displayFullscreenLoading(true);
+		// setSaveLoading(true);
+		// await new Promise((resolve) => setTimeout(resolve, 1000));
 		try {
 			const result = await setPostData(nId, data);
-			setSaveLoading(false);
+			displayFullscreenLoading(false);
 			if (result === "success") {
 				await displayAlert("", "保存しました", "");
 			} else {
@@ -319,7 +319,8 @@ export default function EditPost({ id, isDuplicate, readOnly = false, old = fals
 			console.log(error);
 		}
 
-		setSaveLoading(false);
+		// setSaveLoading(false);
+		displayFullscreenLoading(false);
 		router.push(`/admin/editPost/?id=${nId}`);
 	};
 
@@ -363,7 +364,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false, old = fals
 
 	return (
 		<Box id="editPostComponent" sx={editBlog}>
-			{saveLoading && (
+			{/* {saveLoading && (
 				<Affix w="100vw" h="100vh">
 					<Overlay blur={5} center color="#FFF">
 						<Flex direction="column" align="center" justify="center" gap="0.5em">
@@ -372,7 +373,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false, old = fals
 						</Flex>
 					</Overlay>
 				</Affix>
-			)}
+			)} */}
 
 			<Global styles={P1_EditorStyle({ bg: api.viewGrid }) as CSSObject} />
 			<Head>

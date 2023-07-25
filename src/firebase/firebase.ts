@@ -389,7 +389,10 @@ export const getAllCampaignList = async ({ dbName = _dbName }: { dbName?: string
 	const _result: CampaignType[] = await getDocDataFromDB(dbName, "campaign");
 	const list = await getListInLayoutUsage("campaign");
 
-	const result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+	let result: any = [];
+	if (_result && list) {
+		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+	}
 	return result;
 };
 
@@ -441,7 +444,7 @@ export const deleteCampaign = async (idArr: string[]) => {
 	//
 	const list = await getAllCampaignList({});
 
-	const delArr = list.filter((d) => idArr.includes(d.id));
+	const delArr = list.filter((d: any) => idArr.includes(d.id));
 
 	const isIncludes = delArr.length > 0;
 	if (!isIncludes) {
@@ -491,8 +494,13 @@ export const deleteCampaign = async (idArr: string[]) => {
 
 export const getTopImage = async ({ dbName = _dbName }) => {
 	const _result: TopImageType[] = await getDocDataFromDB(dbName, "topImage");
-	const result: TopImageType = _result[0];
-	return result;
+	let result: TopImageType;
+	if (_result) {
+		result = _result[0] || undefined;
+		return result;
+	} else {
+		return;
+	}
 };
 
 export const setTopImage = async <T>(
@@ -551,7 +559,10 @@ export const getTopWord = async ({ dbName = _dbName }) => {
 	const _result: TopWordType[] = await getDocDataFromDB(dbName, "topWord");
 	const list = await getListInLayoutUsage("topWord");
 
-	const result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+	let result: any[] = [];
+	if (_result && list) {
+		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+	}
 
 	return result;
 };
@@ -709,8 +720,7 @@ export const setUserData = async (data: UserType) => {
 
 export const getPeopleData = async ({ dbName = _dbName }) => {
 	const result = await getDocDataFromDB(dbName, "people");
-
-	return result;
+	return result ? result : [{ peopleList: [""] }];
 };
 
 type SetPeopleDataType = {
@@ -763,7 +773,11 @@ export const setPeopleData = async (data: SetPeopleDataType, node: HTMLElement, 
 export const getAllShopInfoList = async ({ dbName = _dbName }) => {
 	const _result: ShopInfoType[] = await getDocDataFromDB(dbName, "shopInfo");
 	const list = await getListInLayoutUsage("shopInfo");
-	const result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+
+	let result: any[] = [];
+	if (_result && list) {
+		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+	}
 
 	return result;
 };
@@ -841,6 +855,9 @@ export const deleteShopInfo = async (idArr: string[]) => {
 export const getListInLayoutUsage = async (key: string) => {
 	//DB > usage > layout　の中から、　keyでfilterして、そのIDをリストにして返す
 	const layoutUsage = await getlayoutUsage();
+	if (!layoutUsage) {
+		return [];
+	}
 	const reg = new RegExp(`^${key}_(.*)`);
 	const _filterd = layoutUsage.map((d) => (d.match(reg) ? d.match(reg) : []));
 	const filterd = _filterd.flatMap((d) => (d?.[1] ? d[1] : []));
@@ -1164,7 +1181,15 @@ export const deleteMediaLib = async (mediaLibArr: string[]) => {
 
 export const getNews = async ({ dbName = _dbName }) => {
 	const result: NewsType[] = await getDocDataFromDB(dbName, "news");
-	return result;
+	const initData = [
+		{
+			id: "",
+			newsList: [""],
+			createdAt: "",
+			updatedAt: "",
+		},
+	];
+	return result ? result : initData;
 };
 
 export const setNews = async (data: NewsType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
@@ -1263,7 +1288,10 @@ export const getAllTables = async ({ dbName = _dbName }: { dbName?: string }) =>
 	const _result: TableType[] = await getDocDataFromDB(dbName, "table");
 	const list = await getListInTableUsage("topWord");
 
-	const result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+	let result;
+	if (_result && list) {
+		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+	}
 
 	return result;
 };
@@ -1314,8 +1342,7 @@ export const deleteTable = async (idArr: string[]) => {
 export const getLayoutData = async ({ dbName = _dbName }: { dbName?: string }): Promise<ContainerType[]> => {
 	//
 	const layoutData = await getDocDataFromDBWithFieldName(dbName, "layout");
-
-	return layoutData;
+	return layoutData ? layoutData : [];
 };
 
 export const setLayoutData = async (layoutData: ContainerType[]): Promise<"success" | "error"> => {
@@ -1633,7 +1660,7 @@ export const setPostTag = async (tagArr: TagType[]) => {
 
 export const getAllPostCategory = async ({ dbName = _dbName }: { dbName?: string }) => {
 	const result: CategoryType[] = await getDocDataFromDB(dbName, "post_category");
-	return result;
+	return result ? result : [];
 };
 
 export const setPostCategory = async (categoryArr: CategoryType[]) => {
@@ -1654,7 +1681,7 @@ export const setPostCategory = async (categoryArr: CategoryType[]) => {
 
 export const getMenuList = async ({ dbName = _dbName }) => {
 	const result = await getDocDataFromDB(dbName, "menu");
-	return result;
+	return result ? result : [[]];
 };
 
 export const setMenuList = async (dataArr: MenuType[], node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
@@ -1690,7 +1717,7 @@ export const setMenuList = async (dataArr: MenuType[], node: HTMLElement, width:
 
 export const getFooterData = async ({ dbName = _dbName }) => {
 	const result: FooterCompType[] = await getDocDataFromDB(dbName, "footer");
-	return result;
+	return result ? result : [null];
 };
 
 export const setFooterData = async (data: FooterCompType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
@@ -1820,7 +1847,7 @@ export const deleteFixedComponent = async (idArr: string[]) => {
 
 export const getGeneralData = async ({ dbName = _dbName }: { dbName?: string }) => {
 	const result: GeneralControlType[] = await getDocDataFromDB(dbName, "generalControls");
-	return result;
+	return result ? result : [];
 };
 
 export const setGeneralData = async ({ data }: { data: GeneralControlType }) => {
@@ -1862,7 +1889,7 @@ export const setGeneralData = async ({ data }: { data: GeneralControlType }) => 
 
 export const getAllComponent = async ({ dbName = _dbName }) => {
 	const result: CompListType[] = await getDocDataFromDB(dbName, "componentList");
-	return result;
+	return result ? result : [];
 };
 
 type SetComponentDataType = {
@@ -1964,13 +1991,12 @@ export const deployDatabase = async () => {
 	///////////////////Usageを読み取る//////////////////////////
 
 	let _layoutUsage: string[] = [];
-	let tableUsage: [string, string[]][];
-	let mediaUsage: [string, string[]][];
+	let tableUsage: [string, string[]][] = [];
+	let mediaUsage: [string, string[]][] = [];
 
 	const querySnapshot = await getDocs(collection(db, "usage"));
 	querySnapshot.forEach((doc) => {
 		if (doc.id === "layout") {
-			// layoutUsage.push(doc.data()?.layout);
 			_layoutUsage = doc.data()?.layout;
 		}
 		if (doc.id === "table") {
@@ -2138,10 +2164,10 @@ export const initWebData = async (_dbName: string) => {
 
 	const _logoImgSrc = mediaLib.find((m) => m.id === _generalData[0].logoImg);
 
-	const generalData = { ..._generalData[0], logoImgSrc: _logoImgSrc.srcHigh };
-	const faviconImg = mediaLib.find((d) => d.id === generalData.favicon);
-	const logoImg = mediaLib.find((d) => d.id === generalData.logoImg);
-	const ogImg = mediaLib.find((d) => d.id === generalData.ogImage);
+	const generalData = { ..._generalData[0], logoImgSrc: _logoImgSrc?.srcHigh };
+	const faviconImg = mediaLib.find((d) => d.id === generalData?.favicon);
+	const logoImg = mediaLib.find((d) => d.id === generalData?.logoImg);
+	const ogImg = mediaLib.find((d) => d.id === generalData?.ogImage);
 
 	const _allComplist = await getAllComponent({});
 	const allComplist = _allComplist.filter((d) => containerChild.includes(d.id));

@@ -117,10 +117,10 @@ const AdminPassWordReset = () => {
 					<LoadingOverlay visible={loading} />
 				</Box>
 			</Container>
-			<AlertComp />
+			{/* <AlertComp />
 			<ConfirmComp />
 			<BigDialog />
-			<BigDialog2 />
+			<BigDialog2 /> */}
 		</>
 	);
 };

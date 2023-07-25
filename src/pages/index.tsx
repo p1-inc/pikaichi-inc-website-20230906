@@ -32,7 +32,7 @@ export default function Home() {
     `;
 
 	const [openFlyerSample, toggleOpenFlyerSample] = useToggle([false, true]);
-
+	//TODO
 	return (
 		<div>
 			<Head>
@@ -84,8 +84,8 @@ export default function Home() {
 					<SlideFlyerSample setWinOpen={openFlyerSample} />
 				</Modal>
 			</main>
-			<AlertComp />
-			<ConfirmComp />
+			{/* <AlertComp />
+			<ConfirmComp /> */}
 		</div>
 	);
 }
