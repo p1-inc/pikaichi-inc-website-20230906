@@ -3,8 +3,6 @@ import { useRouter } from "next/router";
 
 import NextLink from "next/link";
 
-import { AlertComp, BigDialog, BigDialog2, ConfirmComp } from "../../components/commonComponents/alertComp";
-
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import { sendEmailVerificationFunc, signupFunc } from "../../firebase/firebaseAuth";
@@ -50,7 +48,7 @@ const AdminSignup = () => {
 
 	const [loading, setLoading] = useState<boolean>(false);
 
-	const { displayAlert, displayConfirm, displayConfirmSaveAs } = useDialogState();
+	const { displayAlert, displayAlertEX } = useDialogState();
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -83,19 +81,20 @@ const AdminSignup = () => {
 		setLoading(false);
 
 		if (res === "auth/email-already-in-use") {
-			await displayAlert(
-				"",
-				"入力したメールアドレスは既に登録されています。このメールアドレスを使用される場合は、ログイン画面に戻ってログインしてください。パスワードがお忘れの方はログイン画面からパスワードの再発行をお願いします",
-				"",
-			);
+			await displayAlertEX({
+				title: "入力したメールアドレスは既に登録されています",
+				msg: "このメールアドレスを使用される場合は、\nログイン画面に戻ってログインしてください",
+				body: "パスワードがお忘れの方はログイン画面から\nパスワードの再発行をお願いします",
+			});
 
 			router.push("/admin/index/");
 		} else if (res) {
-			await displayAlert(
-				"",
-				"登録したアドレスに確認メールをお送りいたしました。しばらくお待ちの上、受信メールに記載されているURLをクリックして認証を完了してください。（確認メールが迷惑メールのフォルダに入っている場合もあります、こちらもご確認ください）",
-				"",
-			);
+			await displayAlertEX({
+				title: "登録したアドレスに確認メールをお送りいたしました",
+				msg: "しばらくお待ちの上、受信メールに記載されているURLをクリックして認証を完了してください",
+				body: "確認メールが迷惑メールのフォルダに入っている場合もあります、こちらもご確認ください",
+			});
+
 			router.push("/admin/index/");
 		} else {
 			await displayAlert("", "アカウント登録に失敗しました。再度登録してください。問題が解決しない場合は、サポートまでお問い合わせください", "red");
@@ -131,11 +130,11 @@ const AdminSignup = () => {
 		setLoading(false);
 
 		if (res) {
-			await displayAlert(
-				"",
-				"登録したアドレスに確認メールをお送りいたしました。しばらくお待ちの上、受信メールに記載されているURLをクリックして認証を完了してください。（確認メールが迷惑メールのフォルダに入っている場合もあります、こちらもご確認ください）",
-				"",
-			);
+			await displayAlertEX({
+				title: "登録したアドレスに確認メールをお送りいたしました",
+				msg: "しばらくお待ちの上、受信メールに記載されているURLをクリックして認証を完了してください",
+				body: "確認メールが迷惑メールのフォルダに入っている場合もあります、こちらもご確認ください",
+			});
 
 			router.push("/admin/index/");
 		} else {

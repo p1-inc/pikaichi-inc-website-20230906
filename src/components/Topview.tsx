@@ -372,12 +372,12 @@ export default function Topview({ scrollIntoView, contactRef }: { scrollIntoView
 	return (
 		<Box w="100%" m="0 auto" sx={topview} ref={ref}>
 			<Flex w="90%" align="flex-start" justify="space-between" m="0 auto" pt="2em" sx={{ zIndex: 100000 }} pos="relative">
-				<Flex w={mq.sp ? "4em" : "6em"}>
+				<Anchor w={mq.sp ? "4em" : "6em"} href="/">
 					<Box component={Image} src="/img/logo_top2.svg" width={137} height={137} alt="ロゴ" w="100%" h="100%" sx={{ objectFit: "cover" }} />
-				</Flex>
-				<Flex align="center" justify="center" mt="1em" gap="1em">
+				</Anchor>
+				<Flex align="center" justify="center" mt="1em" gap="2em">
 					<UnstyledButton
-						fz={mq.sp ? "0.8em" : "1em"}
+						fz={mq.sp ? "1em" : "1.2em"}
 						sx={{ color: c.mainPurple, fontFamily: f.fontfamily_en_01 }}
 						onClick={() =>
 							scrollIntoView({
@@ -388,7 +388,7 @@ export default function Topview({ scrollIntoView, contactRef }: { scrollIntoView
 						CONTACT
 					</UnstyledButton>
 					<Anchor sx={{ "&:hover": { textDecoration: "none" } }} href="/posts/postIndex" target="_blank" rel="noopener noreferrer">
-						<Text fz={mq.sp ? "0.8em" : "1em"} sx={{ color: c.mainPurple, fontFamily: f.fontfamily_en_01 }}>
+						<Text fz={mq.sp ? "1em" : "1.2em"} sx={{ color: c.mainPurple, fontFamily: f.fontfamily_en_01 }}>
 							BLOG
 						</Text>
 					</Anchor>

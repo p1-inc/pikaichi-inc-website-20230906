@@ -3,6 +3,7 @@ import { useSetRecoilState } from "recoil";
 import {
 	dialogConfirmState,
 	dialogAlertState,
+	dialogAlertStateEX,
 	dialogConfirmSaveState,
 	dialogConfirmSaveAsState,
 	bigDialogState,
@@ -13,6 +14,8 @@ import {
 export const useDialogState = () => {
 	//
 	const setDialogAlert = useSetRecoilState(dialogAlertState);
+	const setDialogAlertEX = useSetRecoilState(dialogAlertStateEX);
+
 	const setDialogConfirm = useSetRecoilState(dialogConfirmState);
 	const setDialogConfirmSave = useSetRecoilState(dialogConfirmSaveState);
 	const setDialogConfirmSaveAs = useSetRecoilState(dialogConfirmSaveAsState);
@@ -28,6 +31,19 @@ export const useDialogState = () => {
 				onClose: resolve,
 				title: title,
 				msg: msg,
+				color: color,
+			});
+		});
+	};
+
+	const displayAlertEX = ({ title = "", msg = "", body = "", color = "" }: { title?: string; msg?: string; body?: string; color?: string }) => {
+		return new Promise<boolean>((resolve) => {
+			setDialogAlertEX({
+				visible: true,
+				onClose: resolve,
+				title: title,
+				msg: msg,
+				body: body,
 				color: color,
 			});
 		});
@@ -121,10 +137,13 @@ export const useDialogState = () => {
 
 	return {
 		setDialogAlert,
-		displayConfirm,
+		displayAlert,
+
+		setDialogAlertEX,
+		displayAlertEX,
 
 		setDialogConfirm,
-		displayAlert,
+		displayConfirm,
 
 		setDialogConfirmSave,
 		displayConfirmSave,

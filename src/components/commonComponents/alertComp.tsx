@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import {
 	dialogConfirmState,
 	dialogAlertState,
+	dialogAlertStateEX,
 	dialogConfirmSaveState,
 	dialogConfirmSaveAsState,
 	bigDialogState,
@@ -11,10 +12,12 @@ import {
 	fullscreenLoadingState,
 } from "../../recoil/atoms";
 
+import { c, cArr } from "../../styles/eStyle";
+
 import { Affix, Box, Button, Flex, Loader, LoadingOverlay, Modal, Overlay, Table, Text } from "@mantine/core";
 
 const replaceBS = (text: string) => {
-	const nText = text.split("\n");
+	const nText = text?.split("\n") || [];
 	return (
 		<div>
 			{nText.map((txt, index) => (
@@ -58,6 +61,61 @@ export const AlertComp = () => {
 					ml="auto"
 					mr="0"
 					mt="1em"
+					onClick={() => {
+						handleClose(true);
+					}}
+				>
+					O K
+				</Button>
+			</Flex>
+		</Modal>
+	);
+};
+
+export const AlertCompEX = () => {
+	//
+	const [dialogAlertEX, setDialogAlertEX] = useRecoilState(dialogAlertStateEX);
+
+	const handleClose = (prop: boolean) => {
+		if (dialogAlertEX.onClose) {
+			dialogAlertEX.onClose(prop);
+		}
+
+		setDialogAlertEX({
+			visible: false,
+			onClose: undefined,
+			title: "",
+			msg: "",
+			body: "",
+			color: "",
+		});
+	};
+
+	return (
+		<Modal
+			zIndex={1000}
+			opened={dialogAlertEX?.visible}
+			onClose={() => {
+				handleClose(true);
+			}}
+			styles={{ header: { color: dialogAlertEX.color } }}
+		>
+			<Flex direction="column" p="1em" py={0}>
+				<Text c={dialogAlertEX.color} fz="1em">
+					{replaceBS(dialogAlertEX.title)}
+				</Text>
+				<Text c={dialogAlertEX.color} fz="0.9em" mt="1em">
+					{replaceBS(dialogAlertEX.msg)}
+				</Text>
+				<Text c={dialogAlertEX.color} fz="0.8em" mt="1em" p="0.8em" sx={{ backgroundColor: cArr.skyblue[0], borderRadius: "0.5em" }}>
+					{replaceBS(dialogAlertEX.body)}
+				</Text>
+
+				<Button
+					px="3em"
+					ml="auto"
+					mr="0"
+					mt="2em"
 					onClick={() => {
 						handleClose(true);
 					}}

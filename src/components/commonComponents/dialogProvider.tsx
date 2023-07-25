@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { AlertComp, BigDialog, BigDialog2, ConfirmComp, FullscreenLoading } from "../../components/commonComponents/alertComp";
+import { AlertComp, AlertCompEX, BigDialog, BigDialog2, ConfirmComp, FullscreenLoading } from "../../components/commonComponents/alertComp";
 
 export const DialogProvider = ({ children }: { children: ReactNode }) => {
 	//
@@ -7,6 +7,7 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
 		<>
 			{children}
 			<AlertComp />
+			<AlertCompEX />
 			<ConfirmComp />
 			<BigDialog />
 			<BigDialog2 />

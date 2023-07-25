@@ -61,6 +61,27 @@ export const dialogAlertState = atom<DialogType>({
 	},
 });
 
+/////////////////////////////////////////////////////////////////////
+type dialogAlertStateEX = {
+	visible: boolean;
+	onClose: (value: boolean | PromiseLike<boolean>) => void;
+	title: string;
+	msg: string;
+	body: string;
+	color: string;
+};
+export const dialogAlertStateEX = atom<dialogAlertStateEX>({
+	key: "dialogAlertEX",
+	default: {
+		visible: false,
+		onClose: undefined,
+		title: undefined,
+		msg: undefined,
+		body: undefined,
+		color: undefined,
+	},
+});
+
 export const dialogConfirmState = atom<DialogType>({
 	key: "dialogConfirm",
 	default: {

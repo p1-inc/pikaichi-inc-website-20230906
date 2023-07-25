@@ -47,7 +47,7 @@ const AdminLogin = () => {
 	const [authUser, setAuthUser] = useRecoilState(authUserState);
 	const [authError, setAuthError] = useRecoilState(authErrorState);
 
-	const { displayAlert } = useDialogState();
+	const { displayAlert, displayAlertEX } = useDialogState();
 
 	const [loading, setLoading] = useState<boolean>(false);
 
@@ -135,11 +135,11 @@ const AdminLogin = () => {
 		setLoading(false);
 
 		if (res) {
-			await displayAlert(
-				"",
-				"登録したアドレスに確認メールをお送りいたしました。しばらくお待ちの上、受信メールに記載されているURLをクリックして認証を完了してください。（確認メールが迷惑メールのフォルダに入っている場合もあります、こちらもご確認ください）",
-				"",
-			);
+			await displayAlertEX({
+				title: "登録したアドレスに確認メールをお送りいたしました",
+				msg: "しばらくお待ちの上、受信メールに記載されているURLをクリックして認証を完了してください",
+				body: "確認メールが迷惑メールのフォルダに入っている場合もあります、こちらもご確認ください",
+			});
 
 			setAuthError("");
 			router.push("/admin/index/");
