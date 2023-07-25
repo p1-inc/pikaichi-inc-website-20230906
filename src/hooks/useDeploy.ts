@@ -20,7 +20,10 @@ export const useDeploy = () => {
 		}
 
 		const vercelDeployUrl = process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_URL;
-		if (!vercelDeployUrl) throw new Error("VERCEL_DEPLOY_環境変数が設定されていません。");
+		if (!vercelDeployUrl) {
+			displayFullscreenLoading(false);
+			console.log("VERCEL_DEPLOY_環境変数が設定されていません。デプロイできませんでした");
+		}
 
 		if (res === "success") {
 			displayFullscreenLoading(false);

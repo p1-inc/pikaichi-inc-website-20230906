@@ -1,4 +1,26 @@
-import { BlockNameType, ContainerType, FooterCompType, StaticPropsType } from "./../types/types";
+import {
+	BlockNameType,
+	CampaignInit,
+	CategoryInit,
+	CompListInit,
+	ContainerInitObj,
+	ContainerType,
+	FooterCompInit,
+	FooterCompType,
+	GeneralControlInit,
+	MediaLibInitObj,
+	MenuInit,
+	NewsInit,
+	PeopleType,
+	PeopleTypeInit,
+	PhotoGalleryInit,
+	ShopInfoInit,
+	StaticPropsType,
+	TableInit,
+	TopImageInit,
+	TopWordInit,
+	UserTypeInit,
+} from "./../types/types";
 //
 //
 
@@ -389,7 +411,8 @@ export const getAllCampaignList = async ({ dbName = _dbName }: { dbName?: string
 	const _result: CampaignType[] = await getDocDataFromDB(dbName, "campaign");
 	const list = await getListInLayoutUsage("campaign");
 
-	let result: any = [];
+	let result: CampaignType[] = [CampaignInit];
+
 	if (_result && list) {
 		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
 	}
@@ -494,13 +517,12 @@ export const deleteCampaign = async (idArr: string[]) => {
 
 export const getTopImage = async ({ dbName = _dbName }) => {
 	const _result: TopImageType[] = await getDocDataFromDB(dbName, "topImage");
-	let result: TopImageType;
+	let result: TopImageType = TopImageInit;
+
 	if (_result) {
-		result = _result[0] || undefined;
-		return result;
-	} else {
-		return;
+		result = _result[0];
 	}
+	return result;
 };
 
 export const setTopImage = async <T>(
@@ -559,7 +581,8 @@ export const getTopWord = async ({ dbName = _dbName }) => {
 	const _result: TopWordType[] = await getDocDataFromDB(dbName, "topWord");
 	const list = await getListInLayoutUsage("topWord");
 
-	let result: any[] = [];
+	let result: TopWordType[] = [TopWordInit];
+
 	if (_result && list) {
 		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
 	}
@@ -668,7 +691,7 @@ export const getDeployData = async () => {
 
 export const getAllUserList = async () => {
 	//
-	const result: UserType[] = [];
+	const result: UserType[] = [UserTypeInit];
 
 	const querySnapshot = await getDocs(collection(db, "users"));
 	querySnapshot.forEach((doc) => {
@@ -719,8 +742,12 @@ export const setUserData = async (data: UserType) => {
 };
 
 export const getPeopleData = async ({ dbName = _dbName }) => {
-	const result = await getDocDataFromDB(dbName, "people");
-	return result ? result : [{ peopleList: [""] }];
+	let result: PeopleType[] = [PeopleTypeInit];
+	const _result: PeopleType[] = await getDocDataFromDB(dbName, "people");
+	if (_result) {
+		result = _result;
+	}
+	return result;
 };
 
 type SetPeopleDataType = {
@@ -774,7 +801,7 @@ export const getAllShopInfoList = async ({ dbName = _dbName }) => {
 	const _result: ShopInfoType[] = await getDocDataFromDB(dbName, "shopInfo");
 	const list = await getListInLayoutUsage("shopInfo");
 
-	let result: any[] = [];
+	let result: any[] = [ShopInfoInit];
 	if (_result && list) {
 		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
 	}
@@ -906,7 +933,7 @@ export const getImageSrc = async (id: string) => {
 };
 
 export const getMediaLib = async () => {
-	const mediaLib: MediaLib[] = [];
+	const mediaLib: MediaLib[] = [MediaLibInitObj];
 	const querySnapshot = await getDocs(collection(db, "mediaLib"));
 	querySnapshot.forEach((doc) => {
 		const data = doc.data();
@@ -1180,16 +1207,13 @@ export const deleteMediaLib = async (mediaLibArr: string[]) => {
 };
 
 export const getNews = async ({ dbName = _dbName }) => {
-	const result: NewsType[] = await getDocDataFromDB(dbName, "news");
-	const initData = [
-		{
-			id: "",
-			newsList: [""],
-			createdAt: "",
-			updatedAt: "",
-		},
-	];
-	return result ? result : initData;
+	const _result: NewsType[] = await getDocDataFromDB(dbName, "news");
+
+	let result: NewsType[] = [NewsInit];
+	if (_result) {
+		result = _result;
+	}
+	return result;
 };
 
 export const setNews = async (data: NewsType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
@@ -1287,12 +1311,10 @@ export const setTableAsTemplate = async (data: TableType, node: HTMLElement, wid
 export const getAllTables = async ({ dbName = _dbName }: { dbName?: string }) => {
 	const _result: TableType[] = await getDocDataFromDB(dbName, "table");
 	const list = await getListInTableUsage("topWord");
-
-	let result;
+	let result: TableType[] = [TableInit];
 	if (_result && list) {
 		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
 	}
-
 	return result;
 };
 
@@ -1341,8 +1363,12 @@ export const deleteTable = async (idArr: string[]) => {
 
 export const getLayoutData = async ({ dbName = _dbName }: { dbName?: string }): Promise<ContainerType[]> => {
 	//
-	const layoutData = await getDocDataFromDBWithFieldName(dbName, "layout");
-	return layoutData ? layoutData : [];
+	const _result: ContainerType[] = await getDocDataFromDBWithFieldName(dbName, "layout");
+	let result: ContainerType[] = [ContainerInitObj];
+	if (_result) {
+		result = _result;
+	}
+	return result;
 };
 
 export const setLayoutData = async (layoutData: ContainerType[]): Promise<"success" | "error"> => {
@@ -1382,7 +1408,11 @@ export const setLayoutData = async (layoutData: ContainerType[]): Promise<"succe
 };
 
 export const getPhotoGalleryData = async ({ dbName = _dbName }) => {
-	const result: PhotoGalleryType[] = await getDocDataFromDB(dbName, "photoGallery");
+	const _result: PhotoGalleryType[] = await getDocDataFromDB(dbName, "photoGallery");
+	let result: PhotoGalleryType[] = [PhotoGalleryInit];
+	if (_result) {
+		result = _result;
+	}
 	return result;
 };
 
@@ -1439,13 +1469,13 @@ export const setPhotoGalleryData = async (
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////ここから下は記事に関するメソッド//////////////////////////////
-export const getAllPostData___old = async ({ dbName = _dbName }: { dbName?: string }) => {
-	const result: PostDataType[] = await getDocDataFromDB(dbName, "post");
-	return result;
-};
+// export const getAllPostData___old = async ({ dbName = _dbName }: { dbName?: string }) => {
+// 	const result: PostDataType[] = await getDocDataFromDB(dbName, "post");
+// 	return result;
+// };
 
 export const getAllPostData = async () => {
-	const result: PostDataType[] = [];
+	const result: PostDataType[] = [PostDataInitObj];
 	const querySnapshot = await getDocs(collection(db, "posts"));
 	querySnapshot.forEach((doc) => {
 		result.push(doc.data() as PostDataType);
@@ -1512,83 +1542,83 @@ export const setPostData = async (id: string, data: PostDataType) => {
 	return "success";
 };
 
-export const deletePost__old = async (arr: string[]) => {
-	const f = false;
-	//////////////////////すべてのidが存在するかチェック///////////////////////////
+// export const deletePost__old = async (arr: string[]) => {
+// 	const f = false;
+// 	//////////////////////すべてのidが存在するかチェック///////////////////////////
+//
+// 	const docRef = doc(db, _dbName, "post");
+// 	const docSnap = await getDoc(docRef);
+//
+// 	const allPostData = await getAllPostData();
+//
+// 	const allPostId = allPostData.map((d) => d.id);
+//
+// 	const isExist = arr.filter((d) => allPostId.includes(d));
+//
+// 	if (isExist.length !== arr.length) {
+// 		console.log("No such document!");
+// 		return "error";
+// 	}
+// };
 
-	const docRef = doc(db, _dbName, "post");
-	const docSnap = await getDoc(docRef);
+// const getDeletedMediaUsageByPostId = async (postIdArr: string[]) => {
+// 	//postIdを配列で指定して、deleteするusageを更新し、新しくupdateするmediaUsage　の　dataを取得する
+// 	const docRef = doc(db, "usage", "media");
+// 	const docSnap = await getDoc(docRef);
+//
+// 	if (docSnap.exists()) {
+// 		const nData1 = docSnap.data();
+// 		const nData2: [string, string[]][] = Object.entries(nData1);
+// 		const nData3 = nData2.map((d) => {
+// 			const nUsagelist = d[1].filter((d2) => {
+// 				const isExistId = postIdArr.filter((id) => (d2.match(id) ? true : false));
+// 				return isExistId.length > 0 ? false : true;
+// 			});
+//
+// 			return [d[0], nUsagelist];
+// 		}) as [string, string[]];
+//
+// 		const res = nData3.reduce((acc: { [index: string]: string }, value) => {
+// 			const [key, val] = value;
+// 			acc[key] = val;
+// 			return acc;
+// 		}, {});
+//
+// 		return res;
+// 	} else {
+// 		console.log("No such document!");
+// 	}
+// };
 
-	const allPostData = await getAllPostData();
-
-	const allPostId = allPostData.map((d) => d.id);
-
-	const isExist = arr.filter((d) => allPostId.includes(d));
-
-	if (isExist.length !== arr.length) {
-		console.log("No such document!");
-		return "error";
-	}
-};
-
-const getDeletedMediaUsageByPostId = async (postIdArr: string[]) => {
-	//postIdを配列で指定して、deleteするusageを更新し、新しくupdateするmediaUsage　の　dataを取得する
-	const docRef = doc(db, "usage", "media");
-	const docSnap = await getDoc(docRef);
-
-	if (docSnap.exists()) {
-		const nData1 = docSnap.data();
-		const nData2: [string, string[]][] = Object.entries(nData1);
-		const nData3 = nData2.map((d) => {
-			const nUsagelist = d[1].filter((d2) => {
-				const isExistId = postIdArr.filter((id) => (d2.match(id) ? true : false));
-				return isExistId.length > 0 ? false : true;
-			});
-
-			return [d[0], nUsagelist];
-		}) as [string, string[]];
-
-		const res = nData3.reduce((acc: { [index: string]: string }, value) => {
-			const [key, val] = value;
-			acc[key] = val;
-			return acc;
-		}, {});
-
-		return res;
-	} else {
-		console.log("No such document!");
-	}
-};
-
-const getDeletedTableUsageByPostId = async (postIdArr: string[]) => {
-	//postIdを配列で指定して、deleteするusageを更新し、新しくupdateするmediaUsage　の　dataを取得する
-	const docRef = doc(db, "usage", "table");
-	const docSnap = await getDoc(docRef);
-
-	if (docSnap.exists()) {
-		const nData1 = docSnap.data();
-		console.log("nData1 : ", nData1);
-		const nData2: [string, string[]][] = Object.entries(nData1);
-		const nData3 = nData2.map((d) => {
-			const nUsagelist = d[1].filter((d2) => {
-				const isExistId = postIdArr.filter((id) => (d2.match(id) ? true : false));
-				return isExistId.length > 0 ? false : true;
-			});
-
-			return [d[0], nUsagelist];
-		}) as [string, string[]];
-
-		const res = nData3.reduce((acc: { [index: string]: string }, value) => {
-			const [key, val] = value;
-			acc[key] = val;
-			return acc;
-		}, {});
-
-		return res;
-	} else {
-		console.log("No such document!");
-	}
-};
+// const getDeletedTableUsageByPostId = async (postIdArr: string[]) => {
+// 	//postIdを配列で指定して、deleteするusageを更新し、新しくupdateするmediaUsage　の　dataを取得する
+// 	const docRef = doc(db, "usage", "table");
+// 	const docSnap = await getDoc(docRef);
+//
+// 	if (docSnap.exists()) {
+// 		const nData1 = docSnap.data();
+// 		console.log("nData1 : ", nData1);
+// 		const nData2: [string, string[]][] = Object.entries(nData1);
+// 		const nData3 = nData2.map((d) => {
+// 			const nUsagelist = d[1].filter((d2) => {
+// 				const isExistId = postIdArr.filter((id) => (d2.match(id) ? true : false));
+// 				return isExistId.length > 0 ? false : true;
+// 			});
+//
+// 			return [d[0], nUsagelist];
+// 		}) as [string, string[]];
+//
+// 		const res = nData3.reduce((acc: { [index: string]: string }, value) => {
+// 			const [key, val] = value;
+// 			acc[key] = val;
+// 			return acc;
+// 		}, {});
+//
+// 		return res;
+// 	} else {
+// 		console.log("No such document!");
+// 	}
+// };
 
 export const deletePostAsIdArr = async (arr: string[]) => {
 	const batch: WriteBatch = writeBatch(db);
@@ -1659,8 +1689,12 @@ export const setPostTag = async (tagArr: TagType[]) => {
 };
 
 export const getAllPostCategory = async ({ dbName = _dbName }: { dbName?: string }) => {
-	const result: CategoryType[] = await getDocDataFromDB(dbName, "post_category");
-	return result ? result : [];
+	const _result: CategoryType[] = await getDocDataFromDB(dbName, "post_category");
+	let result: CategoryType[] = [CategoryInit];
+	if (_result) {
+		result = _result;
+	}
+	return result;
 };
 
 export const setPostCategory = async (categoryArr: CategoryType[]) => {
@@ -1680,8 +1714,13 @@ export const setPostCategory = async (categoryArr: CategoryType[]) => {
 };
 
 export const getMenuList = async ({ dbName = _dbName }) => {
-	const result = await getDocDataFromDB(dbName, "menu");
-	return result ? result : [[]];
+	const _result: MenuType[] = await getDocDataFromDB(dbName, "menu");
+
+	let result = [MenuInit];
+	if (_result) {
+		result = _result;
+	}
+	return [result];
 };
 
 export const setMenuList = async (dataArr: MenuType[], node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
@@ -1716,8 +1755,12 @@ export const setMenuList = async (dataArr: MenuType[], node: HTMLElement, width:
 };
 
 export const getFooterData = async ({ dbName = _dbName }) => {
-	const result: FooterCompType[] = await getDocDataFromDB(dbName, "footer");
-	return result ? result : [null];
+	const _result: FooterCompType[] = await getDocDataFromDB(dbName, "footer");
+	let result: FooterCompType[] = [FooterCompInit];
+	if (_result) {
+		result = _result;
+	}
+	return result;
 };
 
 export const setFooterData = async (data: FooterCompType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
@@ -1846,8 +1889,12 @@ export const deleteFixedComponent = async (idArr: string[]) => {
 };
 
 export const getGeneralData = async ({ dbName = _dbName }: { dbName?: string }) => {
-	const result: GeneralControlType[] = await getDocDataFromDB(dbName, "generalControls");
-	return result ? result : [];
+	const _result: GeneralControlType[] = await getDocDataFromDB(dbName, "generalControls");
+	let result: GeneralControlType[] = [GeneralControlInit];
+	if (_result) {
+		result = _result;
+	}
+	return result;
 };
 
 export const setGeneralData = async ({ data }: { data: GeneralControlType }) => {
@@ -1888,8 +1935,12 @@ export const setGeneralData = async ({ data }: { data: GeneralControlType }) => 
 };
 
 export const getAllComponent = async ({ dbName = _dbName }) => {
-	const result: CompListType[] = await getDocDataFromDB(dbName, "componentList");
-	return result ? result : [];
+	const _result: CompListType[] = await getDocDataFromDB(dbName, "componentList");
+	let result: CompListType[] = [CompListInit];
+	if (_result) {
+		result = _result;
+	}
+	return result;
 };
 
 type SetComponentDataType = {

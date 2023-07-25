@@ -25,7 +25,7 @@ export interface CompListType {
 	updatedAt: string;
 }
 
-export const CompListInit = {
+export const CompListInit: CompListType = {
 	id: "",
 	blockName: "",
 	subName: "",
@@ -50,7 +50,7 @@ export interface ContainerType {
 	child: string[];
 }
 
-export const ContainerInitObj = {
+export const ContainerInitObj: ContainerType = {
 	id: "",
 	title: "",
 	bcColor: "",
@@ -60,7 +60,7 @@ export const ContainerInitObj = {
 	maxWidth: "",
 	minWidthActive: false,
 	maxWidthActive: false,
-	child: [] as string[],
+	child: [],
 };
 
 export interface MediaLib {
@@ -83,21 +83,21 @@ export interface MediaLib {
 }
 //TODO  型から初期化する方法::typeを定義すると同時に下記のように初期値を設置してexportしておく（型を一致させておく）
 export const MediaLibInitObj: MediaLib = {
-	id: undefined,
-	src: undefined,
-	srcHigh: undefined,
-	widthLow: undefined,
-	heightLow: undefined,
-	widthHigh: undefined,
-	heightHigh: undefined,
-	createdAt: undefined,
-	updatedAt: undefined,
-	contentTypeLow: undefined,
-	contentTypeHigh: undefined,
-	alt: undefined,
-	caption: undefined,
-	description: undefined,
-	tag: undefined,
+	id: "",
+	src: "",
+	srcHigh: "",
+	widthLow: 0,
+	heightLow: 0,
+	widthHigh: 0,
+	heightHigh: 0,
+	createdAt: "",
+	updatedAt: "",
+	contentTypeLow: "",
+	contentTypeHigh: "",
+	alt: "",
+	caption: "",
+	description: "",
+	tag: "",
 };
 
 export interface TopImageType {
@@ -106,6 +106,13 @@ export interface TopImageType {
 	createdAt: string;
 	updatedAt: string;
 }
+
+export const TopImageInit: TopImageType = {
+	id: "",
+	topImageList: [],
+	createdAt: "",
+	updatedAt: "",
+};
 
 export interface TopWordType {
 	id: string;
@@ -116,6 +123,16 @@ export interface TopWordType {
 	updatedAt: string;
 	usage?: boolean;
 }
+
+export const TopWordInit: TopWordType = {
+	id: "",
+	body: "",
+	bodyArr: [],
+	memo: "",
+	createdAt: "",
+	updatedAt: "",
+	usage: false,
+};
 
 export interface PostDataType {
 	id: string;
@@ -141,26 +158,26 @@ export interface PostDataType {
 }
 
 export const PostDataInitObj: PostDataType = {
-	id: undefined,
-	user: { uid: undefined, displayName: undefined }, //寄稿者
-	body: undefined, //メイン記事
-	canPublic: undefined, //公開・非公開
+	id: "",
+	user: { uid: "", displayName: "" }, //寄稿者
+	body: { blocks: [] }, //メイン記事
+	canPublic: false, //公開・非公開
 	isDraft: true, //下書き
-	date: undefined,
-	mainImage: undefined,
-	src: undefined, //イメージのパス
-	srcHigh: undefined, //イメージのパス
-	pin: undefined, //ピン留め
-	priority: undefined,
+	date: "",
+	mainImage: "",
+	src: "", //イメージのパス
+	srcHigh: "", //イメージのパス
+	pin: false, //ピン留め
+	priority: 0,
 	relatedArticles: [],
-	subCopy: undefined,
-	category: undefined,
-	tag: [{ id: undefined, name: undefined }],
-	title: undefined,
-	metaTitle: undefined,
-	metaDescription: undefined,
-	createdAt: undefined,
-	updatedAt: undefined,
+	subCopy: "",
+	category: "",
+	tag: [{ id: "", name: "" }],
+	title: "",
+	metaTitle: "",
+	metaDescription: "",
+	createdAt: "",
+	updatedAt: "",
 };
 
 export interface CategoryType {
@@ -172,6 +189,16 @@ export interface CategoryType {
 	createdAt: string;
 	updatedAt: string;
 }
+
+export const CategoryInit: CategoryType = {
+	id: "",
+	name: "",
+	active: false,
+	color: "",
+	description: "",
+	createdAt: "",
+	updatedAt: "",
+};
 
 export type TableFormat = "normal" | "kakaku" | "yen_zeikomi" | "yen_zeinuki" | "per_tsuki" | "leaders" | "none" | "sideTopCell" | "topCell" | "sideCell";
 
@@ -207,6 +234,20 @@ export interface TableType {
 	usage?: boolean;
 }
 
+export const TableInit: TableType = {
+	id: "",
+	readOnly: false,
+	cellData: [],
+	templateAreas: "",
+	templateColumns: [],
+	templateRows: [],
+	innerWidth: [],
+	tableTitle: "",
+	createdAt: "",
+	updatedAt: "",
+	usage: false,
+};
+
 export interface BlockList {
 	blockName: string;
 	subName: string;
@@ -235,12 +276,41 @@ export interface CampaignType {
 	usage?: boolean;
 }
 
+export const CampaignInit: CampaignType = {
+	id: "",
+	design: "",
+	color: "",
+	bgColor: "",
+	title: "",
+	subTitle: "",
+	shoulderTitle: "",
+	body: "",
+	buttonText: "",
+	buttonIcon: "",
+	link: "",
+	imageId: "",
+	imageWidth: 0,
+	imageHeight: 0,
+	src: "",
+	srcHigh: "",
+	createdAt: "",
+	updatedAt: "",
+	usage: false,
+};
+
 export interface NewsType {
 	id: string;
 	newsList: string[];
 	createdAt: string;
 	updatedAt: string;
 }
+
+export const NewsInit: NewsType = {
+	id: "",
+	newsList: [],
+	createdAt: "",
+	updatedAt: "",
+};
 
 export interface UserType {
 	id: string;
@@ -262,6 +332,41 @@ export interface UserType {
 	createdAt: string;
 	updatedAt: string;
 }
+
+export const UserTypeInit: UserType = {
+	id: "",
+	enabled: false,
+	email: "",
+	displayName: "",
+	namePronunciation: "",
+	age: 0,
+	address: "",
+	zipCode: "",
+	phoneNumber: "",
+	position: "",
+	text: "",
+	imageId: "",
+	src: "",
+	srcHigh: "",
+	note: "",
+	role: "user",
+	createdAt: "",
+	updatedAt: "",
+};
+
+export interface PeopleType {
+	id: string;
+	peopleList: string[];
+	createdAt: string;
+	updatedAt: string;
+}
+
+export const PeopleTypeInit: PeopleType = {
+	id: "",
+	peopleList: [],
+	createdAt: "",
+	updatedAt: "",
+};
 
 export type UserRoleType = "admin" | "staff" | "user";
 
@@ -290,12 +395,34 @@ export interface ShopInfoType {
 	usage?: boolean;
 }
 
+export const ShopInfoInit: ShopInfoType = {
+	id: "",
+	address: { value: "", visibility: false },
+	businessInfo: { value: "", visibility: false },
+	directions: { value: "", visibility: false },
+	link: { value: "", visibility: false },
+	map: { value: "", visibility: false },
+	zipCode: { value: "", visibility: false },
+	phoneNumber: { value: "", visibility: false },
+	createdAt: "",
+	updatedAt: "",
+	active: false,
+	usage: false,
+};
+
 export interface PhotoGalleryType {
 	id: string;
 	photoGalleryList: string[];
 	createdAt: string;
 	updatedAt: string;
 }
+
+export const PhotoGalleryInit: PhotoGalleryType = {
+	id: "",
+	photoGalleryList: [],
+	createdAt: "",
+	updatedAt: "",
+};
 
 export interface FixedComponentType {
 	id: string;
@@ -349,6 +476,17 @@ export interface MenuType {
 	// tmp?: boolean; // 仮メニュー用
 }
 
+export const MenuInit: MenuType = {
+	id: "",
+	index: 0,
+	subMenu: false,
+	parentId: "",
+	title: "",
+	link: "",
+	protected: false,
+	noSubMenu: false,
+};
+
 export interface GeneralControlType {
 	domain: string;
 	description: string;
@@ -360,6 +498,17 @@ export interface GeneralControlType {
 	ogImage: string;
 }
 
+export const GeneralControlInit: GeneralControlType = {
+	domain: "",
+	description: "",
+	copyrite: "",
+	logoImg: "",
+	webTitle: "",
+	email: "",
+	favicon: "",
+	ogImage: "",
+};
+
 export interface FooterCompType {
 	footerText1: string;
 	footerText2: string;
@@ -369,6 +518,16 @@ export interface FooterCompType {
 	createdAt: string;
 	updatedAt: string;
 }
+
+export const FooterCompInit: FooterCompType = {
+	footerText1: "",
+	footerText2: "",
+	footerText3: "",
+	snsList: [],
+	copyrite: "",
+	createdAt: "",
+	updatedAt: "",
+};
 
 export interface PeopleType {
 	id: string;
@@ -383,3 +542,9 @@ export interface MediaLogType {
 	message: string;
 	createdAt: string;
 }
+
+//TODO ログコードとは?
+// storage　=> trash 移動 :m101
+// trash を消去 : m102
+// missingImage（firestoreににあるのにstorageに存在しない画像）が見つかった : m103
+// deploy失敗: m104
