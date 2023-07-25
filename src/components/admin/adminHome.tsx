@@ -108,6 +108,7 @@ const AdminHome = () => {
 
 		if (res === "success") {
 			await displayAlert("", "設定を反映しました", "");
+			await fetch(process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_URL, { method: "POST" });
 		} else {
 			await displayAlert("", "反映に失敗しました", "red");
 		}
@@ -147,13 +148,7 @@ const AdminHome = () => {
 								</NextLink>
 							</Box>
 							<Box component="li" mb="1em">
-								<Button
-									w="100%"
-									size="sm"
-									variant="filled"
-									onClick={handleSubmit}
-									loading={submitLoading ? true : false}
-								>
+								<Button w="100%" size="sm" variant="filled" onClick={handleSubmit} loading={submitLoading ? true : false}>
 									設定を反映させる
 								</Button>
 							</Box>
