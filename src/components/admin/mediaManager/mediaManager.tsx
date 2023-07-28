@@ -1,15 +1,3 @@
-//
-
-//TODO
-//画像をローカルにダウンロードする方法も検討する
-//本番環境ではgetstaticpropsにて画像を一括ダウンロードする、
-//adminでは、adminコンポーネントにて画像をfetchしてローカルにダウンロードする
-//この場合、svg画像も表示される
-
-//next.confug に以下を追加することで解決
-//dangerouslyAllowSVG: true,
-//TODO 上記を許可するためにsvg画像をアップロードする際にサニタイズ(無効化する必要がある)
-
 import { useState, useEffect, useRef, Dispatch, SetStateAction, ChangeEvent, ChangeEventHandler } from "react";
 import Head from "next/head";
 
@@ -102,7 +90,6 @@ export const handleImportImage = async (
 		await displayAlert("", "アップロードに失敗しました::459", "red");
 		return;
 	}
-	console.log("uploadedMediaData: ", uploadedMediaData);
 
 	const tmpImgDataArr = await setTempMedia(uploadedMediaData, canOverWrite);
 
@@ -152,7 +139,9 @@ const MediaManager = () => {
 
 	useEffect(() => {
 		const f = async () => {
-			const _mediaLib = await getMediaLib();
+			const __mediaLib = await getMediaLib();
+			const _mediaLib = __mediaLib.filter((d) => d.id);
+
 			const mediaLib = sortByUpdated(_mediaLib);
 			setMediaLib(mediaLib);
 			setMediaLib_f(mediaLib);
