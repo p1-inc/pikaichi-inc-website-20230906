@@ -32,7 +32,7 @@ export default function Home() {
     `;
 
 	const [openFlyerSample, toggleOpenFlyerSample] = useToggle([false, true]);
-	//TODO
+
 	return (
 		<div>
 			<Head>
