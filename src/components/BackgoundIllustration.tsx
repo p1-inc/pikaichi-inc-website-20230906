@@ -1,6 +1,6 @@
 import { Box } from "@mantine/core";
 
-export default function Price({ children }) {
+export default function Price({ children }: { children: React.ReactNode }) {
 	const backgroundIllustration = {
 		backgroundImage: "url(/img/backgroundIllustration.png)",
 		backgroundSize: "50%",

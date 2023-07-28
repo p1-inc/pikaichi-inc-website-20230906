@@ -2,7 +2,7 @@
 
 import { css } from "@emotion/react";
 
-import { useState, useEffect, useRef, useLayoutEffect, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 // import P1Button from "../layoutComp/P1Button";
 

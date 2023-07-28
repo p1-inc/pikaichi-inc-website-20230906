@@ -84,8 +84,6 @@ export default function Home() {
 					<SlideFlyerSample setWinOpen={openFlyerSample} />
 				</Modal>
 			</main>
-			{/* <AlertComp />
-			<ConfirmComp /> */}
 		</div>
 	);
 }

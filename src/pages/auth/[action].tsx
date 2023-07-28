@@ -24,7 +24,7 @@ const handleVerifyEmail = async ({ auth, actionCode }: { auth: Auth; actionCode:
 	}
 };
 
-const ActionContainer = ({ children }) => {
+const ActionContainer = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<Box w="100vw" h="100vh" pt="3em" sx={{ backgroundColor: "#F6F6F6" }}>
 			<Flex

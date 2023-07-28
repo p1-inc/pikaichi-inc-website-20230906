@@ -7,19 +7,9 @@ import { c, f } from "../styles/eStyle";
 import { useWindowSize } from "../hooks/useWindowSize";
 import { Anchor, Box, Button, CSSObject, Flex, Text, Title, UnstyledButton, keyframes } from "@mantine/core";
 import { useMQ } from "../hooks/useMQ";
-import { useScrollIntoView } from "@mantine/hooks";
-import { ExButton } from "./UILib/extendMantine";
-
-// import { Kiwi_Maru } from "@next/font/google";
-// const Kiwi_Maru_normal = Kiwi_Maru({
-// 	weight: "400",
-// 	subsets: ["cyrillic"],
-// });
-// console.log("Kiwi_Maru_normal.className: ", Kiwi_Maru_normal.className);
 
 export default function Topview({ scrollIntoView, contactRef }: { scrollIntoView: any; contactRef: MutableRefObject<HTMLDivElement> }) {
 	//
-	const { windowWidth, windowHeight } = useWindowSize();
 
 	const { mq } = useMQ();
 	const ref = useRef();
@@ -401,9 +391,6 @@ export default function Topview({ scrollIntoView, contactRef }: { scrollIntoView
 					<Anchor sx={loginBtn} href="/admin/index" target="_blank" rel="noopener noreferrer">
 						<Box>ログイン</Box>
 					</Anchor>
-					{/* <ExButton variant="outline" size="xs" color={c.mainPurple}>
-						ログイン
-					</ExButton> */}
 				</Flex>
 			</Flex>
 			<Box sx={wrapper}>

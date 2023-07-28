@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Image from "next/future/image";
 
-import { useState, useEffect, ReactNode, useRef, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 // const EditorContainer = dynamic(() => import("../../components/admin/editorjs/editorContainer"), { ssr: false });
 import { getDeployData, getfilteredPostDataByCanPublic } from "../../firebase/firebase";
 import { CategoryType, FooterCompType, GeneralControlType, MediaLib, PostDataType } from "../../types/types";
@@ -159,7 +159,6 @@ export default function Post({ postData: pData, categoryList, footerData, genera
 		{ title: "HOME", href: "/" },
 		{ title: "記事一覧へ", href: "/posts/postIndex" },
 	];
-
 	const getCategoryName = (id: string) => {
 		//
 		let result: {
@@ -229,7 +228,6 @@ export default function Post({ postData: pData, categoryList, footerData, genera
 
 				{body && (
 					<Box mt="5em">
-						{/* <EditorContainer editorInstance={editorInstance} editData={body} readOnly={true} /> */}
 						<P1_EditorContainer api={api} readOnly={true} maw="40em" />
 					</Box>
 				)}
@@ -253,10 +251,7 @@ export default function Post({ postData: pData, categoryList, footerData, genera
 
 export async function getStaticPaths() {
 	//
-	// const { postData: _postData } = await getDeployData();
 	const postData = await getfilteredPostDataByCanPublic();
-
-	// const postData: PostDataType[] = JSON.parse(_postData || "null");
 
 	const posts = postData.map((post) => ({ params: { pid: post.id } }));
 
@@ -291,16 +286,7 @@ export async function getStaticProps({ params }: { params: { pid: string } }) {
 
 	const mediaLib: MediaLib[] = JSON.parse(_mediaLib || "null");
 
-	const faviconImg = mediaLib.find((d: MediaLib) => d.id === generalDataAsParse.favicon);
-	const logoImg = mediaLib.find((d: MediaLib) => d.id === generalDataAsParse.logoImg);
-	const ogImg = mediaLib.find((d: MediaLib) => d.id === generalDataAsParse.ogImage);
-
 	const _postData = await getfilteredPostDataByCanPublic();
-
-	// const _postData2: PostDataType[] = _postData.map((d) => {
-	// 	const { src, srcHigh } = mediaLib.find((d2) => d2.id === d.mainImage);
-	// 	return { ...d, src: src, srcHigh: srcHigh };
-	// });
 
 	const _postData2: PostDataType[] = _postData.map((d) => {
 		const mediaProp = mediaLib.find((d2) => d2.id === d.mainImage);
@@ -310,11 +296,10 @@ export async function getStaticProps({ params }: { params: { pid: string } }) {
 
 	return {
 		props: {
-			postData: postData,
+			postData: postData || null,
 			categoryList: JSON.parse(categoryList || "null") as CategoryType[],
 			footerData: JSON.parse(footerData || "null") as FooterCompType[],
 			generalData: generalDataAsParse,
-			logoImg: logoImg,
 		},
 	};
 }
