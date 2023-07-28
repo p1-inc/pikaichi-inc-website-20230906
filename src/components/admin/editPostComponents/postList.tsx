@@ -83,7 +83,6 @@ const getDateFormatYYYYMMMDD = (date: string) => {
 };
 
 export default function PostList() {
-	console.log("PostList: ");
 	//
 	const componentName = "記事の管理";
 
@@ -144,7 +143,6 @@ export default function PostList() {
 		} else {
 			if (checked.length > 1) {
 				await displayAlert("", "編集する記事は１つにしてください", "");
-
 				return;
 			} else if (checked.length === 1) {
 				nId = checked[0];
@@ -156,7 +154,6 @@ export default function PostList() {
 	const handleDuplicate = async () => {
 		if (checked.length > 1) {
 			await displayAlert("", "編集する記事は１つにしてください", "");
-
 			return;
 		}
 		router.push(`/admin/editPost/?dup=true&id=${checked[0]}`);

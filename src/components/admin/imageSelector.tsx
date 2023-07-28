@@ -1,17 +1,8 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
-import { useDialogState } from "../../hooks/useDialogState";
-
-import ImportImageComp from "./importImageComp";
-
-import UploadFileIcon from "@mui/icons-material/UploadFile";
-
-import { cArr } from "../../styles/eStyle";
-// import { handleImportImage } from "./mediaManager/mediaManager";
 import { ImageTableComp } from "./imageTableComp";
-import { Box, Button, Center, FileInput, Flex, Modal, Space } from "@mantine/core";
+import { Box, Button, Flex, Modal, Space } from "@mantine/core";
 import { MediaLib } from "../../types/types";
-import { handleImportImage } from "./mediaManager/mediaManager";
 import { useDoubleClick } from "../../hooks/useDoubleClick";
 
 type ImageSelector = {

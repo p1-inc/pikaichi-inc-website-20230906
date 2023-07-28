@@ -45,16 +45,30 @@ const headerLevels: {
 	},
 	{
 		number: 3,
-		fz: 1.375,
+		fz: 1.41,
 		label: "見出し中",
 		tag: "H3",
 		icon: IconH3,
 	},
 	{
 		number: 4,
-		fz: 1.125,
-		label: "見出し小",
+		fz: 1.12,
+		label: "見出し小1",
 		tag: "H4",
+		icon: IconH4,
+	},
+	{
+		number: 5,
+		fz: 1,
+		label: "見出し小2",
+		tag: "H5",
+		icon: IconH4,
+	},
+	{
+		number: 6,
+		fz: 0.8,
+		label: "見出し小3",
+		tag: "H6",
 		icon: IconH4,
 	},
 ];
@@ -87,13 +101,9 @@ const fz = (level: TitleOrder) => {
 	return result;
 };
 
-const HeaderWrapper = ({
-	blockData,
-	headerLevel,
-	children,
-}: { blockData: DataType; headerLevel: TitleOrder; children: ReactNode }) => {
+const HeaderWrapper = ({ blockData, headerLevel, children }: { blockData: DataType; headerLevel: TitleOrder; children: ReactNode }) => {
 	const { style, color } = blockData;
-
+	const borderWeight = Math.max(fz(headerLevel) * 2, 1);
 	return (
 		<>
 			{style === "none" && <Box sx={{ color: color }}>{children}</Box>}
@@ -109,11 +119,7 @@ const HeaderWrapper = ({
 				</Box>
 			)}
 			{style === "outlined" && (
-				<Box
-					px="1em"
-					py="0.8em"
-					sx={{ color: color, border: `${fz(headerLevel) * 2}px solid ${color}`, borderRadius: "0.5em" }}
-				>
+				<Box px="1em" py="0.8em" sx={{ color: color, border: `${borderWeight}px solid ${color}`, borderRadius: "0.5em" }}>
 					{children}
 				</Box>
 			)}
@@ -169,11 +175,7 @@ export const Header = ({ blockData, blockTool, api }: InitialToolPropsType) => {
 	);
 };
 
-const HeaderBlockTuneMenu = ({
-	id,
-	blockData,
-	api,
-}: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
+const HeaderBlockTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
 	//
 
 	return (
@@ -233,11 +235,7 @@ const HeaderBlockTuneMenu = ({
 							}}
 						>
 							<Flex gap="0.5em">
-								{color.id === "none" ? (
-									<NotInterestedIcon sx={{ color: color.colorCode }} />
-								) : (
-									<CircleIcon sx={{ color: color.colorCode }} />
-								)}
+								{color.id === "none" ? <NotInterestedIcon sx={{ color: color.colorCode }} /> : <CircleIcon sx={{ color: color.colorCode }} />}
 								<Flex align="center">{color.label}</Flex>
 							</Flex>
 						</ExMenuChild>

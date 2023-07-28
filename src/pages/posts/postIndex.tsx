@@ -56,6 +56,7 @@ export default function PostIndex({ categoryList, shopInfoData, menuList, genera
 			const bData = b.updatedAt.replace(/-/g, "");
 			return Number(bData) - Number(aData);
 		});
+		console.log("sort : ", sort);
 		setNPostData(sort);
 	}, [postData]);
 

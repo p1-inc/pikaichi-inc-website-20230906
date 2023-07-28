@@ -9,6 +9,16 @@ import { P1_EditorStyle } from "./p1_EditorStyle";
 import { getHotkeyHandler } from "@mantine/hooks";
 import { InlineTunes } from "./plugin/inlineTunes/inlineTunes";
 
+//TODO テキストブロックがふたつ繋がっているとき、
+//したのブロックの一番上が空白行で、その行を削除するためにdelをすると、
+//上のブロックと結合してしまう
+//TODO 変換するためにreturnを押すと改行されてしまう
+//TODO ブロック表示しながら入力できたほうが便利
+//TODOブロックからフォーカスが外れると、キャレット位置がリセットされてしまう
+//TODO 「こちらにテキストを入力してください」[タイトル]がのこらないようにする
+//TODO すでにあるテキストを選択してペーストすると、そのテキストの前にペーストされてしまう。上書きしてほしい
+//TODO　見出しの大きさ、現在の見出しの大きさを知る方法がない
+//TODO ブロックもスタイルもコピペできるようにする
 type EditorContainerType = {
 	readOnly?: boolean;
 	api: BlockControlType;
@@ -62,14 +72,7 @@ const NoComponent = ({ blockData, api }: { blockData: OutputBlockData; api: Bloc
 				setConfirm(!confirm);
 			}}
 		>
-			<Flex
-				ml="2em"
-				w="fit-content"
-				p="1em"
-				align="center"
-				justify="center"
-				sx={{ backgroundColor: cArr.pink[1], borderRadius: "0.5em" }}
-			>
+			<Flex ml="2em" w="fit-content" p="1em" align="center" justify="center" sx={{ backgroundColor: cArr.pink[1], borderRadius: "0.5em" }}>
 				{confirm ? (
 					<Flex align="center" justify="center" w="22em" h="6em">
 						<IconMoodSad2 stroke={1} size="4em" color={cArr.pink[6]} />

@@ -23,15 +23,7 @@ type DialogCompType = {
 	setOpenImgDialog: Dispatch<SetStateAction<boolean>>;
 };
 
-const DialogComp = ({
-	dialogOpen,
-	setDialogOpen,
-	handleDialogClose,
-	setImage,
-	sizeState,
-	setSizeState,
-	setOpenImgDialog,
-}: DialogCompType) => {
+const DialogComp = ({ dialogOpen, setDialogOpen, handleDialogClose, setImage, sizeState, setSizeState, setOpenImgDialog }: DialogCompType) => {
 	//
 	const handleSizeChange = (size: SizeType) => {
 		setSizeState(size);
@@ -41,14 +33,7 @@ const DialogComp = ({
 	const sizeItem: SizeType[] = ["xs", "s", "m", "l", "xl"];
 
 	return (
-		<Modal
-			centered
-			opened={dialogOpen}
-			onClose={handleDialogClose}
-			title="画像の変更"
-			size="lg"
-			styles={{ header: { paddingBottom: "0.5em" } }}
-		>
+		<Modal centered opened={dialogOpen} onClose={handleDialogClose} title="画像の変更" size="lg" styles={{ header: { paddingBottom: "0.5em" } }}>
 			<Flex w="25em" m="0 auto" direction="column">
 				<Button.Group orientation="vertical">
 					{sizeItem.map((size) => (
@@ -105,13 +90,7 @@ type ImageGalleryComp = {
 	readOnly?: boolean;
 };
 
-export const ImageSelectTrigger = ({
-	imgData,
-	size = "m",
-	onImgUrlChange,
-	onSizeChange = () => {},
-	readOnly = false,
-}: ImageGalleryComp) => {
+export const ImageSelectTrigger = ({ imgData, size = "m", onImgUrlChange, onSizeChange = () => {}, readOnly = false }: ImageGalleryComp) => {
 	//
 	const [mediaLib, setMediaLib] = useState<MediaLib[]>();
 
@@ -172,11 +151,7 @@ export const ImageSelectTrigger = ({
 		return result;
 	};
 
-	const getImageWrapperSize = ({
-		size,
-		wrapW,
-		aspectRatio,
-	}: { size: string; wrapW: number; aspectRatio: number[] }) => {
+	const getImageWrapperSize = ({ size, wrapW, aspectRatio }: { size: string; wrapW: number; aspectRatio: number[] }) => {
 		const _scaledWidth = aspectRatio[1] > aspectRatio[0] ? (aspectRatio[0] / aspectRatio[1]) * wrapW : wrapW;
 		const scaledWidth = _scaledWidth * getSize(size);
 		return scaledWidth;
@@ -191,13 +166,7 @@ export const ImageSelectTrigger = ({
 							setOpenImgDialog(true);
 						}}
 					>
-						<Flex
-							justify="center"
-							align="center"
-							w="16em"
-							h="9em"
-							sx={{ aspectRatio: "3/2", backgroundColor: cArr.skyblue[2] }}
-						>
+						<Flex justify="center" align="center" w="16em" h="9em" sx={{ aspectRatio: "3/2", backgroundColor: cArr.skyblue[2] }}>
 							<ImageSVG color="#FFF" width="5em" height="5em" />
 						</Flex>
 					</UnstyledButton>
@@ -236,13 +205,7 @@ export const ImageSelectTrigger = ({
 					</Box>
 				)}
 
-				<ImageSelector
-					mediaLib={mediaLib}
-					setMediaLib={setMediaLib}
-					setImage={setImage}
-					openImgDialog={openImgDialog}
-					setOpenImgDialog={setOpenImgDialog}
-				/>
+				<ImageSelector mediaLib={mediaLib} setMediaLib={setMediaLib} setImage={setImage} openImgDialog={openImgDialog} setOpenImgDialog={setOpenImgDialog} />
 
 				<DialogComp
 					dialogOpen={dialogOpen}

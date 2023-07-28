@@ -933,7 +933,7 @@ export const getImageSrc = async (id: string) => {
 };
 
 export const getMediaLib = async () => {
-	const mediaLib: MediaLib[] = [MediaLibInitObj];
+	const mediaLib: MediaLib[] = [];
 	const querySnapshot = await getDocs(collection(db, "mediaLib"));
 	querySnapshot.forEach((doc) => {
 		const data = doc.data();
@@ -1475,7 +1475,7 @@ export const setPhotoGalleryData = async (
 // };
 
 export const getAllPostData = async () => {
-	const result: PostDataType[] = [PostDataInitObj];
+	const result: PostDataType[] = [];
 	const querySnapshot = await getDocs(collection(db, "posts"));
 	querySnapshot.forEach((doc) => {
 		result.push(doc.data() as PostDataType);

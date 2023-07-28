@@ -139,8 +139,7 @@ const MediaManager = () => {
 
 	useEffect(() => {
 		const f = async () => {
-			const __mediaLib = await getMediaLib();
-			const _mediaLib = __mediaLib.filter((d) => d.id);
+			const _mediaLib = await getMediaLib();
 
 			const mediaLib = sortByUpdated(_mediaLib);
 			setMediaLib(mediaLib);

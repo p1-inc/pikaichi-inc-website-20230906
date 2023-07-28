@@ -45,8 +45,6 @@ type EditPostType = {
 	id: string;
 	isDuplicate: boolean;
 	readOnly?: boolean;
-	old?: boolean;
-	test?: boolean;
 };
 
 export type UndoStackType = {
@@ -55,7 +53,7 @@ export type UndoStackType = {
 	eventType: string;
 };
 
-export default function EditPost({ id, isDuplicate, readOnly = false, old = false, test = false }: EditPostType) {
+export default function EditPost({ id, isDuplicate, readOnly = false }: EditPostType) {
 	//
 	const componentName = "記事の管理";
 
@@ -106,7 +104,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false, old = fals
 
 			let post: PostDataType;
 
-			if (postData.id === undefined) {
+			if (postData.id === "" || postData.id === undefined) {
 				post = {
 					id: autoID(),
 					user: { uid: "", displayName: "" }, //寄稿者
@@ -303,9 +301,9 @@ export default function EditPost({ id, isDuplicate, readOnly = false, old = fals
 			createdAt: createdAt || null,
 			updatedAt: updatedAt || null,
 		};
+
 		displayFullscreenLoading(true);
-		// setSaveLoading(true);
-		// await new Promise((resolve) => setTimeout(resolve, 1000));
+
 		try {
 			const result = await setPostData(nId, data);
 			displayFullscreenLoading(false);
@@ -319,7 +317,6 @@ export default function EditPost({ id, isDuplicate, readOnly = false, old = fals
 			console.log(error);
 		}
 
-		// setSaveLoading(false);
 		displayFullscreenLoading(false);
 		router.push(`/admin/editPost/?id=${nId}`);
 	};

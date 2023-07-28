@@ -14,8 +14,8 @@ const sanitize = { text: { br: true } }; // ｂlｃｋDataの内、プロパテ�
 type QuoteBCType = "skyblue" | "yellow" | "pink" | "green" | "beige" | "gray";
 
 const quoteBCStyle: { id: QuoteBCType; colorCode: string; label: string }[] = [
-	{ id: "skyblue", colorCode: cArr.blue[1], label: "ブルー" },
-	{ id: "yellow", colorCode: cArr.yellow[1], label: "イエロー" },
+	{ id: "skyblue", colorCode: cArr.blue[0], label: "ブルー" },
+	{ id: "yellow", colorCode: cArr.yellow[0], label: "イエロー" },
 	{ id: "pink", colorCode: cArr.pink[1], label: "ピンク" },
 	{ id: "green", colorCode: cArr.green[1], label: "グリーン" },
 	{ id: "beige", colorCode: cArr.yelloworange[1], label: "ベージュ" },
@@ -61,18 +61,15 @@ export const QuoteTool = ({ blockData, blockTool, api }: InitialToolPropsType) =
 				m={getMargin(textAlign)}
 				my="0.4em"
 				w="fit-content"
-				p="0.6em"
+				p="1em"
+				fz="0.8em"
 				sx={{ backgroundColor: bgColor, border: "none", borderRadius: "0.3em", boxShadow: "none" }}
 			/>
 		</P1_EditorWrapper>
 	);
 };
 
-const QuoteToolTuneMenu = ({
-	id,
-	blockData,
-	api,
-}: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
+const QuoteToolTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
 	//
 
 	return (
