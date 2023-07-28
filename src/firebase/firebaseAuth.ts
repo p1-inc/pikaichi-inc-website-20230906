@@ -82,10 +82,10 @@ export const sendEmailVerificationFunc = async (uid: string, password: string) =
 	try {
 		const res = await sendEmailVerification(user);
 		const res2 = await signOut(auth);
-		return res;
+		return true;
 	} catch (error) {
 		console.log(error);
-		return error;
+		return;
 	}
 };
 
