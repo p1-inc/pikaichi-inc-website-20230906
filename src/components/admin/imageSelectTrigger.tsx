@@ -105,14 +105,11 @@ export const ImageSelectTrigger = ({ imgData, size = "m", onImgUrlChange, onSize
 	useEffect(() => {
 		const editMode = async () => {
 			const mediaLib = await getMediaLib();
-
 			setMediaLib(mediaLib);
-			// 			const media = mediaLib.find((e) => e.id === imgData?.id);
-			//
-			// 			if (media) {
-			// 				setImage(media);
-			// 				setAspectRatio([media.widthHigh, media.heightHigh]);
-			// 			}
+			if (imgData) {
+				setImage(imgData);
+				setAspectRatio([imgData.widthHigh, imgData.heightHigh]);
+			}
 		};
 		if (!readOnly) {
 			editMode();
