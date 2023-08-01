@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useEffect, useRef, MutableRefObject } from "react";
+import { useState, useEffect, useRef, MutableRefObject, useLayoutEffect } from "react";
 import Image from "next/future/image";
 
 import { c, f } from "../styles/eStyle";
@@ -60,7 +60,7 @@ export default function Topview({ scrollIntoView, contactRef }: { scrollIntoView
 	const [star_08_Y, setStar_08_Y] = useState<number>();
 	const [star_09_Y, setStar_09_Y] = useState<number>();
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setWindowW(window.innerWidth);
 		setWRetio(450 / window.innerWidth);
 
@@ -80,7 +80,7 @@ export default function Topview({ scrollIntoView, contactRef }: { scrollIntoView
 		};
 	}, []);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setBg_01_Y(bg_01_init[0] - positionY * bg_01_init[1] * 0.003 * wRetio);
 		setBg_02_Y(bg_02_init[0] - positionY * bg_02_init[1] * 0.003 * wRetio);
 		setBg_03_Y(bg_03_init[0] - positionY * bg_03_init[1] * 0.003 * wRetio);

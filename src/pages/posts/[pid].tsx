@@ -1,9 +1,7 @@
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import Head from "next/head";
 import Image from "next/future/image";
 
-import { useState, useEffect } from "react";
-// const EditorContainer = dynamic(() => import("../../components/admin/editorjs/editorContainer"), { ssr: false });
+import { useEffect } from "react";
 import { getDeployData, getfilteredPostDataByCanPublic } from "../../firebase/firebase";
 import { CategoryType, FooterCompType, GeneralControlType, MediaLib, PostDataType } from "../../types/types";
 
@@ -177,6 +175,13 @@ export default function Post({ postData: pData, categoryList, footerData, genera
 
 	return (
 		<Box sx={mainContainer}>
+			<Head>
+				<title>{pData.metaTitle}</title>
+				<meta name="description" content={pData.metaDescription} />
+				<meta property="og:title" content={pData.metaTitle} />
+				<meta property="og:description" content={pData.metaDescription} />
+				<meta property="og:image" content={pData.srcHigh} />
+			</Head>
 			<Box component="ul" sx={nav}>
 				{navList.map((nav, index) => (
 					<Box

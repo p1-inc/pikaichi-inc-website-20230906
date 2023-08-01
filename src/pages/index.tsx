@@ -40,14 +40,14 @@ export default function Home() {
 				<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 				<meta
 					name="description"
-					content="これからスタジオを始めるインストラクターさんのためのヨガ専門webサイト・チラシ制作サービスです。月々4980円、初回19980円で効果の高い集客施策をご提供"
+					content="これからスタジオを始めるインストラクターさんのためのヨガ専門webサイト・チラシ制作サービスです。月々4980円、初回29,980円で効果の高い集客施策をご提供"
 				/>
 				<meta property="og:url" content="https://pick-yoga.com" />
 				<meta property="og:title" content="ヨガ専門webサイト・チラシ制作 || これからスタジオを始めるインストラクターさんへ集客のお手伝い" />
 				<meta property="og:site_name" content="ヨガ専門webサイト・チラシ制作 " />
 				<meta
 					property="og:description"
-					content="これからスタジオを始めるインストラクターさんのためのヨガ専門webサイト・チラシ制作サービスです。月々4980円、初回19980円で効果の高い集客施策をご提供"
+					content="これからスタジオを始めるインストラクターさんのためのヨガ専門webサイト・チラシ制作サービスです。月々4980円、初回29,980円で効果の高い集客施策をご提供"
 				/>
 				<meta property="og:type" content="website" />
 				<meta property="og:image" content="https://pick-yoga.com/img/ogpImage.png" />

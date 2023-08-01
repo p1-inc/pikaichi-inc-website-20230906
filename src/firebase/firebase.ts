@@ -2024,6 +2024,7 @@ export const deployDatabase = async () => {
 	};
 	try {
 		const func = httpsCallable(functions, "restructureUsageDataOnCall");
+		console.log(' "restructureUsageDataOnCall": ');
 		await func(checksProp);
 	} catch (error) {
 		console.log("error: ", error);
