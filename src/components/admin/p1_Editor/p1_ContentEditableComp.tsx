@@ -4,7 +4,7 @@ import { BlockControlType, BlockToolType, InlineSelType, OutputBlockData } from 
 
 import { Box } from "@mantine/core";
 import { useState, CompositionEvent, KeyboardEvent, useEffect, FormEvent, useRef } from "react";
-import { getHotkeyHandler, useDebouncedState } from "@mantine/hooks";
+import { getHotkeyHandler, useDebouncedState, useDebouncedValue } from "@mantine/hooks";
 import { config } from "./p1_EditorConfig";
 import { getValidOffset } from "./hooks/useSetBlocksState";
 import { useGetComputedStyles } from "../../../hooks/useGetComputedStyles";
@@ -17,13 +17,7 @@ interface P1_ContentEditableComp {
 	[key: string]: any;
 }
 
-export const P1_ContentEditableComp = <T,>({
-	blockData,
-	blockTool,
-	api,
-	pureBlockData,
-	...props
-}: P1_ContentEditableComp) => {
+export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBlockData, ...props }: P1_ContentEditableComp) => {
 	//
 	const {
 		readOnly,
@@ -37,6 +31,8 @@ export const P1_ContentEditableComp = <T,>({
 	}: BlockControlType = api;
 
 	const [isComposing, setIsComposing] = useState<boolean>(false);
+	const [isComposingDebounced] = useDebouncedValue(isComposing, 30);
+
 	const [inputDebounced, setInputDebounced] = useDebouncedState<{
 		id: string;
 		innerHTML: string;
@@ -201,6 +197,10 @@ export const P1_ContentEditableComp = <T,>({
 		} else if (rects.top > viewportHeight - 40) {
 			window.scrollBy(0, rects.top - viewportHeight + 40); // 20pxのマージンを加えてスクロール
 		}
+	};
+
+	const watchCaretPos = () => {
+		console.log("watchCaretPos: ");
 	};
 
 	const handleMoveCaretByLeftRight = ({
@@ -412,7 +412,7 @@ export const P1_ContentEditableComp = <T,>({
 		[
 			"Enter",
 			(event: KeyboardEvent<HTMLDivElement>) => {
-				if (!isComposing) {
+				if (!isComposingDebounced) {
 					handleBlockSplit({ event, id: blockData.id });
 				}
 			},
@@ -483,8 +483,12 @@ export const P1_ContentEditableComp = <T,>({
 			dangerouslySetInnerHTML={{ __html: pureBlockData?.text }}
 			onPaste={(event) => {
 				handleOnPaste({ event, id: blockData.id });
+				watchCaretPos();
 			}}
-			onKeyDown={(event) => handleOnKeyDown(event)}
+			onKeyDown={(event) => {
+				handleOnKeyDown(event);
+				watchCaretPos();
+			}}
 			onInput={(e) => {
 				if (!isComposing) {
 					const inputEvent = e.nativeEvent as InputEvent;
@@ -496,6 +500,7 @@ export const P1_ContentEditableComp = <T,>({
 
 						const text = bufferText + inputEvent.data;
 						setBufferText(text);
+						watchCaretPos();
 					}
 					// console.log("通常のキーボード入力");
 				} else {

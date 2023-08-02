@@ -28,11 +28,7 @@ type EditorWrapperType = {
 	[key: string]: any;
 };
 
-const MarkerColorWrapper = ({
-	api,
-	blockData,
-	children,
-}: { api: BlockControlType; blockData: OutputBlockData; children: ReactNode }) => {
+const MarkerColorWrapper = ({ api, blockData, children }: { api: BlockControlType; blockData: OutputBlockData; children: ReactNode }) => {
 	const [isHovered, setIsHovered] = useState(false);
 
 	const toolConfig = config.blockTools.find((d) => d.id === blockData.type);
@@ -40,13 +36,7 @@ const MarkerColorWrapper = ({
 	const labelStr = toolConfig.label;
 
 	return (
-		<Tooltip
-			label={labelStr}
-			opened={isHovered && api.viewGrid}
-			position="top-start"
-			withArrow
-			styles={{ tooltip: { fontSize: 10 } }}
-		>
+		<Tooltip label={labelStr} opened={isHovered && api.viewGrid} position="top-start" withArrow styles={{ tooltip: { fontSize: 10 } }}>
 			<Box
 				onMouseEnter={() => {
 					setIsHovered(true);
