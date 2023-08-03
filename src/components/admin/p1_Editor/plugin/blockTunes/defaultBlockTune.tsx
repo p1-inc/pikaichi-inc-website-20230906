@@ -4,13 +4,9 @@ import { BlockControlType, OutputBlockData } from "../../p1_EditorTypes";
 import { Dispatch, SetStateAction, useState } from "react";
 import { c, cArr } from "../../../../../styles/eStyle";
 
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import ClearIcon from "@mui/icons-material/Clear";
 import { IconAlignLeft, IconChevronDown, IconChevronUp, IconX } from "@tabler/icons-react";
 import { IconAlignCenter } from "@tabler/icons-react";
 import { IconAlignRight } from "@tabler/icons-react";
-import { useSetBlocksState } from "../../hooks/useSetBlocksState";
 import { ExMenuChild, ExMenuParent } from "../../../../UILib/extendMantine";
 import { config } from "../../p1_EditorConfig";
 
@@ -47,6 +43,7 @@ export const DefaultBlockTuneMenu = ({ blockData, api }: DefaultBlockTuneMenuTyp
 					{textAlign.map((align) => (
 						<ExMenuChild
 							key={align.id}
+							active={align.id === blockData.data.align}
 							onClick={() => {
 								handleAlignChange(blockData.id, align.id);
 							}}
@@ -135,40 +132,6 @@ export const DefaultBlockTuneMenu = ({ blockData, api }: DefaultBlockTuneMenuTyp
 					<Text ml="1em">下へ移動</Text>
 				</ExMenuChild>
 			</Menu>
-
-			{/* <NavLink
-				key="delete"
-				label={confirm ? "クリックして削除" : "削 除"}
-				icon={<ClearIcon />}
-				onClick={() => {
-					if (confirm) {
-						reorderBlock({ id: blockId, dir: "del" });
-						setConfirm(false);
-					} else {
-						setConfirm(true);
-					}
-				}}
-				styles={{
-					root: {
-						borderRadius: "0.3em",
-						backgroundColor: confirm ? cArr.pink[4] : "inherit",
-						color: confirm ? "#FFF" : "inherit",
-						"&:hover": {
-							backgroundColor: confirm ? cArr.pink[5] : "inherit",
-							color: confirm ? "#FFF" : "inherit",
-						},
-					},
-				}}
-			/> */}
-
-			{/* <NavLink
-				key="moveDown"
-				label="下へ移動"
-				icon={<KeyboardArrowDownIcon />}
-				onClick={() => {
-					reorderBlock({ id: blockId, dir: "down" });
-				}}
-			/> */}
 		</Flex>
 	);
 };

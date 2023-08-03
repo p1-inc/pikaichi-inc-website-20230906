@@ -38,11 +38,7 @@ export const Paragraph = ({ blockData, blockTool, api }: InitialToolPropsType) =
 	);
 };
 
-const ParagraphBlockTuneMenu = ({
-	id,
-	blockData,
-	api,
-}: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
+const ParagraphBlockTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
 	return (
 		<>
 			<Menu width={200} shadow="md" position="right-start" offset={0}>

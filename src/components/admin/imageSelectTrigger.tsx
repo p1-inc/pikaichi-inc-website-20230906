@@ -131,6 +131,10 @@ export const ImageSelectTrigger = ({ imgData, size = "m", onImgUrlChange, onSize
 		setDialogOpen(false);
 	};
 
+	useEffect(() => {
+		setSizeState(size);
+	}, [size]);
+
 	const sizeList: { id: string; label: string; retio: number }[] = [
 		{ id: "xs", label: "サイズ[XS]", retio: 0.6 },
 		{ id: "s", label: "サイズ[S]", retio: 0.7 },

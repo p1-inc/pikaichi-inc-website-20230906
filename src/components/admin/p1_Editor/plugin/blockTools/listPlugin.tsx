@@ -7,14 +7,7 @@ import { P1_ContentEditableComp } from "../../p1_ContentEditableComp";
 
 import { c, cArr } from "../../../../../styles/eStyle";
 
-import {
-	IconPointFilled,
-	IconCircleFilled,
-	IconPlayerStopFilled,
-	IconPlayerPlayFilled,
-	Icon123,
-	IconBoxMultiple1,
-} from "@tabler/icons-react";
+import { IconPointFilled, IconCircleFilled, IconPlayerStopFilled, IconPlayerPlayFilled, Icon123, IconBoxMultiple1 } from "@tabler/icons-react";
 import { ExMenuChild, ExMenuParent } from "../../../../UILib/extendMantine";
 import CircleIcon from "@mui/icons-material/Circle";
 import NotInterestedIcon from "@mui/icons-material/NotInterested";
@@ -86,7 +79,7 @@ const PreMark = ({ listIndex, listStyle, listColor }: { listIndex: number; listS
 		);
 	} else {
 		return (
-			<Flex mt="0.5em" align="center" sx={{ color: listColor }}>
+			<Flex mt="0.5em" align="center" sx={{ color: color }}>
 				{listStyleConfig.find((d) => d.id === listStyle)?.icon}
 			</Flex>
 		);
@@ -177,11 +170,7 @@ const groupIndexList = ({ id, blockDataArr }: { id: string; blockDataArr: Output
 	return { listIndex: listIndex, topOrBottom, changeList, listStyle: mostFrequentStyle, listColor: mostFrequentColor };
 };
 
-const handleChangeListStyle = ({
-	id,
-	style,
-	blockDataArr,
-}: { id: string; style: string; blockDataArr: OutputBlockData[] }) => {
+const handleChangeListStyle = ({ id, style, blockDataArr }: { id: string; style: string; blockDataArr: OutputBlockData[] }) => {
 	const { changeList, listStyle, listColor } = groupIndexList({ id, blockDataArr });
 	const changeIndexList = changeList.map((d) => d.id);
 	const nBlockDataArr = blockDataArr.map((d) => {
@@ -193,11 +182,7 @@ const handleChangeListStyle = ({
 	return nBlockDataArr;
 };
 
-const handleChangeListColor = ({
-	id,
-	color,
-	blockDataArr,
-}: { id: string; color: string; blockDataArr: OutputBlockData[] }) => {
+const handleChangeListColor = ({ id, color, blockDataArr }: { id: string; color: string; blockDataArr: OutputBlockData[] }) => {
 	const { changeList, listStyle, listColor } = groupIndexList({ id, blockDataArr });
 	const changeIndexList = changeList.map((d) => d.id);
 	const nBlockDataArr = blockDataArr.map((d) => {
@@ -255,11 +240,7 @@ export const ListTool = ({ blockData, blockTool, api }: InitialToolPropsType) =>
 	);
 };
 
-const ParagraphBlockTuneMenu = ({
-	id,
-	blockData,
-	api,
-}: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
+const ParagraphBlockTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
 	//
 	return (
 		<>
@@ -273,6 +254,7 @@ const ParagraphBlockTuneMenu = ({
 					{listStyleConfig.map((list) => (
 						<ExMenuChild
 							key={list.id}
+							active={list.id === blockData.data?.style}
 							onClick={() => {
 								const nBlockDataArr = handleChangeListStyle({ id, style: list.id, blockDataArr: api.blockDataArr });
 								api.handleSetBlockDataArr({ blockDataArr: nBlockDataArr });
@@ -297,17 +279,14 @@ const ParagraphBlockTuneMenu = ({
 					{colorStyle.map((color) => (
 						<ExMenuChild
 							key={color.id}
+							active={color.id === blockData.data?.color}
 							onClick={() => {
 								const nBlockDataArr = handleChangeListColor({ id, color: color.id, blockDataArr: api.blockDataArr });
 								api.handleSetBlockDataArr({ blockDataArr: nBlockDataArr });
 							}}
 						>
 							<Flex gap="0.5em">
-								{color.id === "none" ? (
-									<NotInterestedIcon sx={{ color: color.colorCode }} />
-								) : (
-									<CircleIcon sx={{ color: color.colorCode }} />
-								)}
+								{color.id === "none" ? <NotInterestedIcon sx={{ color: color.colorCode }} /> : <CircleIcon sx={{ color: color.colorCode }} />}
 								<Flex align="center">{color.label}</Flex>
 							</Flex>
 						</ExMenuChild>

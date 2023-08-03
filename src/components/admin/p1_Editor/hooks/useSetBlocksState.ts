@@ -1,24 +1,7 @@
-import {
-	useState,
-	useEffect,
-	useRef,
-	RefObject,
-	ClipboardEvent,
-	CompositionEvent,
-	useLayoutEffect,
-	KeyboardEvent,
-} from "react";
+import { useState, useEffect, useRef, RefObject, ClipboardEvent, CompositionEvent, useLayoutEffect, KeyboardEvent } from "react";
 
 import DOMPurify from "dompurify";
-import {
-	OutputBlockData,
-	BlockControlType,
-	BlockToolType,
-	InlineToolType,
-	P1GlobalClassNameType,
-	InlineSelType,
-	UndoType,
-} from "../p1_EditorTypes";
+import { OutputBlockData, BlockControlType, BlockToolType, InlineToolType, P1GlobalClassNameType, InlineSelType, UndoType } from "../p1_EditorTypes";
 import { autoID } from "../../../../util/autoID";
 
 import { LLABClassName, config, inlineToolClassNames } from "../p1_EditorConfig";
@@ -110,6 +93,15 @@ export const useSetBlocksState = (): BlockControlType => {
 
 		selection.removeAllRanges();
 		selection.addRange(range);
+	}, [blockDataArr]);
+
+	useEffect(() => {
+		if (blockDataArr.length === 0) {
+			const _defaultData = config.blockTools.find((d) => d.id === config.defaultTool);
+			const defaultData = { ..._defaultData.defaultData };
+			const def = { id: autoID(10), type: config.defaultTool, data: defaultData };
+			handleSetBlockDataArr({ blockDataArr: [def] });
+		}
 	}, [blockDataArr]);
 
 	const containerRef: RefObject<HTMLElement> = useRef(null);
@@ -220,80 +212,6 @@ export const useSetBlocksState = (): BlockControlType => {
 		const _wrappedStyles = extractClassNamesWithPathsFunc(contentEl);
 		const wrappedStyles = _wrappedStyles.filter((d) => startEl.path[0] <= d.path[0] && d.path[0] <= endEl.path[0]);
 
-		// 		/////////////////////////////////////////////////wrapper//////////////////////////////////////////////
-		// 		let wrapperElement: Element;
-		// 		let _wrapperClassNames: string[];
-		// 		if (commonAncestor.nodeType === Node.TEXT_NODE) {
-		// 			wrapperElement = commonAncestor.parentNode as Element;
-		// 			if (wrapperElement instanceof Element) {
-		// 				_wrapperClassNames = wrapperElement.className.split(" ");
-		// 			}
-		// 		} else {
-		// 			wrapperElement = commonAncestor;
-		// 			_wrapperClassNames = wrapperElement.className.split(" ");
-		// 		}
-		//
-		// 		const _nodeObj = findNode(_contentElement.el, wrapperElement);
-		// 		const wrapperClassName = inlineToolClassNames.find((d) => _wrapperClassNames.includes(d));
-		// 		const isWrap: boolean = wrapperClassName ? true : false;
-		//
-		// 		/////////////////////////////////////////////////childWrapper//////////////////////////////////////////////
-		// 		const getElCallBack = ({
-		// 			el,
-		// 			text,
-		// 			startElement,
-		// 			endElement,
-		// 		}: { el: Node; text: string; startElement: Node; endElement: Node }): Node => {
-		// 			if (el === endElement) {
-		// 				return startElement;
-		// 			} else if (el.nodeType === Node.ELEMENT_NODE) {
-		// 				return el;
-		// 			} else {
-		// 				return getElCallBack({ el: el.parentNode, text, startElement, endElement });
-		// 			}
-		// 		};
-
-		// 		const startElement = getElCallBack({
-		// 			el: range.startContainer,
-		// 			text: range.startContainer.textContent,
-		// 			startElement: range.startContainer,
-		// 			endElement: wrapperElement,
-		// 		});
-		//
-		// 		const endElement = getElCallBack({
-		// 			el: range.endContainer,
-		// 			text: range.endContainer.textContent,
-		// 			startElement: range.endContainer,
-		// 			endElement: wrapperElement,
-		// 		});
-
-		// 		const startIndex = Array.from(_contentElement.el.childNodes).findIndex((d: Element) => d === startElement);
-		// 		const endIndex = Array.from(_contentElement.el.childNodes).findIndex((d: Element) => d === endElement);
-		//
-		// 		const commonAncestorChildNodes = Array.from(commonAncestor.childNodes).filter((el: Element, index) => {
-		// 			if (el.nodeType !== Node.ELEMENT_NODE) {
-		// 				return false;
-		// 			}
-		// 			const commonClassList = Array.from(el.classList).filter((element) => inlineToolClassNames.includes(element));
-		//
-		// 			if (commonClassList.length !== 0 && startIndex <= index && index <= endIndex) {
-		// 				return el;
-		// 			}
-		// 			return false;
-		// 		});
-
-		// 		const childWrapperClassNames: string[] = [];
-		//
-		// 		commonAncestorChildNodes.forEach((el: Element) => {
-		// 			const commonClassList = Array.from(el.classList).filter((element) => inlineToolClassNames.includes(element));
-		// 			childWrapperClassNames.push(...commonClassList);
-		// 		});
-		//
-		// 		const isChildWrap: boolean = commonAncestorChildNodes.length !== 0 ? true : false;
-		//
-		// 		const childNodeObj = commonAncestorChildNodes.map((el) => findNode(wrapperElement, el));
-		// const childNodePaths = childNodeObj.map((d) => d.path);
-
 		return {
 			blockId: blockElement.id,
 			collapsed: range.collapsed,
@@ -376,9 +294,9 @@ export const useSetBlocksState = (): BlockControlType => {
 		selObj?: InlineSelType;
 	}) => {
 		//
-		if (blockDataArr.length <= 0) {
-			return;
-		}
+		// if (blockDataArr.length <= 0) {
+		// 	return;
+		// }
 
 		const _undoSel = undoSel ? JSON.stringify(undoSel) : null;
 		const _redoSel = redoSel ? JSON.stringify(redoSel) : null;
@@ -441,12 +359,7 @@ export const useSetBlocksState = (): BlockControlType => {
 		return inlineSel;
 	};
 
-	const cloneElementForInlineSel = ({
-		node,
-		inlineSel,
-		startText,
-		endText,
-	}: { node: Node; inlineSel: InlineSelType; startText: string; endText: string }) => {
+	const cloneElementForInlineSel = ({ node, inlineSel, startText, endText }: { node: Node; inlineSel: InlineSelType; startText: string; endText: string }) => {
 		const cNode = node.cloneNode(true);
 
 		const startEl = getElementFromParentUsingPath(cNode, inlineSel.startEl.path);
@@ -674,11 +587,7 @@ export const useSetBlocksState = (): BlockControlType => {
 		return result;
 	};
 
-	const findParentWithClassNameAndPath = (
-		_element: Node | Element,
-		className: string,
-		path: number[] = [],
-	): { el: Element; id: string; path: number[] } => {
+	const findParentWithClassNameAndPath = (_element: Node | Element, className: string, path: number[] = []): { el: Element; id: string; path: number[] } => {
 		const element = _element as Element;
 
 		if (!element) {
@@ -699,8 +608,19 @@ export const useSetBlocksState = (): BlockControlType => {
 
 	const handleOnPaste = ({ event, id }: { event: ClipboardEvent<HTMLElement>; id: string }) => {
 		event.preventDefault();
-		const pasteText = event.clipboardData.getData("text/html");
 
+		const contentEl = document.getElementById(`${id}-${config.p1GlobalClassName.blockContent}`);
+
+		const nSelection = document.getSelection();
+		const nRange = nSelection.getRangeAt(0);
+		// const nRange = _nRange.cloneRange();
+		const rangeObj = getRangeObj(nRange);
+
+		if (!nRange.collapsed) {
+			nRange.deleteContents();
+		}
+
+		const pasteText = event.clipboardData.getData("text/html");
 		const sanitizedHtml = getPureBlockData(pasteText);
 
 		const tempDiv = document.createElement("div");
@@ -710,23 +630,20 @@ export const useSetBlocksState = (): BlockControlType => {
 		if (selection.rangeCount === 0) {
 			return;
 		}
-		const range = selection.getRangeAt(0);
-		const rangeObj = getRangeObj(range);
 
 		const docFragment = document.createDocumentFragment();
 		while (tempDiv.firstChild) {
 			docFragment.appendChild(tempDiv.firstChild);
 		}
-		range.insertNode(docFragment);
-
-		const contentEl = document.getElementById(rangeObj.contentEl.contentId);
+		nRange.insertNode(docFragment);
 
 		contentEl.normalize();
 
+		// nRange.setStart(nRange.startContainer, nRange.startOffset + sanitizedHtml.length);
+		// nRange.setEnd(nRange.endContainer, nRange.endOffset + sanitizedHtml.length);
+
 		selection.collapseToEnd();
 
-		const nSelection = document.getSelection();
-		const nRange = nSelection.getRangeAt(0);
 		const _redoSel = getRangeObj(nRange);
 
 		const undoSel = { ...rangeObj, displayInlineTune: false };
@@ -843,11 +760,7 @@ export const useSetBlocksState = (): BlockControlType => {
 		handleAddBlockData({ id, data: { text: event.currentTarget.innerHTML }, undoSel, redoSel, selObj });
 	};
 
-	const handleContentEditableOnInput = ({
-		id,
-		innerHTML,
-		textContent,
-	}: { id: string; innerHTML: string; textContent: string }) => {
+	const handleContentEditableOnInput = ({ id, innerHTML, textContent }: { id: string; innerHTML: string; textContent: string }) => {
 		//
 		if (!innerHTML) {
 			return;

@@ -84,6 +84,7 @@ const QuoteToolTuneMenu = ({ id, blockData, api }: { id: string; blockData: Outp
 					{quoteBCStyle.map((color) => (
 						<ExMenuChild
 							key={color.id}
+							active={color.id === blockData.data?.bcColor}
 							onClick={() => {
 								api.handleAddBlockData({ id: blockData.id, data: { bcColor: color.id } });
 							}}

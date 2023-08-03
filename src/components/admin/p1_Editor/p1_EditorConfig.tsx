@@ -63,7 +63,7 @@ export const config: ConfigType = {
 			component: Paragraph,
 			inlinetoolbarList: [],
 			isContentEditable: true,
-			defaultData: { align: "left", lineHeight: 2.4, text: "こちらにテキストを入力してください" },
+			defaultData: { align: "left", lineHeight: 2.4, text: "" },
 			markerColor: cArr.green[1],
 		},
 		{
@@ -119,7 +119,7 @@ export const config: ConfigType = {
 			component: QuoteTool,
 			inlinetoolbarList: [],
 			isContentEditable: true,
-			defaultData: { align: "left", bcColor: "skyblue", text: "こちらにテキストを入力してください" },
+			defaultData: { align: "left", bcColor: "skyblue", text: "" },
 			markerColor: cArr.orange[1],
 		},
 		{
@@ -130,7 +130,7 @@ export const config: ConfigType = {
 			component: ListTool,
 			inlinetoolbarList: [],
 			isContentEditable: true,
-			defaultData: { align: "left", style: "disc", color: "none", text: "こちらにテキストを入力してください" },
+			defaultData: { align: "left", style: "disc", color: "none", text: "" },
 			markerColor: cArr.redpurple[1],
 		},
 		{

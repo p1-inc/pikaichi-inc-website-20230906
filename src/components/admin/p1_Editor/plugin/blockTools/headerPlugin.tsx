@@ -138,7 +138,6 @@ type DataType = {
 
 export const Header = ({ blockData, blockTool, api }: InitialToolPropsType) => {
 	//
-
 	const nData = { ...blockTool.defaultData, ...blockData.data } as DataType;
 
 	const pureBlockText = api.getPureBlockData(nData.text);
@@ -177,7 +176,6 @@ export const Header = ({ blockData, blockTool, api }: InitialToolPropsType) => {
 
 const HeaderBlockTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
 	//
-
 	return (
 		<>
 			<Menu width={200} shadow="md" position="right-start" offset={0}>
@@ -187,16 +185,19 @@ const HeaderBlockTuneMenu = ({ id, blockData, api }: { id: string; blockData: Ou
 					</Box>
 				</Menu.Target>
 				<Menu.Dropdown>
-					{headerStyles.map((style) => (
-						<ExMenuChild
-							key={style.id}
-							onClick={() => {
-								api.handleAddBlockData({ id: id, data: { style: style.id } });
-							}}
-						>
-							{style.label}
-						</ExMenuChild>
-					))}
+					{headerStyles.map((style) => {
+						return (
+							<ExMenuChild
+								key={style.id}
+								active={style.id === blockData.data?.style}
+								onClick={() => {
+									api.handleAddBlockData({ id: id, data: { style: style.id } });
+								}}
+							>
+								{style.label}
+							</ExMenuChild>
+						);
+					})}
 				</Menu.Dropdown>
 			</Menu>
 
@@ -210,6 +211,7 @@ const HeaderBlockTuneMenu = ({ id, blockData, api }: { id: string; blockData: Ou
 					{headerLevels.map((level) => (
 						<ExMenuChild
 							key={level.tag}
+							active={level.number === blockData.data?.level}
 							onClick={() => {
 								api.handleAddBlockData({ id: id, data: { level: level.number } });
 							}}
@@ -230,6 +232,7 @@ const HeaderBlockTuneMenu = ({ id, blockData, api }: { id: string; blockData: Ou
 					{colorStyle.map((color) => (
 						<ExMenuChild
 							key={color.id}
+							active={color.colorCode === blockData.data?.color}
 							onClick={() => {
 								api.handleAddBlockData({ id: id, data: { color: color.colorCode } });
 							}}

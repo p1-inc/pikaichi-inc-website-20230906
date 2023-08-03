@@ -4,8 +4,6 @@ import Head from "next/head";
 
 import { authUserState } from "../../../recoil/atoms";
 
-// import EditorJS, { OutputData } from "@editorjs/editorjs";
-
 import dayjs from "dayjs";
 
 import { EditPost_SubHeader } from "./editPost_SubHeader";
@@ -361,17 +359,6 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 
 	return (
 		<Box id="editPostComponent" sx={editBlog}>
-			{/* {saveLoading && (
-				<Affix w="100vw" h="100vh">
-					<Overlay blur={5} center color="#FFF">
-						<Flex direction="column" align="center" justify="center" gap="0.5em">
-							<Loader size="lg" />
-							<Text fz="1em">保存中...</Text>
-						</Flex>
-					</Overlay>
-				</Affix>
-			)} */}
-
 			<Global styles={P1_EditorStyle({ bg: api.viewGrid }) as CSSObject} />
 			<Head>
 				<title>{componentName}</title>
@@ -437,7 +424,6 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 						<ActionIcon
 							onClick={() => {
 								api.setViewGrid(!api.viewGrid);
-								api.setReadOnly(!api.viewGrid);
 							}}
 						>
 							<ViewComfyIcon />

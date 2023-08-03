@@ -1,8 +1,9 @@
 import { Anchor, Box, Flex, Button, ButtonProps } from "@mantine/core";
-import { c } from "../../styles/eStyle";
+import { c, cArr } from "../../styles/eStyle";
 import { FC, MouseEventHandler, ReactNode } from "react";
 
 import { IconChevronRight } from "@tabler/icons-react";
+import { IconCheck } from "@tabler/icons-react";
 
 export const ExMenuParent: FC<ButtonProps> = ({ children, ...props }) => {
 	//
@@ -17,16 +18,26 @@ export const ExMenuParent: FC<ButtonProps> = ({ children, ...props }) => {
 };
 
 interface ExMenuChildProps extends ButtonProps {
+	active?: boolean;
 	onClick?: MouseEventHandler<HTMLButtonElement>;
 	children: ReactNode;
 }
 
-export const ExMenuChild: FC<ExMenuChildProps> = ({ onClick, children, ...props }) => {
+export const ExMenuChild: FC<ExMenuChildProps> = ({ active = false, onClick, children, ...props }) => {
 	//
 	return (
-		<Button px="0.8em" w="100%" variant="subtle" styles={{ label: { width: "100%", color: c.mainBlack } }} {...props} onClick={onClick}>
+		<Button
+			px="0.8em"
+			w="100%"
+			variant="subtle"
+			sx={{ backgroundColor: active ? cArr.yellow[1] : "none" }}
+			styles={{ label: { width: "100%", color: c.mainBlack } }}
+			{...props}
+			onClick={onClick}
+		>
 			<Flex w="100%" align="center">
 				{children}
+				{active && <IconCheck width="1em" />}
 			</Flex>
 		</Button>
 	);

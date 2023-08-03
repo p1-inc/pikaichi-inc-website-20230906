@@ -6,7 +6,7 @@ import { Box, Flex, Tooltip, ActionIcon, Menu, NavLink, Divider, Text, Affix } f
 
 import { BlockControlType, OutputBlockData } from "./p1_EditorTypes";
 
-import { useClickOutside, useHover } from "@mantine/hooks";
+import { useClickOutside } from "@mantine/hooks";
 import { DefaultBlockTuneMenu } from "./plugin/blockTunes/defaultBlockTune";
 import { FloatingPosition } from "@mantine/core/lib/Floating";
 import { config } from "./p1_EditorConfig";
@@ -55,7 +55,6 @@ const MarkerColorWrapper = ({ api, blockData, children }: { api: BlockControlTyp
 };
 export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...props }: EditorWrapperType) => {
 	//
-
 	const [isHovered, setIsHovered] = useState(false);
 
 	const { blockTools, addNewBlock }: BlockControlType = api;

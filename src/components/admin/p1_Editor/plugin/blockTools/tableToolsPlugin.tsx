@@ -48,13 +48,7 @@ export const TableTool = ({ blockData, blockTool, api }: InitialToolPropsType) =
 				justify={getAlign(nData?.align)}
 				my="0.4em"
 			>
-				<TableSelectTrigger
-					tableId={nData.tableId}
-					size={nData.size}
-					onCellDataChange={onCellDataChange}
-					onSizeChange={onSizeChange}
-					readOnly={readOnly}
-				/>
+				<TableSelectTrigger tableId={nData.tableId} size={nData.size} onCellDataChange={onCellDataChange} onSizeChange={onSizeChange} readOnly={readOnly} />
 			</Flex>
 		</P1_EditorWrapper>
 	);

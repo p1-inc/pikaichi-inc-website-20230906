@@ -88,11 +88,8 @@ export const DelimiterTool = ({ blockData, blockTool, api }: InitialToolPropsTyp
 	);
 };
 
-const DelimiterToolTuneMenu = ({
-	id,
-	blockData,
-	api,
-}: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
+const DelimiterToolTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
+	console.log("blockData: ", blockData);
 	//
 	return (
 		<>
@@ -103,14 +100,15 @@ const DelimiterToolTuneMenu = ({
 					</Box>
 				</Menu.Target>
 				<Menu.Dropdown>
-					{delimiterStyle.map((style) => (
+					{delimiterStyle.map((type) => (
 						<ExMenuChild
-							key={style.id}
+							key={type.id}
+							active={type.id === blockData.data.type}
 							onClick={() => {
-								api.handleAddBlockData({ id: blockData.id, data: { type: style.id } });
+								api.handleAddBlockData({ id: blockData.id, data: { type: type.id } });
 							}}
 						>
-							<Text>{style.label}</Text>
+							<Text>{type.label}</Text>
 						</ExMenuChild>
 					))}
 				</Menu.Dropdown>
@@ -125,6 +123,7 @@ const DelimiterToolTuneMenu = ({
 					{delimiterWeight.map((weight) => (
 						<ExMenuChild
 							key={weight.id}
+							active={weight.id === blockData.data.weight}
 							onClick={() => {
 								api.handleAddBlockData({ id: blockData.id, data: { weight: weight.id } });
 							}}
@@ -137,13 +136,14 @@ const DelimiterToolTuneMenu = ({
 			<Menu width={200} shadow="md" position="right-start" offset={0}>
 				<Menu.Target>
 					<Box>
-						<ExMenuParent>色変換</ExMenuParent>
+						<ExMenuParent>色</ExMenuParent>
 					</Box>
 				</Menu.Target>
 				<Menu.Dropdown>
 					{delimiterColor.map((color) => (
 						<ExMenuChild
 							key={color.id}
+							active={color.id === blockData.data.color}
 							onClick={() => {
 								api.handleAddBlockData({ id: blockData.id, data: { color: color.id } });
 							}}
@@ -153,52 +153,6 @@ const DelimiterToolTuneMenu = ({
 					))}
 				</Menu.Dropdown>
 			</Menu>
-
-			{/* <NavLink label="スタイル変換" childrenOffset="xs">
-				<Flex direction="column">
-					{delimiterStyle.map((style) => (
-						<Button
-							key={style.id}
-							variant="white"
-							onClick={() => {
-								api.handleAddBlockData({ id: blockData.id, data: { type: style.id } });
-							}}
-						>
-							<Text>{style.label}</Text>
-						</Button>
-					))}
-				</Flex>
-			</NavLink> */}
-			{/* <NavLink label="太さ変換" childrenOffset="xs">
-				<Flex direction="column">
-					{delimiterWeight.map((weight) => (
-						<Button
-							key={weight.id}
-							variant="white"
-							onClick={() => {
-								api.handleAddBlockData({ id: blockData.id, data: { weight: weight.id } });
-							}}
-						>
-							<Text>{weight.label}</Text>
-						</Button>
-					))}
-				</Flex>
-			</NavLink> */}
-			{/* <NavLink label="色変換" childrenOffset="xs">
-				<Flex direction="column">
-					{delimiterColor.map((color) => (
-						<Button
-							key={color.id}
-							variant="white"
-							onClick={() => {
-								api.handleAddBlockData({ id: blockData.id, data: { color: color.id } });
-							}}
-						>
-							<Text sx={{ color: cArr[color.id][6] }}>{color.label}</Text>
-						</Button>
-					))}
-				</Flex>
-			</NavLink> */}
 		</>
 	);
 };

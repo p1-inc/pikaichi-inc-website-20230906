@@ -61,30 +61,14 @@ export const ImageTool = ({ blockData, blockTool, api }: InitialToolPropsType) =
 				justify={getAlign(nData.align)}
 				my="0.4em"
 			>
-				<ImageSelectTrigger
-					imgData={nData.imgData}
-					size={nData.size}
-					onImgUrlChange={onImgUrlChange}
-					onSizeChange={onSizeChange}
-					readOnly={readOnly}
-				/>
+				<ImageSelectTrigger imgData={nData.imgData} size={nData.size} onImgUrlChange={onImgUrlChange} onSizeChange={onSizeChange} readOnly={readOnly} />
 			</Flex>
 		</P1_EditorWrapper>
 	);
 };
 
-const ImageToolTuneMenu = ({
-	id,
-	blockData,
-	api,
-}: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
+const ImageToolTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
 	//
-	const isSameSize = (size: string) => {
-		if ("size" in blockData.data && blockData.data.size === size) {
-			return true;
-		}
-		return false;
-	};
 
 	return (
 		<Menu width={200} shadow="md" position="right-start" offset={0}>
@@ -97,13 +81,12 @@ const ImageToolTuneMenu = ({
 				{sizeList.map((size) => (
 					<ExMenuChild
 						key={size.id}
+						active={size.id === blockData.data.size}
 						onClick={() => {
 							api.handleAddBlockData({ id: id, data: { size: size.id } });
 						}}
-						sx={{ backgroundColor: isSameSize(size.id) ? cArr.yellow[1] : "initial" }}
 					>
 						{size.label}
-						{isSameSize(size.id) && "*"}
 					</ExMenuChild>
 				))}
 			</Menu.Dropdown>

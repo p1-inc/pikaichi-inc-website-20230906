@@ -199,10 +199,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		}
 	};
 
-	const watchCaretPos = () => {
-		console.log("watchCaretPos: ");
-	};
-
 	const handleMoveCaretByLeftRight = ({
 		event,
 		id,
@@ -471,6 +467,16 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		],
 	]);
 
+	const defaultStyle = {
+		"&:empty::before": {
+			content: '"テキストを入力してください"',
+			color: cArr.gray[8],
+		},
+		"&:hover": {
+			cursor: "text",
+		},
+	};
+
 	return (
 		<Box
 			ref={contentRef}
@@ -479,15 +485,14 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 			id={`${blockData.id}-${p1_globalClassName.blockContent}`}
 			contentEditable={!readOnly}
 			className={`${p1_globalClassName.block} ${p1_globalClassName.blockContent} ${blockTool.className}`}
+			sx={{ ...props.sx, ...defaultStyle }}
 			// rome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 			dangerouslySetInnerHTML={{ __html: pureBlockData?.text }}
 			onPaste={(event) => {
 				handleOnPaste({ event, id: blockData.id });
-				watchCaretPos();
 			}}
 			onKeyDown={(event) => {
 				handleOnKeyDown(event);
-				watchCaretPos();
 			}}
 			onInput={(e) => {
 				if (!isComposing) {
@@ -500,7 +505,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 
 						const text = bufferText + inputEvent.data;
 						setBufferText(text);
-						watchCaretPos();
 					}
 					// console.log("通常のキーボード入力");
 				} else {
