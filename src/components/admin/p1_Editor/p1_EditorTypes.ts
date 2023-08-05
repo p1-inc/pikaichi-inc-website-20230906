@@ -1,17 +1,7 @@
 import { Box } from "@mantine/core";
 
 import { SnackbarClassKey } from "@mui/material";
-import {
-	Dispatch,
-	FC,
-	MutableRefObject,
-	ReactElement,
-	RefObject,
-	SetStateAction,
-	ClipboardEvent,
-	CompositionEvent,
-	KeyboardEvent,
-} from "react";
+import { Dispatch, FC, MutableRefObject, ReactElement, RefObject, SetStateAction, ClipboardEvent, CompositionEvent, KeyboardEvent } from "react";
 import { SetterOrUpdater } from "recoil";
 import { MediaLib } from "../../../types/types";
 /**

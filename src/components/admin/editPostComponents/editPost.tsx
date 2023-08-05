@@ -154,14 +154,15 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 
 			setMetaDescription(metaDesc);
 
-			if (post.body.blocks.length === 0) {
-				const _defaultData = config.blockTools.find((d) => d.id === config.defaultTool);
-				const defaultData = { ..._defaultData.defaultData };
-				const def = { id: autoID(10), type: config.defaultTool, data: defaultData };
-				api.handleSetBlockDataArr({ blockDataArr: [def] });
-			} else {
-				api.handleSetBlockDataArr({ blockDataArr: post.body.blocks });
-			}
+			// if (post.body.blocks.length === 0) {
+			// 	const _defaultData = config.blockTools.find((d) => d.id === config.defaultTool);
+			// 	const defaultData = { ..._defaultData.defaultData };
+			// 	const def = { id: autoID(10), type: config.defaultTool, data: defaultData };
+			// 	api.handleSetBlockDataArr({ blockDataArr: [def] });
+			// } else {
+			// 	api.handleSetBlockDataArr({ blockDataArr: post.body.blocks });
+			// }
+			api.handleSetBlockDataArr({ blockDataArr: post.body.blocks });
 
 			setCategoryState(post.category);
 

@@ -9,11 +9,6 @@ import { P1_EditorStyle } from "./p1_EditorStyle";
 import { getHotkeyHandler } from "@mantine/hooks";
 import { InlineTunes } from "./plugin/inlineTunes/inlineTunes";
 
-//TODO テキストブロックがふたつ繋がっているとき、
-//したのブロックの一番上が空白行で、その行を削除するためにdelをすると、
-//上のブロックと結合してしまう
-
-//TODOブロックからフォーカスが外れると、キャレット位置がリセットされてしまう
 //TODO ブロックもスタイルもコピペできるようにする
 type EditorContainerType = {
 	readOnly?: boolean;

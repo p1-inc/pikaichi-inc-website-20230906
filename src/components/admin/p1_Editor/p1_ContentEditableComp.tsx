@@ -393,15 +393,15 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		}
 
 		const range = selection.getRangeAt(0);
-		const undoObj = api.getRangeObj(range);
+		const rangeObj = api.getRangeObj(range);
 
-		const startOffset = range.startOffset;
+		// const startOffset = range.startOffset;
 
-		if (startOffset === 0) {
+		if (rangeObj.startEl?.path?.[0] === 0 && rangeObj.startEl?.startOffset === 0) {
 			//前のブロックと結合
-			handleMargeByBS({ event, blockData, blockDataArr, undoObj });
+			handleMargeByBS({ event, blockData, blockDataArr, undoObj: rangeObj });
 		}
-		setDelDebounced({ id: blockData.id, beforeInlineSel: undoObj });
+		setDelDebounced({ id: blockData.id, beforeInlineSel: rangeObj });
 	};
 
 	const handleOnKeyDown = getHotkeyHandler([

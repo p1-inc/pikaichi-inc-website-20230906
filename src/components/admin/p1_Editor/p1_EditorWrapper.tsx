@@ -29,21 +29,21 @@ type EditorWrapperType = {
 };
 
 const MarkerColorWrapper = ({ api, blockData, children }: { api: BlockControlType; blockData: OutputBlockData; children: ReactNode }) => {
-	const [isHovered, setIsHovered] = useState(false);
+	// const [isHovered, setIsHovered] = useState(false);
 
 	const toolConfig = config.blockTools.find((d) => d.id === blockData.type);
 	const markerColor = toolConfig ? toolConfig.markerColor : cArr.gray[1];
 	const labelStr = toolConfig.label;
 
 	return (
-		<Tooltip label={labelStr} opened={isHovered && api.viewGrid} position="top-start" withArrow styles={{ tooltip: { fontSize: 10 } }}>
+		<Tooltip label={labelStr} position="top" withArrow styles={{ tooltip: { fontSize: 10 } }}>
 			<Box
-				onMouseEnter={() => {
-					setIsHovered(true);
-				}}
-				onMouseLeave={() => {
-					setIsHovered(false);
-				}}
+				// onMouseEnter={() => {
+				// 	setIsHovered(true);
+				// }}
+				// onMouseLeave={() => {
+				// 	setIsHovered(false);
+				// }}
 				sx={{
 					backgroundColor: api.viewGrid ? markerColor : null,
 				}}
@@ -55,21 +55,21 @@ const MarkerColorWrapper = ({ api, blockData, children }: { api: BlockControlTyp
 };
 export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...props }: EditorWrapperType) => {
 	//
-	const [isHovered, setIsHovered] = useState(false);
+	// const [isHovered, setIsHovered] = useState(false);
 
 	const { blockTools, addNewBlock }: BlockControlType = api;
 	const [menuName, setMenuName] = useState<null | "add" | "tune">(null);
 	const [menuPosition, setMenuPosition] = useState<FloatingPosition>("bottom-start");
 
-	const displayMenu = () => {
-		if (api.readOnly || api.viewGrid) {
-			return false;
-		} else if (isHovered) {
-			return true;
-		} else {
-			return false;
-		}
-	};
+	// const displayMenu = () => {
+	// 	if (api.readOnly || api.viewGrid) {
+	// 		return false;
+	// 	} else if (isHovered) {
+	// 		return true;
+	// 	} else {
+	// 		return false;
+	// 	}
+	// };
 
 	const ref = useClickOutside(() => setMenuName(null));
 
@@ -78,15 +78,16 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 			<Box
 				{...props}
 				fz="16px"
-				onMouseEnter={() => {
-					setIsHovered(true);
-				}}
-				onMouseLeave={() => {
-					setIsHovered(false);
-				}}
+				// onMouseEnter={() => {
+				// 	setIsHovered(true);
+				// }}
+				// onMouseLeave={() => {
+				// 	setIsHovered(false);
+				// }}
 			>
 				<Menu
-					opened={displayMenu()}
+					// opened={displayMenu()}
+					trigger="hover"
 					// opened={true}
 					position="left-start"
 					openDelay={0}

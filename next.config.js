@@ -2,7 +2,7 @@ const withInterceptStdout = require("next-intercept-stdout");
 
 module.exports = withInterceptStdout(
 	{
-		reactStrictMode: true,
+		reactStrictMode: false,
 		images: {
 			domains: ["storage.googleapis.com", "firebasestorage.googleapis.com"],
 			dangerouslyAllowSVG: true,

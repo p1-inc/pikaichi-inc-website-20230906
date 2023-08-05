@@ -95,14 +95,14 @@ export const useSetBlocksState = (): BlockControlType => {
 		selection.addRange(range);
 	}, [blockDataArr]);
 
-	useEffect(() => {
-		if (blockDataArr.length === 0) {
-			const _defaultData = config.blockTools.find((d) => d.id === config.defaultTool);
-			const defaultData = { ..._defaultData.defaultData };
-			const def = { id: autoID(10), type: config.defaultTool, data: defaultData };
-			handleSetBlockDataArr({ blockDataArr: [def] });
-		}
-	}, [blockDataArr]);
+	// useEffect(() => {
+	// 	if (blockDataArr.length === 0) {
+	// 		const _defaultData = config.blockTools.find((d) => d.id === config.defaultTool);
+	// 		const defaultData = { ..._defaultData.defaultData };
+	// 		const def = { id: autoID(10), type: config.defaultTool, data: defaultData };
+	// 		handleSetBlockDataArr({ blockDataArr: [def] });
+	// 	}
+	// }, [blockDataArr]);
 
 	const containerRef: RefObject<HTMLElement> = useRef(null);
 
