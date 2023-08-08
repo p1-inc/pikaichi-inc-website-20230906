@@ -52,7 +52,7 @@ export const config: ConfigType = {
 			component: Header,
 			inlinetoolbarList: [],
 			isContentEditable: true,
-			defaultData: { align: "left", lineHeight: 2, level: 2, style: "none", text: "タイトル" },
+			defaultData: { align: "left", lineHeight: 2, level: 2, style: "none", text: "" },
 			markerColor: cArr.blue[1],
 		},
 		{

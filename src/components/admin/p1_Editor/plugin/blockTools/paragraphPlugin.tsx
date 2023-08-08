@@ -16,6 +16,7 @@ export const Paragraph = ({ blockData, blockTool, api }: InitialToolPropsType) =
 	//
 	const nData = { ...blockTool.defaultData, ...blockData.data } as DataType;
 	const pureBlockText = api.getPureBlockData(nData.text);
+
 	const pureBlockData = { ...nData, text: pureBlockText };
 
 	const textAlign = nData?.align || "left";
