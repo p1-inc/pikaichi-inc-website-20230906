@@ -5,21 +5,7 @@ import { CategoryType } from "../../../types/types";
 import { useDialogState } from "../../../hooks/useDialogState";
 
 import CircleIcon from "@mui/icons-material/Circle";
-import {
-	Checkbox,
-	Tooltip,
-	Chip,
-	Select,
-	Group,
-	Flex,
-	Container,
-	Button,
-	Modal,
-	Textarea,
-	Text,
-	Stack,
-	Box,
-} from "@mantine/core";
+import { Checkbox, Tooltip, Chip, Select, Group, Flex, Container, Button, Modal, Textarea, Text, Stack, Box } from "@mantine/core";
 
 import { DateInput } from "@mantine/dates";
 import "dayjs/locale/ja";
@@ -54,8 +40,8 @@ type EditPost_SubHeaderType = {
 	setPin: Dispatch<SetStateAction<boolean>>;
 	canPublic: boolean;
 	setCanPublic: Dispatch<SetStateAction<boolean>>;
-	isDraft: boolean;
-	setIsDraft: Dispatch<SetStateAction<boolean>>;
+	// isDraft: boolean;
+	// setIsDraft: Dispatch<SetStateAction<boolean>>;
 	categoryState: string;
 	setCategoryState: Dispatch<SetStateAction<string>>;
 	categoryList: CategoryType[];
@@ -72,8 +58,8 @@ export const EditPost_SubHeader = ({
 	setPin,
 	canPublic,
 	setCanPublic,
-	isDraft,
-	setIsDraft,
+	// isDraft,
+	// setIsDraft,
 	categoryState,
 	setCategoryState,
 	categoryList,
@@ -156,7 +142,7 @@ export const EditPost_SubHeader = ({
 					</Tooltip>
 				</Flex>
 
-				<Flex align="center" sx={{ flexShrink: 0 }}>
+				{/* <Flex align="center" sx={{ flexShrink: 0 }}>
 					<Checkbox
 						label="下書き"
 						checked={isDraft}
@@ -171,7 +157,7 @@ export const EditPost_SubHeader = ({
 							<HelpOutlineIcon sx={{ color: cArr.gray[9] }} />
 						</Flex>
 					</Tooltip>
-				</Flex>
+				</Flex> */}
 
 				<Box sx={{ flexShrink: 0 }}>
 					<Select

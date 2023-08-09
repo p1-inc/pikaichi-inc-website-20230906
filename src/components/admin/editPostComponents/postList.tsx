@@ -50,11 +50,11 @@ const headCells: HeadCellsType[] = [
 		label: "公開",
 		width: "7em",
 	},
-	{
-		id: "isDraft",
-		label: "下書き",
-		width: "7em",
-	},
+	// {
+	// 	id: "isDraft",
+	// 	label: "下書き",
+	// 	width: "7em",
+	// },
 	{
 		id: "user",
 		label: "投稿者",
@@ -116,7 +116,7 @@ export default function PostList() {
 
 	const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
-	const { displayAlert, displayConfirm, displayBigDialog } = useDialogState();
+	const { displayAlert, displayConfirm } = useDialogState();
 
 	useEffect(() => {
 		const f = async () => {
@@ -182,7 +182,6 @@ export default function PostList() {
 			}
 		} catch (error) {
 			await displayAlert("", "失敗しました", "");
-
 			console.log(error);
 		}
 
@@ -248,7 +247,15 @@ export default function PostList() {
 							</Box>
 
 							{headCells.map((h) => (
-								<ThComponent key={h.id} sorted={sortBy === h.id} reversed={reverseSortDirection} onSort={() => setSorting(h.id)} width={h.width}>
+								<ThComponent
+									key={h.id}
+									sorted={sortBy === h.id}
+									reversed={reverseSortDirection}
+									onSort={() => {
+										setSorting(h.id);
+									}}
+									width={h.width}
+								>
 									{h.label}
 								</ThComponent>
 							))}
@@ -294,9 +301,9 @@ export default function PostList() {
 									<Text component="td" truncate>
 										{row.canPublic ? "◯" : "✕"}
 									</Text>
-									<Text component="td" truncate>
+									{/* <Text component="td" truncate>
 										{row.isDraft ? "◯" : "✕"}
-									</Text>
+									</Text> */}
 									<Text component="td" truncate>
 										{row.user.displayName}
 									</Text>

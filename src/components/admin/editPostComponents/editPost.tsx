@@ -34,6 +34,8 @@ import { BlockControlType, OutputBlockData, OutputData } from "../p1_Editor/p1_E
 import { LLABClassName, config } from "../p1_Editor/p1_EditorConfig";
 import { P1_EditorStyle } from "../p1_Editor/p1_EditorStyle";
 
+import { getHotkeyHandler, useEventListener, useHotkeys } from "@mantine/hooks";
+
 export type TagstateType = {
 	id: string;
 	name: string;
@@ -51,6 +53,9 @@ export type UndoStackType = {
 	eventType: string;
 };
 
+//TODO ブロックまるごとコピー
+//TODO 記事ブロック表示時のブロックtype名をどのように表記？
+//TODO　記事のヘッダーがない
 export default function EditPost({ id, isDuplicate, readOnly = false }: EditPostType) {
 	//
 	const componentName = "記事の管理";
@@ -67,7 +72,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 	const [metaTitle, setMetaTitle] = useState<string>("");
 	const [metaDescription, setMetaDescription] = useState<string>("");
 
-	const { displayAlert, displayConfirm, displayFullscreenLoading } = useDialogState();
+	const { displayAlert, displayAlertEX, displayConfirm, displayFullscreenLoading } = useDialogState();
 
 	const [saveLoading, setSaveLoading] = useState<boolean>(false);
 
@@ -79,7 +84,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 	const [mainImage, setMainImage] = useState<MediaLib>();
 	const [canPublic, setCanPublic] = useState<boolean>(false); // 公開のときはtrue、非公開のときはfalse
 	const [pin, setPin] = useState<boolean>(false); // ピンどめのときはtrue
-	const [isDraft, setIsDraft] = useState<boolean>(true);
+	// const [isDraft, setIsDraft] = useState<boolean>(true);
 
 	const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
@@ -104,21 +109,14 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			const defaultTool = config.blockTools.find((d) => d.id === config.defaultTool);
 			const _defaultBody = defaultTool ? defaultTool.defaultData : { align: "left", lineHeight: 2, level: 2, style: "none", text: "" };
 			const defaultBody = { id: autoID(10), type: config.defaultTool, data: _defaultBody };
-			// 			let postBody;
-			// 			if (postData && postData.body?.blocks?.length !== 0) {
-			// 				postBody = postData.body.blocks;
-			// 			} else {
-			// 				const defaultTool = config.blockTools.find((d) => d.id === config.defaultTool);
-			//
-			// 				postBody = [];
-			// 			}
+
 			if (postData.id === "" || postData.id === undefined) {
 				post = {
 					id: autoID(),
 					user: { uid: "", displayName: "" }, //寄稿者
 					body: { blocks: [defaultBody] }, //メイン記事
 					canPublic: false, //公開・非公開
-					isDraft: true, //下書き
+					// isDraft: true, //下書き
 					date: "",
 					mainImage: "",
 					src: "", //イメージのパス
@@ -167,14 +165,6 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 
 			setMetaDescription(metaDesc);
 
-			// if (post.body.blocks.length === 0) {
-			// 	const _defaultData = config.blockTools.find((d) => d.id === config.defaultTool);
-			// 	const defaultData = { ..._defaultData.defaultData };
-			// 	const def = { id: autoID(10), type: config.defaultTool, data: defaultData };
-			// 	api.handleSetBlockDataArr({ blockDataArr: [def] });
-			// } else {
-			// 	api.handleSetBlockDataArr({ blockDataArr: post.body.blocks });
-			// }
 			api.handleSetBlockDataArr({ blockDataArr: post.body.blocks });
 
 			setCategoryState(post.category);
@@ -195,7 +185,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 
 			setCanPublic(Boolean(post.canPublic));
 			setPin(Boolean(post.pin));
-			setIsDraft(Boolean(post.isDraft));
+			// setIsDraft(Boolean(post.isDraft));
 
 			setCategoryList(post_categorySort);
 
@@ -205,6 +195,11 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 
 		f();
 	}, []);
+
+	//　command+sのショートカット処理、
+	//　command+zなどは、エディタの機能に内包されるので、p1_editorContainer.tsx内でイベント処理する
+	//command+sは保存処理を分離したいので、このコンポーネントで処理する
+	const eventRef = useEventListener("keydown", getHotkeyHandler([["mod+S", (e) => handleSave({ noReload: true }), { preventDefault: true }]]));
 
 	const handleDate = (value: dayjs.Dayjs | Date) => {
 		setDateState(value);
@@ -217,15 +212,6 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			const mData = mediaLib.find((d) => d.id === newData.id);
 			setMainImage(mData);
 		}
-	};
-
-	const handleSaveAs = async () => {
-		const nId = autoID();
-		const isConfirm = await displayConfirm("", `別IDとして保存します。  新ID : ${nId.slice(0, 8)}`, "");
-		if (!isConfirm) {
-			return;
-		}
-		handleSave(nId);
 	};
 
 	const validateClassName = (text: string) => {
@@ -263,16 +249,25 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 		return nBlockDataArr;
 	};
 
-	const handleSave = async (nId = idState) => {
+	const handleSaveAs = async () => {
+		const nId = autoID();
+		const isConfirm = await displayConfirm("", `別IDとして保存します。  新ID : ${nId.slice(0, 8)}`, "");
+		if (!isConfirm) {
+			return;
+		}
+		handleSave({ nId });
+	};
+
+	const handleSave = async ({ nId = idState, noReload = false }: { nId?: string; noReload?: boolean }) => {
 		if (!postDataState) {
 			await displayAlert("", "保存に失敗しました", "red");
 			return;
 		}
 
-		if (canPublic && isDraft) {
-			await displayAlert("", "記事を公開として保存する場合は、下書きのチェックを外してください", "");
-			return;
-		}
+		// if (canPublic && isDraft) {
+		// 	await displayAlert("", "記事を公開として保存する場合は、下書きのチェックを外してください", "");
+		// 	return;
+		// }
 
 		const body = sanitizeBlockdata(api.blockDataArr);
 
@@ -296,7 +291,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			user: authUser || null,
 			body: { blocks: body }, //メイン記事
 			canPublic: canPublic || null, //公開true,非公開false
-			isDraft: isDraft || null, // 下書き
+			// isDraft: isDraft || null, // 下書き
 			date: `${nData}-${HHmmss}` || null,
 			mainImage: mainImage?.id || null,
 			src: "", //イメージのパス
@@ -320,7 +315,11 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			const result = await setPostData(nId, data);
 			displayFullscreenLoading(false);
 			if (result === "success") {
-				await displayAlert("", "保存しました", "");
+				// await displayAlert("", "保存しました", "");
+				await displayAlertEX({
+					title: "保存しました",
+					msg: "記事を本番のwebサイトに反映させるには【設定を反映させる】ボタンを押してください\nまた、反映させるまで多少時間がかかります",
+				});
 			} else {
 				await displayAlert("", "保存に失敗しました", "red");
 			}
@@ -330,7 +329,10 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 		}
 
 		displayFullscreenLoading(false);
-		router.push(`/admin/editPost/?id=${nId}`);
+
+		if (!noReload) {
+			router.push(`/admin/editPost/?id=${nId}`);
+		}
 	};
 
 	const handleChangeTitle = (e: any) => {
@@ -372,7 +374,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 	};
 
 	return (
-		<Box id="editPostComponent" sx={editBlog}>
+		<Box id="editPostComponent" sx={editBlog} ref={eventRef}>
 			<Global styles={P1_EditorStyle({ bg: api.viewGrid }) as CSSObject} />
 			<Head>
 				<title>{componentName}</title>
@@ -398,8 +400,8 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 				setPin={setPin}
 				canPublic={canPublic}
 				setCanPublic={setCanPublic}
-				isDraft={isDraft}
-				setIsDraft={setIsDraft}
+				// isDraft={isDraft}
+				// setIsDraft={setIsDraft}
 				categoryState={categoryState}
 				setCategoryState={setCategoryState}
 				categoryList={categoryList}

@@ -134,7 +134,6 @@ const AdminLogin = () => {
 		const res = await sendEmailVerificationFunc(v.email, v.pass);
 		setLoading(false);
 
-		console.log("res: ", res);
 		if (res) {
 			await displayAlertEX({
 				title: "登録したアドレスに確認メールをお送りいたしました",

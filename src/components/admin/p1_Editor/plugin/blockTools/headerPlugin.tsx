@@ -109,7 +109,7 @@ const HeaderWrapper = ({ blockData, headerLevel, children }: { blockData: DataTy
 			{style === "none" && <Box sx={{ color: color }}>{children}</Box>}
 			{style === "headCell" && (
 				<Flex w="100%" gap={fz(headerLevel) * 8}>
-					<Box w={fz(headerLevel) * 7} h="2em" sx={{ backgroundColor: color }} />
+					<Box w={fz(headerLevel) * 7} sx={{ aspectRatio: "1/3", backgroundColor: color }} />
 					{children}
 				</Flex>
 			)}
@@ -151,7 +151,6 @@ export const Header = ({ blockData, blockTool, api }: InitialToolPropsType) => {
 		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={HeaderBlockTuneMenu} api={api} mb="2em">
 			<Box w="100%">
 				<Flex w="100%">
-					{/* {pureBlockData?.style === "headCell" && <Divider size={fz(headerLevel) * 8} orientation="vertical" />} */}
 					<HeaderWrapper headerLevel={headerLevel} blockData={pureBlockData}>
 						<P1_ContentEditableComp
 							blockData={blockData}

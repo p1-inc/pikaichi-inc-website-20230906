@@ -139,7 +139,7 @@ export interface PostDataType {
 	user: { uid: string; displayName: string }; //寄稿者
 	body: { blocks: OutputBlockData[] }; //メイン記事
 	canPublic: boolean; //公開・非公開
-	isDraft: boolean; //下書き
+	// isDraft: boolean; //下書き
 	date: string;
 	mainImage: string;
 	src?: string; //イメージのパス
@@ -162,7 +162,7 @@ export const PostDataInitObj: PostDataType = {
 	user: { uid: "", displayName: "" }, //寄稿者
 	body: { blocks: [] }, //メイン記事
 	canPublic: false, //公開・非公開
-	isDraft: true, //下書き
+	// isDraft: true, //下書き
 	date: "",
 	mainImage: "",
 	src: "", //イメージのパス

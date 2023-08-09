@@ -1,9 +1,9 @@
-import { useState, useEffect, forwardRef, MouseEventHandler } from "react";
+import { useState } from "react";
 import { getAuth, signOut } from "firebase/auth";
 
 import NextLink from "next/link";
 
-import { useRecoilState, atom } from "recoil";
+import { useRecoilState } from "recoil";
 import { authUserState } from "../../recoil/atoms";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -12,23 +12,18 @@ import { adminPages } from "./adminHome";
 
 import { c, cArr } from "../../styles/eStyle";
 
-import { deployDatabase } from "../../firebase/firebase";
-import { useDialogState } from "../../hooks/useDialogState";
-
-import { Burger, Button, Container, Drawer, Flex, Group, Header, Menu, UnstyledButton, Navbar, NavLink, Box, Text } from "@mantine/core";
+import { Burger, Button, Drawer, Flex, Header, Menu, UnstyledButton, Navbar, Box, Text } from "@mantine/core";
 import { useDeploy } from "../../hooks/useDeploy";
 
 type AdminHeaderType = {
 	title: string;
-	fixed?: boolean;
 	color?: string;
 };
-export const AdminHeader = ({ title, fixed = false, color = c.defaultBlue }: AdminHeaderType) => {
+export const AdminHeader = ({ title, color = c.defaultBlue }: AdminHeaderType) => {
 	//
 	const [authUser, setAuthUser] = useRecoilState(authUserState);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [openMenu, setOpenMenu] = useState(false);
-	// const [submitLoading, setSubmitLoading] = useState<boolean>(false);
 
 	const { handleDeploy, loading } = useDeploy();
 
@@ -53,23 +48,6 @@ export const AdminHeader = ({ title, fixed = false, color = c.defaultBlue }: Adm
 			console.log(error);
 		}
 	};
-
-	// 	const handleSubmit = async () => {
-	// 		setSubmitLoading(true);
-	//
-	// 		const res = await deployDatabase();
-	//
-	// 		if (res === "success") {
-	// 			await displayAlert("", "設定を反映しました", "");
-	// 		} else {
-	// 			await displayAlert("", "反映に失敗しました", "red");
-	// 		}
-	// 		setOpenMenu(false);
-	//
-	// 		setSubmitLoading(false);
-	//
-	// 		//////////vercel deploy処理必要！！！
-	// 	};
 
 	const navList = {
 		label: "navList",
@@ -142,7 +120,7 @@ export const AdminHeader = ({ title, fixed = false, color = c.defaultBlue }: Adm
 				</Menu>
 
 				<Drawer opened={openMenu} onClose={() => setOpenMenu(false)}>
-					<Navbar p="xl">
+					<Navbar p="xl" styles={{ root: { border: "none" } }}>
 						<Navbar.Section sx={{ display: "flex", flexDirection: "column" }}>
 							{adminPages.map((menu, index, arr) => (
 								<NextLink key={menu.id} href={`/admin/${menu.id}`} passHref>
@@ -164,7 +142,16 @@ export const AdminHeader = ({ title, fixed = false, color = c.defaultBlue }: Adm
 								</Button>
 							</NextLink>
 
-							<Button size="xs" sx={{ width: "15em" }} variant="filled" onClick={handleDeploy} loading={loading ? true : false}>
+							<Button
+								size="xs"
+								sx={{ width: "15em" }}
+								variant="filled"
+								onClick={() => {
+									setOpenMenu(false);
+									handleDeploy();
+								}}
+								loading={loading ? true : false}
+							>
 								設定を反映させる
 							</Button>
 						</Navbar.Section>

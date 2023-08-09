@@ -280,9 +280,15 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		const caretPosition = _caretPosition + lineHeight / 2;
 
 		const elementRect = contentEl.getBoundingClientRect();
+		const computedStyle = window.getComputedStyle(contentEl);
 
-		const elementPositionTop = elementRect.top;
-		const elementPositionBottom = elementRect.bottom;
+		const paddingTop = parseFloat(computedStyle.paddingTop);
+		const paddingBottom = parseFloat(computedStyle.paddingBottom);
+		const borderTop = parseFloat(computedStyle.borderTopWidth);
+		const borderBottom = parseFloat(computedStyle.borderBottomWidth);
+
+		const elementPositionTop = elementRect.top + paddingTop + borderTop;
+		const elementPositionBottom = elementRect.bottom - paddingBottom - borderBottom;
 
 		const blockDataIndex = blockDataArr.findIndex((d) => d.id === id);
 

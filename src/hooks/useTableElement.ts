@@ -39,10 +39,10 @@ export const useTableElement = <T>(defaultSortBy: keyof T) => {
 		return filterData(
 			[...data].sort((a, b) => {
 				if (payload.reversed) {
-					return b[sortBy].toString().localeCompare(a[sortBy].toString());
+					return b[sortBy]?.toString().localeCompare(a[sortBy]?.toString());
 				}
 
-				return a[sortBy].toString().localeCompare(b[sortBy].toString());
+				return a[sortBy]?.toString().localeCompare(b[sortBy]?.toString());
 			}),
 			payload.search,
 		);

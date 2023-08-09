@@ -1,9 +1,6 @@
 import { Box } from "@mantine/core";
 
-import { SnackbarClassKey } from "@mui/material";
 import { Dispatch, FC, MutableRefObject, ReactElement, RefObject, SetStateAction, ClipboardEvent, CompositionEvent, KeyboardEvent } from "react";
-import { SetterOrUpdater } from "recoil";
-import { MediaLib } from "../../../types/types";
 /**
  * Object returned by Tool's {@link BlockTool#save} method
  * Specified by Tool developer, so leave it as object
@@ -100,64 +97,25 @@ export type WrapperRefType = {
 
 export type InlineSelType = {
 	blockId: string;
-	// blockEl: Node | Element;
 	collapsed: boolean;
-	// range: Range;
 	displayInlineTune: boolean;
 	contentEl: {
-		// contentEl: Element;
 		contentId: string;
 		path: number[];
 	};
 	startEl: {
 		path: number[]; // blockContent: "pe-block__content" からのpath
-		// startContainer: Node;
 		startOffset: number;
 	};
 	endEl: {
 		path: number[]; // blockContent: "pe-block__content" からのpath
-		// endContainer: Node;
 		endOffset: number;
 	};
-	// selection: Selection;
-	// wrapper: { isWrap: boolean; className: string; path: number[] };
-	// childWrapper: { isWrap: boolean; classNames: string[]; paths: number[][] };
 	wrappedStyles: { classNames: string[]; path: number[] }[];
-
 	top: number;
 	left: number;
 };
 
-// export type SavedSelectionRefType = {
-// 	contentEl: {
-// 		anchorEl: Element;
-// 		anchorId: string;
-// 		path: number[];
-// 	};
-// 	startEl: {
-// 		anchorEl: Element;
-// 		anchorId: string;
-// 		path: number[];
-// 		startContainer: Node;
-// 		startOffset: number;
-// 	};
-// 	endEl: {
-// 		anchorEl: Element;
-// 		anchorId: string;
-// 		path: number[];
-// 		endContainer: Node;
-// 		endOffset: number;
-// 	};
-// 	wrapper: { isWrap: boolean; className: string; el: Element };
-// 	top: number;
-// 	left: number;
-// };
-
-// export type UndoType = {
-// 	undoSel: InlineSelType;
-// 	redoSel: InlineSelType;
-// 	blockDataArr: OutputBlockData[];
-// };
 export type UndoType = {
 	undoSel: string;
 	redoSel: string;

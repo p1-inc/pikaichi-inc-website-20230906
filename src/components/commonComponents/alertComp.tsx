@@ -107,9 +107,12 @@ export const AlertCompEX = () => {
 				<Text c={dialogAlertEX.color} fz="0.9em" mt="1em">
 					{replaceBS(dialogAlertEX.msg)}
 				</Text>
-				<Text c={dialogAlertEX.color} fz="0.8em" mt="1em" p="0.8em" sx={{ backgroundColor: cArr.skyblue[0], borderRadius: "0.5em" }}>
-					{replaceBS(dialogAlertEX.body)}
-				</Text>
+
+				{dialogAlertEX.body && (
+					<Text c={dialogAlertEX.color} fz="0.8em" mt="1em" p="0.8em" sx={{ backgroundColor: cArr.skyblue[0], borderRadius: "0.5em" }}>
+						{replaceBS(dialogAlertEX.body)}
+					</Text>
+				)}
 
 				<Button
 					px="3em"
