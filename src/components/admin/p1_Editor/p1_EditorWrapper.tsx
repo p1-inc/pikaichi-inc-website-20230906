@@ -30,27 +30,26 @@ type EditorWrapperType = {
 
 const MarkerColorWrapper = ({ api, blockData, children }: { api: BlockControlType; blockData: OutputBlockData; children: ReactNode }) => {
 	// const [isHovered, setIsHovered] = useState(false);
-
 	const toolConfig = config.blockTools.find((d) => d.id === blockData.type);
 	const markerColor = toolConfig ? toolConfig.markerColor : cArr.gray[1];
 	const labelStr = toolConfig.label;
 
 	return (
-		<Tooltip label={labelStr} position="top" withArrow styles={{ tooltip: { fontSize: 10 } }}>
-			<Box
-				// onMouseEnter={() => {
-				// 	setIsHovered(true);
-				// }}
-				// onMouseLeave={() => {
-				// 	setIsHovered(false);
-				// }}
-				sx={{
-					backgroundColor: api.viewGrid ? markerColor : null,
-				}}
-			>
-				{children}
-			</Box>
-		</Tooltip>
+		// <Tooltip label={labelStr} position="top" withArrow styles={{ tooltip: { fontSize: 10 } }}>
+		<Box
+			// onMouseEnter={() => {
+			// 	setIsHovered(true);
+			// }}
+			// onMouseLeave={() => {
+			// 	setIsHovered(false);
+			// }}
+			sx={{
+				backgroundColor: api.viewGrid ? markerColor : null,
+			}}
+		>
+			{children}
+		</Box>
+		// </Tooltip>
 	);
 };
 export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...props }: EditorWrapperType) => {

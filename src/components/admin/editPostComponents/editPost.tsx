@@ -101,12 +101,22 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			});
 
 			let post: PostDataType;
-
+			const defaultTool = config.blockTools.find((d) => d.id === config.defaultTool);
+			const _defaultBody = defaultTool ? defaultTool.defaultData : { align: "left", lineHeight: 2, level: 2, style: "none", text: "" };
+			const defaultBody = { id: autoID(10), type: config.defaultTool, data: _defaultBody };
+			// 			let postBody;
+			// 			if (postData && postData.body?.blocks?.length !== 0) {
+			// 				postBody = postData.body.blocks;
+			// 			} else {
+			// 				const defaultTool = config.blockTools.find((d) => d.id === config.defaultTool);
+			//
+			// 				postBody = [];
+			// 			}
 			if (postData.id === "" || postData.id === undefined) {
 				post = {
 					id: autoID(),
 					user: { uid: "", displayName: "" }, //寄稿者
-					body: { blocks: [] }, //メイン記事
+					body: { blocks: [defaultBody] }, //メイン記事
 					canPublic: false, //公開・非公開
 					isDraft: true, //下書き
 					date: "",
@@ -127,6 +137,9 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 				};
 			} else {
 				post = postData;
+				if (postData.body.blocks.length === 0) {
+					post.body = { blocks: [defaultBody] };
+				}
 			}
 
 			const mediaLib = await getMediaLib();
