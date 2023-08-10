@@ -11,7 +11,6 @@ import { DefaultBlockTuneMenu } from "./plugin/blockTunes/defaultBlockTune";
 import { FloatingPosition } from "@mantine/core/lib/Floating";
 import { config } from "./p1_EditorConfig";
 import { c, cArr } from "../../../styles/eStyle";
-import { DragIndicatorSVG } from "./svg/dragIndicator";
 
 type EditorWrapperType = {
 	blockData: OutputBlockData;

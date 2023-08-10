@@ -4,8 +4,6 @@ import { BlockControlType, OutputBlockData, InitialToolPropsType } from "../../p
 import { c, cArr } from "../../../../../styles/eStyle";
 
 import { P1_EditorWrapper } from "../../p1_EditorWrapper";
-import { BorderStarSVG } from "../../../../../svg/BorderStarSVG";
-import { BorderHandLineSVG } from "../../../../../svg/BorderHandLineSVG";
 import { ExMenuParent } from "../../../../UILib/extendMantine";
 
 type DataType = { height: number };
@@ -32,11 +30,7 @@ export const SpaceTool = ({ blockData, blockTool, api }: InitialToolPropsType) =
 	);
 };
 
-const SpaceToolTuneMenu = ({
-	id,
-	blockData,
-	api,
-}: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
+const SpaceToolTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
 	//
 	return (
 		<>
