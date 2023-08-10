@@ -50,7 +50,7 @@ export const QuoteTool = ({ blockData, blockTool, api }: InitialToolPropsType) =
 	const bgColor = _bgColor ? _bgColor.colorCode : null;
 
 	return (
-		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={QuoteToolTuneMenu} api={api} mb="2em">
+		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={QuoteToolTuneMenu} api={api} my="0.31em">
 			<P1_ContentEditableComp
 				blockData={blockData}
 				blockTool={blockTool}
@@ -63,7 +63,7 @@ export const QuoteTool = ({ blockData, blockTool, api }: InitialToolPropsType) =
 				w="fit-content"
 				p="1em"
 				fz="0.8em"
-				lh="1.6em"
+				lh={1.6}
 				sx={{ backgroundColor: bgColor, border: "none", borderRadius: "0.3em", boxShadow: "none" }}
 			/>
 		</P1_EditorWrapper>

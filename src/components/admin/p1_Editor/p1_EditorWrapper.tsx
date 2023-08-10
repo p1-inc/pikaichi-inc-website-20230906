@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -56,48 +56,40 @@ const useStyles = createStyles((theme) => ({
 
 export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...props }: EditorWrapperType) => {
 	//
-	// const [isHovered, setIsHovered] = useState(false);
-
 	const { blockTools, addNewBlock }: BlockControlType = api;
 	const [menuName, setMenuName] = useState<null | "add" | "tune">(null);
 	const [menuPosition, setMenuPosition] = useState<FloatingPosition>("bottom-start");
 
+	const [menuBtnPos, setMenuBtnPos] = useState<number>(0);
 	const ref = useClickOutside(() => setMenuName(null));
+
+	const contentRef = useRef(null);
+	const MenuBtnHeight = 16;
+
+	useLayoutEffect(() => {
+		const blockContent = contentRef.current.querySelector(`.${api.p1_globalClassName.blockContent}`);
+		const contentStyle = window.getComputedStyle(blockContent);
+		const contentLineHeight = parseInt(contentStyle.lineHeight);
+		const offsetY = contentLineHeight / 2 - MenuBtnHeight / 2;
+		setMenuBtnPos(offsetY);
+	}, [contentRef.current]);
 
 	const { classes } = useStyles();
 	return (
 		<MarkerColorWrapper api={api} blockData={blockData}>
-			<Box
-				{...props}
-				fz="16px"
-				// onMouseEnter={() => {
-				// 	setIsHovered(true);
-				// }}
-				// onMouseLeave={() => {
-				// 	setIsHovered(false);
-				// }}
-			>
-				<Menu
-					// opened={displayMenu()}
-					trigger="hover"
-					// opened={true}
-					position="left-start"
-					openDelay={0}
-					closeDelay={0}
-					offset={-32}
-					// styles={{ dropdown: { border: "none", padding: 0 } }}
-					zIndex={1}
-					classNames={classes}
-				>
+			<Box {...props} fz="16px">
+				<Menu trigger="hover" position="left-start" openDelay={0} closeDelay={0} offset={-32} zIndex={1} classNames={classes}>
 					<Menu.Target>
-						<Box px="2em" sx={{ zIndex: 10000 }}>
+						<Box ref={contentRef} px="2em" sx={{ label: "content", zIndex: 10000 }}>
 							{children}
 						</Box>
 					</Menu.Target>
 					<Menu.Dropdown sx={{ zIndex: 0 }}>
-						<Menu
+						<Box
+							component={Menu}
 							shadow="md"
 							width={200}
+							h={MenuBtnHeight}
 							position={menuPosition}
 							opened={Boolean(menuName)}
 							// opened={true}
@@ -105,28 +97,23 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 							onPositionChange={(e) => {
 								setMenuPosition(e);
 							}}
-							// trigger="hover"
+							mt={menuBtnPos}
 						>
 							<Menu.Target>
 								<Flex gap="0.3em" mr="0.3em">
 									<ActionIcon w="1em" h="1em" miw="initial" mih="initial">
-										<Tooltip label="追加">
-											<AddIcon
-												onClick={() => {
-													setMenuName(menuName ? null : "add");
-												}}
-											/>
-										</Tooltip>
+										<AddIcon
+											onClick={() => {
+												setMenuName(menuName ? null : "add");
+											}}
+										/>
 									</ActionIcon>
 									<ActionIcon w="1em" h="1em" miw="initial" mih="initial">
-										<Tooltip label="メニュー">
-											{/* <DragIndicatorSVG width="1em" height="1em" /> */}
-											<DragIndicatorIcon
-												onClick={() => {
-													setMenuName(menuName ? null : "tune");
-												}}
-											/>
-										</Tooltip>
+										<DragIndicatorIcon
+											onClick={() => {
+												setMenuName(menuName ? null : "tune");
+											}}
+										/>
 									</ActionIcon>
 								</Flex>
 							</Menu.Target>
@@ -155,7 +142,7 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 									</Box>
 								</Box>
 							</Menu.Dropdown>
-						</Menu>
+						</Box>
 					</Menu.Dropdown>
 				</Menu>
 			</Box>

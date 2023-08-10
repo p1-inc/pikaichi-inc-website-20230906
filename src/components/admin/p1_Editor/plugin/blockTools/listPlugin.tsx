@@ -221,7 +221,7 @@ export const ListTool = ({ blockData, blockTool, api }: InitialToolPropsType) =>
 	};
 
 	return (
-		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={ParagraphBlockTuneMenu} api={api} my="0.18em">
+		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={ParagraphBlockTuneMenu} api={api} my="0.31em">
 			<Flex gap="0.5em" align="flex-start" {...getMargin()}>
 				<PreMark listIndex={listIndex} listStyle={listStyle} listColor={listColor} />
 				<P1_ContentEditableComp
@@ -233,7 +233,7 @@ export const ListTool = ({ blockData, blockTool, api }: InitialToolPropsType) =>
 					component="p"
 					// my="0.4em"
 					ta={textAlign}
-					lh="1.6em"
+					lh={1.6}
 				/>
 			</Flex>
 		</P1_EditorWrapper>

@@ -22,7 +22,7 @@ export const Paragraph = ({ blockData, blockTool, api }: InitialToolPropsType) =
 	const textAlign = nData?.align || "left";
 
 	return (
-		<P1_EditorWrapper blockData={blockData} api={api} my="0.18em">
+		<P1_EditorWrapper blockData={blockData} api={api} my="0.31em">
 			<P1_ContentEditableComp
 				blockData={blockData}
 				blockTool={blockTool}
@@ -35,7 +35,7 @@ export const Paragraph = ({ blockData, blockTool, api }: InitialToolPropsType) =
 				fz="1em"
 				w="100%"
 				ta={textAlign}
-				lh="1.6em"
+				lh={1.6}
 			/>
 		</P1_EditorWrapper>
 	);

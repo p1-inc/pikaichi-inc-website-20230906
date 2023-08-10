@@ -158,13 +158,12 @@ export const Header = ({ blockData, blockTool, api }: InitialToolPropsType) => {
 						pureBlockData={pureBlockData}
 						/////
 						component={Title}
-						my="0.18em"
 						w="100%"
 						ta={textAlign}
 						order={headerLevel}
 						weight="normal"
 						fz={`${headerStyle.fz}em`}
-						lh="1.6em"
+						lh={1.6}
 					/>
 				</HeaderWrapper>
 			</Box>
