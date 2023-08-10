@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import AddIcon from "@mui/icons-material/Add";
 
-import { Box, Flex, Tooltip, ActionIcon, Menu, NavLink, Divider, Text, Affix } from "@mantine/core";
+import { Box, Flex, Tooltip, ActionIcon, Menu, NavLink, Divider, Text, Affix, createStyles } from "@mantine/core";
 
 import { BlockControlType, OutputBlockData } from "./p1_EditorTypes";
 
@@ -11,6 +11,7 @@ import { DefaultBlockTuneMenu } from "./plugin/blockTunes/defaultBlockTune";
 import { FloatingPosition } from "@mantine/core/lib/Floating";
 import { config } from "./p1_EditorConfig";
 import { c, cArr } from "../../../styles/eStyle";
+import { DragIndicatorSVG } from "./svg/dragIndicator";
 
 type EditorWrapperType = {
 	blockData: OutputBlockData;
@@ -36,22 +37,32 @@ const MarkerColorWrapper = ({ api, blockData, children }: { api: BlockControlTyp
 
 	return (
 		// <Tooltip label={labelStr} position="top" withArrow styles={{ tooltip: { fontSize: 10 } }}>
-		<Box
-			// onMouseEnter={() => {
-			// 	setIsHovered(true);
-			// }}
-			// onMouseLeave={() => {
-			// 	setIsHovered(false);
-			// }}
-			sx={{
-				backgroundColor: api.viewGrid ? markerColor : null,
-			}}
-		>
-			{children}
-		</Box>
+		<>
+			<Text fz="0.8em" color="#FFF" pos="absolute" right={5}>
+				{labelStr}
+			</Text>
+			<Box
+				// onMouseEnter={() => {
+				// 	setIsHovered(true);
+				// }}
+				// onMouseLeave={() => {
+				// 	setIsHovered(false);
+				// }}
+				sx={{
+					backgroundColor: api.viewGrid ? markerColor : null,
+				}}
+			>
+				{children}
+			</Box>
+		</>
 		// </Tooltip>
 	);
 };
+
+const useStyles = createStyles((theme) => ({
+	dropdown: { border: "none", padding: 0, backgroundColor: "initial" },
+}));
+
 export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...props }: EditorWrapperType) => {
 	//
 	// const [isHovered, setIsHovered] = useState(false);
@@ -72,6 +83,7 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 
 	const ref = useClickOutside(() => setMenuName(null));
 
+	const { classes } = useStyles();
 	return (
 		<MarkerColorWrapper api={api} blockData={blockData}>
 			<Box
@@ -92,8 +104,9 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 					openDelay={0}
 					closeDelay={0}
 					offset={-32}
-					styles={{ dropdown: { border: "none", padding: 0 } }}
+					// styles={{ dropdown: { border: "none", padding: 0 } }}
 					zIndex={1}
+					classNames={classes}
 				>
 					<Menu.Target>
 						<Box px="2em" sx={{ zIndex: 10000 }}>
@@ -114,8 +127,8 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 							// trigger="hover"
 						>
 							<Menu.Target>
-								<Flex>
-									<ActionIcon>
+								<Flex gap="0.3em" mr="0.3em">
+									<ActionIcon w="1em" h="1em" miw="initial" mih="initial">
 										<Tooltip label="追加">
 											<AddIcon
 												onClick={() => {
@@ -124,8 +137,9 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 											/>
 										</Tooltip>
 									</ActionIcon>
-									<ActionIcon>
+									<ActionIcon w="1em" h="1em" miw="initial" mih="initial">
 										<Tooltip label="メニュー">
+											{/* <DragIndicatorSVG width="1em" height="1em" /> */}
 											<DragIndicatorIcon
 												onClick={() => {
 													setMenuName(menuName ? null : "tune");

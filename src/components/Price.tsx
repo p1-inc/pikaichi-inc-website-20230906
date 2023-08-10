@@ -15,7 +15,7 @@ export default function Price() {
 				src="/img/copy_01.svg"
 				width={332}
 				height={351}
-				alt="webサイト*チラシ制作 月々４,980円〜初回19,980円〜"
+				alt="webサイト*チラシ制作 月々４,980円〜初回29,980円〜"
 			/>
 		</Box>
 	);

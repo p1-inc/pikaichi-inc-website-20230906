@@ -54,7 +54,6 @@ export type UndoStackType = {
 };
 
 //TODO ブロックまるごとコピー
-//TODO 記事ブロック表示時のブロックtype名をどのように表記？
 //TODO　記事のヘッダーがない
 export default function EditPost({ id, isDuplicate, readOnly = false }: EditPostType) {
 	//
@@ -258,7 +257,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 		handleSave({ nId });
 	};
 
-	const handleSave = async ({ nId = idState, noReload = false }: { nId?: string; noReload?: boolean }) => {
+	const handleSave = async ({ nId = idState, noReload = false }: { nId?: string; noReload?: boolean } = {}) => {
 		if (!postDataState) {
 			await displayAlert("", "保存に失敗しました", "red");
 			return;

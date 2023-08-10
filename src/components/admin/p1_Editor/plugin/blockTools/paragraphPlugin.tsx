@@ -23,18 +23,21 @@ export const Paragraph = ({ blockData, blockTool, api }: InitialToolPropsType) =
 
 	return (
 		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={ParagraphBlockTuneMenu} api={api} mb="2em">
-			<P1_ContentEditableComp
-				blockData={blockData}
-				blockTool={blockTool}
-				api={api}
-				pureBlockData={pureBlockData}
-				/////
-				component="p"
-				// my="0.4em"
-				fz="1em"
-				ta={textAlign}
-				lh={pureBlockData.lineHeight}
-			/>
+			<Flex w="100%">
+				<P1_ContentEditableComp
+					blockData={blockData}
+					blockTool={blockTool}
+					api={api}
+					pureBlockData={pureBlockData}
+					/////
+					component="p"
+					// my="0.4em"
+
+					fz="1em"
+					ta={textAlign}
+					lh={pureBlockData.lineHeight}
+				/>
+			</Flex>
 		</P1_EditorWrapper>
 	);
 };
