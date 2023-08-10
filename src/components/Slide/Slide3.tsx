@@ -76,23 +76,6 @@ export const Slide3 = ({ toggleOpenFlyerSample }: { toggleOpenFlyerSample: (valu
 		},
 	};
 
-	// const flyImage = {
-	// 	height: mq.sp ? "initial" : "54vw",
-	// 	maxHeight: "420px",
-	// 	width: "65%",
-	// 	margin: "0 auto",
-	// 	marginTop: "1em",
-	// 	marginBottom: mq.sp ? "1.5em" : "initial",
-	// 	overflow: "hidden",
-	// 	filter: "drop-shadow(0.2em 0.2em 0.1em rgba(0, 0, 0, 0.6))",
-	// 	// cursor: "pointer",
-	// 	"&:hover": { opacity: 0.7 },
-	// 	// ${bp.sp} {
-	// 	//     height: initial;
-	// 	//     margin-bottom: 1.5em;
-	// 	// }
-	// };
-
 	const flyImage: CSSObject = {
 		width: "65%",
 		margin: "0 auto",
@@ -169,18 +152,6 @@ export const Slide3 = ({ toggleOpenFlyerSample }: { toggleOpenFlyerSample: (valu
 					</ExButton>
 				</Flex>
 			</Flex>
-
-			{/* <Modal
-				size="xl"
-				opened={openFlyerSample}
-				onClose={() => {
-					setOpenFlyerSample(false);
-				}}
-			>
-				<SlideFlyerSample setWinOpen={setOpenFlyerSample} />
-			</Modal> */}
-
-			{/* {openFlyerSample && <SlideFlyerSample setWinOpen={setOpenFlyerSample} />} */}
 		</>
 	);
 };

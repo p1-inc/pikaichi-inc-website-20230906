@@ -27,7 +27,7 @@ export const Slide4 = () => {
 				}}
 			>
 				<span>当サービスの費用は、1プランのみです。 。</span> <br />
-				<span> 月額4,980円で、</span> <span>初回のみ14,980円〜になります。</span> <br />
+				<span> 月額4,980円で、</span> <span>初回のみ29,980円〜になります。</span> <br />
 			</Box>
 			<Box sx={image}>
 				<Box component={Image} src="/img/slide_4_Image.png" width={805} height={171} w="100%" alt="更新のイメージ図" sx={{ objectFit: "contain" }} />
