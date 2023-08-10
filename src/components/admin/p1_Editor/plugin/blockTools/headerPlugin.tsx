@@ -148,26 +148,25 @@ export const Header = ({ blockData, blockTool, api }: InitialToolPropsType) => {
 	const textAlign = nData?.align || "left";
 
 	return (
-		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={HeaderBlockTuneMenu} api={api} mb="2em">
+		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={HeaderBlockTuneMenu} api={api} mt="2em" mb="0.25em">
 			<Box w="100%">
-				<Flex w="100%">
-					<HeaderWrapper headerLevel={headerLevel} blockData={pureBlockData}>
-						<P1_ContentEditableComp
-							blockData={blockData}
-							blockTool={blockTool}
-							api={api}
-							pureBlockData={pureBlockData}
-							/////
-							component={Title}
-							w="100%"
-							ta={textAlign}
-							order={headerLevel}
-							weight="normal"
-							fz={`${headerStyle.fz}em`}
-							lh={pureBlockData.lineHeight}
-						/>
-					</HeaderWrapper>
-				</Flex>
+				<HeaderWrapper headerLevel={headerLevel} blockData={pureBlockData}>
+					<P1_ContentEditableComp
+						blockData={blockData}
+						blockTool={blockTool}
+						api={api}
+						pureBlockData={pureBlockData}
+						/////
+						component={Title}
+						my="0.18em"
+						w="100%"
+						ta={textAlign}
+						order={headerLevel}
+						weight="normal"
+						fz={`${headerStyle.fz}em`}
+						lh="1.6em"
+					/>
+				</HeaderWrapper>
 			</Box>
 		</P1_EditorWrapper>
 	);

@@ -14,7 +14,7 @@ import { c, cArr } from "../../../styles/eStyle";
 
 type EditorWrapperType = {
 	blockData: OutputBlockData;
-	BlockTuneMenu: ({
+	BlockTuneMenu?: ({
 		id,
 		blockData,
 		api,
@@ -35,18 +35,11 @@ const MarkerColorWrapper = ({ api, blockData, children }: { api: BlockControlTyp
 	const labelStr = toolConfig.label;
 
 	return (
-		// <Tooltip label={labelStr} position="top" withArrow styles={{ tooltip: { fontSize: 10 } }}>
 		<>
 			<Text fz="0.8em" color="#FFF" pos="absolute" right={5}>
 				{labelStr}
 			</Text>
 			<Box
-				// onMouseEnter={() => {
-				// 	setIsHovered(true);
-				// }}
-				// onMouseLeave={() => {
-				// 	setIsHovered(false);
-				// }}
 				sx={{
 					backgroundColor: api.viewGrid ? markerColor : null,
 				}}
@@ -54,7 +47,6 @@ const MarkerColorWrapper = ({ api, blockData, children }: { api: BlockControlTyp
 				{children}
 			</Box>
 		</>
-		// </Tooltip>
 	);
 };
 
@@ -69,16 +61,6 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 	const { blockTools, addNewBlock }: BlockControlType = api;
 	const [menuName, setMenuName] = useState<null | "add" | "tune">(null);
 	const [menuPosition, setMenuPosition] = useState<FloatingPosition>("bottom-start");
-
-	// const displayMenu = () => {
-	// 	if (api.readOnly || api.viewGrid) {
-	// 		return false;
-	// 	} else if (isHovered) {
-	// 		return true;
-	// 	} else {
-	// 		return false;
-	// 	}
-	// };
 
 	const ref = useClickOutside(() => setMenuName(null));
 

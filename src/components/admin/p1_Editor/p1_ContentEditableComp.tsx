@@ -486,7 +486,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 	return (
 		<Box
 			ref={contentRef}
-			my={fz / -2}
+			// my={fz / -2}
 			{...props}
 			id={`${blockData.id}-${p1_globalClassName.blockContent}`}
 			contentEditable={!readOnly}

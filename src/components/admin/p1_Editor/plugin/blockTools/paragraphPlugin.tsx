@@ -22,50 +22,49 @@ export const Paragraph = ({ blockData, blockTool, api }: InitialToolPropsType) =
 	const textAlign = nData?.align || "left";
 
 	return (
-		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={ParagraphBlockTuneMenu} api={api} mb="2em">
-			<Flex w="100%">
-				<P1_ContentEditableComp
-					blockData={blockData}
-					blockTool={blockTool}
-					api={api}
-					pureBlockData={pureBlockData}
-					/////
-					component="p"
-					// my="0.4em"
+		<P1_EditorWrapper blockData={blockData} api={api} my="0.18em">
+			<P1_ContentEditableComp
+				blockData={blockData}
+				blockTool={blockTool}
+				api={api}
+				pureBlockData={pureBlockData}
+				/////
+				component="p"
+				// my="0.4em"
 
-					fz="1em"
-					ta={textAlign}
-					lh={pureBlockData.lineHeight}
-				/>
-			</Flex>
+				fz="1em"
+				w="100%"
+				ta={textAlign}
+				lh="1.6em"
+			/>
 		</P1_EditorWrapper>
 	);
 };
 
-const ParagraphBlockTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
-	return (
-		<>
-			<Menu width={200} shadow="md" position="right-start" offset={0}>
-				<Menu.Target>
-					<Box>
-						<ExMenuParent>行 間</ExMenuParent>
-					</Box>
-				</Menu.Target>
-				<Menu.Dropdown>
-					<Flex align="flex-end">
-						<NumberInput
-							w="8em"
-							size="xs"
-							defaultValue={blockData.data?.lineHeight || 2}
-							onChange={(val) => {
-								api.handleAddBlockData({ id: id, data: { lineHeight: Number(val) } });
-							}}
-							precision={2}
-							step={0.25}
-						/>
-					</Flex>
-				</Menu.Dropdown>
-			</Menu>
-		</>
-	);
-};
+// const ParagraphBlockTuneMenu = ({ id, blockData, api }: { id: string; blockData: OutputBlockData; api: BlockControlType }) => {
+// 	return (
+// 		<>
+// 			<Menu width={200} shadow="md" position="right-start" offset={0}>
+// 				<Menu.Target>
+// 					<Box>
+// 						<ExMenuParent>行 間</ExMenuParent>
+// 					</Box>
+// 				</Menu.Target>
+// 				<Menu.Dropdown>
+// 					<Flex align="flex-end">
+// 						<NumberInput
+// 							w="8em"
+// 							size="xs"
+// 							defaultValue={blockData.data?.lineHeight || 2}
+// 							onChange={(val) => {
+// 								api.handleAddBlockData({ id: id, data: { lineHeight: Number(val) } });
+// 							}}
+// 							precision={2}
+// 							step={0.25}
+// 						/>
+// 					</Flex>
+// 				</Menu.Dropdown>
+// 			</Menu>
+// 		</>
+// 	);
+// };

@@ -50,7 +50,7 @@ const PreMark = ({ listIndex, listStyle, listColor }: { listIndex: number; listS
 	const color = _color.colorCode;
 
 	if (listStyle === "decimal") {
-		return <Text my="0.4em">{listIndex}.</Text>;
+		return <Text>{listIndex}.</Text>;
 	} else if (listStyle === "squareDecimal") {
 		const textColor = listColor !== "none" ? "#FFF" : null;
 		const borderColor = listColor !== "none" ? color : "#7e7e7e";
@@ -58,7 +58,7 @@ const PreMark = ({ listIndex, listStyle, listColor }: { listIndex: number; listS
 
 		return (
 			<Flex
-				my="0.7em"
+				my="0.28em"
 				w="1.1em"
 				h="1.1em"
 				align="center"
@@ -79,7 +79,7 @@ const PreMark = ({ listIndex, listStyle, listColor }: { listIndex: number; listS
 		);
 	} else {
 		return (
-			<Flex mt="0.5em" align="center" sx={{ color: color }}>
+			<Flex align="center" sx={{ color: color }}>
 				{listStyleConfig.find((d) => d.id === listStyle)?.icon}
 			</Flex>
 		);
@@ -221,7 +221,7 @@ export const ListTool = ({ blockData, blockTool, api }: InitialToolPropsType) =>
 	};
 
 	return (
-		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={ParagraphBlockTuneMenu} api={api}>
+		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={ParagraphBlockTuneMenu} api={api} my="0.18em">
 			<Flex gap="0.5em" align="flex-start" {...getMargin()}>
 				<PreMark listIndex={listIndex} listStyle={listStyle} listColor={listColor} />
 				<P1_ContentEditableComp
@@ -231,9 +231,9 @@ export const ListTool = ({ blockData, blockTool, api }: InitialToolPropsType) =>
 					pureBlockData={pureBlockData}
 					/////
 					component="p"
-					my="0.4em"
+					// my="0.4em"
 					ta={textAlign}
-					// lh={2}
+					lh="1.6em"
 				/>
 			</Flex>
 		</P1_EditorWrapper>

@@ -52,7 +52,7 @@ export const config: ConfigType = {
 			component: Header,
 			inlinetoolbarList: [],
 			isContentEditable: true,
-			defaultData: { align: "left", lineHeight: 2, level: 2, style: "none", text: "" },
+			defaultData: { align: "left", level: 2, style: "none", text: "" },
 			markerColor: cArr.blue[1],
 		},
 		{
@@ -63,7 +63,7 @@ export const config: ConfigType = {
 			component: Paragraph,
 			inlinetoolbarList: [],
 			isContentEditable: true,
-			defaultData: { align: "left", lineHeight: 2, text: "" },
+			defaultData: { align: "left", text: "" },
 			markerColor: cArr.green[1],
 		},
 		{

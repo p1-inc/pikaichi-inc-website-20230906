@@ -63,6 +63,7 @@ export const QuoteTool = ({ blockData, blockTool, api }: InitialToolPropsType) =
 				w="fit-content"
 				p="1em"
 				fz="0.8em"
+				lh="1.6em"
 				sx={{ backgroundColor: bgColor, border: "none", borderRadius: "0.3em", boxShadow: "none" }}
 			/>
 		</P1_EditorWrapper>

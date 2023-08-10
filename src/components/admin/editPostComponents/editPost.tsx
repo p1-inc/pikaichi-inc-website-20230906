@@ -54,7 +54,6 @@ export type UndoStackType = {
 };
 
 //TODO ブロックまるごとコピー
-//TODO　記事のヘッダーがない
 export default function EditPost({ id, isDuplicate, readOnly = false }: EditPostType) {
 	//
 	const componentName = "記事の管理";
