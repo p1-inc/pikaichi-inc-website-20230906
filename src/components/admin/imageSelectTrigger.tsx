@@ -87,7 +87,7 @@ type ImageGalleryComp = {
 	size: SizeType;
 	onImgUrlChange: (newData: MediaLib) => void;
 	onSizeChange?: (size: string) => void;
-	justify: "flex-start" | "center" | "flex-end";
+	justify?: "flex-start" | "center" | "flex-end";
 	readOnly?: boolean;
 };
 
