@@ -228,7 +228,7 @@ export const ImageSelectTrigger = ({
 		);
 	} else {
 		return (
-			<Box ref={ref} w="100%" fz="1em">
+			<Flex ref={ref} w="100%" fz="1em" justify={justify}>
 				{image && (
 					<Box
 						w={getImageWrapperSize({ size, wrapW, aspectRatio })}
@@ -251,7 +251,7 @@ export const ImageSelectTrigger = ({
 					</Box>
 				)}
 				{!image && <div>No Image</div>}
-			</Box>
+			</Flex>
 		);
 	}
 };
