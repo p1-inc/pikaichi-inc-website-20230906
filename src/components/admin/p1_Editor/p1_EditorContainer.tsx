@@ -9,7 +9,6 @@ import { P1_EditorStyle } from "./p1_EditorStyle";
 import { getHotkeyHandler } from "@mantine/hooks";
 import { InlineTunes } from "./plugin/inlineTunes/inlineTunes";
 
-//TODO ブロックもスタイルもコピペできるようにする
 type EditorContainerType = {
 	readOnly?: boolean;
 	api: BlockControlType;

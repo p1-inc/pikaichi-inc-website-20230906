@@ -55,13 +55,15 @@ export const ImageTool = ({ blockData, blockTool, api }: InitialToolPropsType) =
 	};
 	return (
 		<P1_EditorWrapper blockData={blockData} BlockTuneMenu={ImageToolTuneMenu} api={api} mb="2em">
-			<Flex
-				className={`${api.p1_globalClassName.block} ${api.p1_globalClassName.blockContent} ${blockTool.className}
-				`}
-				justify={getAlign(nData.align)}
-				my="0.4em"
-			>
-				<ImageSelectTrigger imgData={nData.imgData} size={nData.size} onImgUrlChange={onImgUrlChange} onSizeChange={onSizeChange} readOnly={readOnly} />
+			<Flex className={`${api.p1_globalClassName.block} ${api.p1_globalClassName.blockContent} ${blockTool.className}`} my="0.4em">
+				<ImageSelectTrigger
+					imgData={nData.imgData}
+					size={nData.size}
+					onImgUrlChange={onImgUrlChange}
+					onSizeChange={onSizeChange}
+					justify={getAlign(nData.align)}
+					readOnly={readOnly}
+				/>
 			</Flex>
 		</P1_EditorWrapper>
 	);

@@ -1,12 +1,10 @@
 import { Box, Divider, Flex, Menu, NavLink, Text } from "@mantine/core";
 
 import { BlockControlType, OutputBlockData } from "../../p1_EditorTypes";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { c, cArr } from "../../../../../styles/eStyle";
 
-import { IconAlignLeft, IconChevronDown, IconChevronUp, IconX } from "@tabler/icons-react";
-import { IconAlignCenter } from "@tabler/icons-react";
-import { IconAlignRight } from "@tabler/icons-react";
+import { IconAlignCenter, IconAlignRight, IconCopy, IconAlignLeft, IconChevronDown, IconChevronUp, IconX } from "@tabler/icons-react";
 import { ExMenuChild, ExMenuParent } from "../../../../UILib/extendMantine";
 import { config } from "../../p1_EditorConfig";
 
@@ -23,7 +21,7 @@ export const DefaultBlockTuneMenu = ({ blockData, api }: DefaultBlockTuneMenuTyp
 		{ id: "right", label: "右寄せ", icon: <IconAlignRight /> },
 	];
 
-	const { handleAlignChange, reorderBlock, handleTuneBlocks }: BlockControlType = api;
+	const { handleAlignChange, reorderBlock, handleTuneBlocks, duplicateBlock }: BlockControlType = api;
 
 	const [confirm, setConfirm] = useState<boolean>(false); //delete時、一度確認する
 
@@ -97,12 +95,34 @@ export const DefaultBlockTuneMenu = ({ blockData, api }: DefaultBlockTuneMenuTyp
 
 			<Menu width={200} shadow="md" position="right-start" offset={0}>
 				<ExMenuChild
+					onClick={() => {
+						reorderBlock({ id: blockData.id, dir: "down" });
+					}}
+				>
+					<IconChevronDown width="1em" />
+					<Text ml="1em">下へ移動</Text>
+				</ExMenuChild>
+			</Menu>
+
+			<Menu width={200} shadow="md" position="right-start" offset={0}>
+				<ExMenuChild
+					onClick={() => {
+						duplicateBlock({ id: blockData.id });
+					}}
+				>
+					<IconCopy width="1em" />
+					<Text ml="1em">複 製</Text>
+				</ExMenuChild>
+			</Menu>
+
+			<Menu width={200} shadow="md" position="right-start" offset={0}>
+				<ExMenuChild
 					sx={{
 						borderRadius: "0.3em",
 						backgroundColor: confirm ? cArr.pink[4] : "inherit",
 						color: confirm ? "#FFF" : "inherit",
 						"&:hover": {
-							backgroundColor: confirm ? cArr.pink[5] : "inherit",
+							backgroundColor: confirm ? cArr.pink[5] : cArr.pink[0],
 							color: confirm ? "#FFF" : c.mainBlack,
 						},
 					}}
@@ -119,17 +139,6 @@ export const DefaultBlockTuneMenu = ({ blockData, api }: DefaultBlockTuneMenuTyp
 					<Text ml="1em" sx={{ color: confirm ? "#FFF" : "inherit" }}>
 						{confirm ? "クリックして削除" : "削 除"}
 					</Text>
-				</ExMenuChild>
-			</Menu>
-
-			<Menu width={200} shadow="md" position="right-start" offset={0}>
-				<ExMenuChild
-					onClick={() => {
-						reorderBlock({ id: blockData.id, dir: "down" });
-					}}
-				>
-					<IconChevronDown width="1em" />
-					<Text ml="1em">下へ移動</Text>
 				</ExMenuChild>
 			</Menu>
 		</Flex>

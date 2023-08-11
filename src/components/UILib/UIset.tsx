@@ -11,8 +11,6 @@ type CategoryType_2 = {
 
 export function CategoryUI({ category }: CategoryType_2) {
 	//
-
-	//TODO　カテゴリの表記は最小フォント数にひっかかってしまうので、画像化する？
 	const categoryStyle: CSSObject = {
 		label: "categoryStyle",
 		width: "fit-content",

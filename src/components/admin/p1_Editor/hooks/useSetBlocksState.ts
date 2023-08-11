@@ -280,6 +280,17 @@ export const useSetBlocksState = (): BlockControlType => {
 		handleSetBlockDataArr({ blockDataArr: nBlocks });
 	};
 
+	const duplicateBlock = ({ id }: { id: string }) => {
+		console.log(id);
+		const nBlocks = [...blockDataArr];
+		const blockIndex = nBlocks.findIndex((d) => d.id === id);
+		const newBlock = JSON.parse(JSON.stringify(nBlocks[blockIndex]));
+		newBlock.id = autoID(10);
+		nBlocks.splice(blockIndex + 1, 0, newBlock);
+		handleSetBlockDataArr({ blockDataArr: nBlocks });
+		return newBlock.id;
+	};
+
 	const handleSetBlockDataArr = ({
 		blockDataArr,
 		history = true,
@@ -294,9 +305,6 @@ export const useSetBlocksState = (): BlockControlType => {
 		selObj?: InlineSelType;
 	}) => {
 		//
-		// if (blockDataArr.length <= 0) {
-		// 	return;
-		// }
 
 		const _undoSel = undoSel ? JSON.stringify(undoSel) : null;
 		const _redoSel = redoSel ? JSON.stringify(redoSel) : null;
@@ -407,7 +415,7 @@ export const useSetBlocksState = (): BlockControlType => {
 		}[] = inlineSel.wrappedStyles.flatMap((d) => {
 			const isExist = d.classNames.find((d2) => beforeClassNames.includes(d2));
 			const sortNumStr = d.path.map((d) => d + 1).join("");
-			const sort = Number(sortNumStr) / Math.pow(10, sortNumStr.length - 1);
+			const sort = Number(sortNumStr) / 10 ** (sortNumStr.length - 1);
 			return isExist ? { ...d, sort } : [];
 		});
 
@@ -638,9 +646,6 @@ export const useSetBlocksState = (): BlockControlType => {
 		nRange.insertNode(docFragment);
 
 		contentEl.normalize();
-
-		// nRange.setStart(nRange.startContainer, nRange.startOffset + sanitizedHtml.length);
-		// nRange.setEnd(nRange.endContainer, nRange.endOffset + sanitizedHtml.length);
 
 		selection.collapseToEnd();
 
@@ -938,28 +943,6 @@ export const useSetBlocksState = (): BlockControlType => {
 		handleAddBlockData({ id, data: { text: content }, undoSel, redoSel, selObj });
 	};
 
-	// 	const customNormalize = (node: Node): Node => {
-	// 		let next: ChildNode | null;
-	//
-	// 		for (let child = node.firstChild; child; child = next) {
-	// 			next = child.nextSibling;
-	//
-	// 			if (child.nodeType === Node.TEXT_NODE) {
-	// 				if (!/\S/.test(child.nodeValue || "")) {
-	// 					if (child.previousSibling && child.previousSibling.nodeName === "BR") {
-	// 						// If the empty text node is after a <br>, skip it
-	// 						continue;
-	// 					}
-	// 					node.removeChild(child);
-	// 				}
-	// 			} else if (child.nodeType === Node.ELEMENT_NODE) {
-	// 				customNormalize(child as Node);
-	// 			}
-	// 		}
-	//
-	// 		return node;
-	// 	};
-
 	const handleTuneBlocks = ({ beforeBlockId, afterBlockType }: { beforeBlockId: string; afterBlockType: string }) => {
 		const _defaultBlockData = config.blockTools.find((d) => d.id === afterBlockType);
 		const beforeBlockIndex = blockDataArr.findIndex((d) => d.id === beforeBlockId);
@@ -979,27 +962,6 @@ export const useSetBlocksState = (): BlockControlType => {
 			type: afterBlockType,
 			data: { ...defaultBlockData, text: beforeBlock.data.text },
 		};
-
-		// 		let listData;
-		// 		if (afterBlockType === "list") {
-		// 			const preBlock = blockDataArr?.[beforeBlockIndex - 1];
-		// 			const nextBlock = blockDataArr?.[beforeBlockIndex + 1];
-		//
-		// 			if (nextBlock?.type === "list") {
-		// 				listData = JSON.parse(JSON.stringify(nextBlock.data));
-		// 			}
-		// 			if (preBlock?.type === "list") {
-		// 				listData = JSON.parse(JSON.stringify(preBlock.data));
-		// 			}
-		// 		}
-		//
-		// 		const listStyleStr = listStyleConfig.map((d) => d.id);
-		// 		if (listStyleStr.includes(listData.style)) {
-		// 			if ("style" in afterBlockData.data) {
-		// 				afterBlockData.data = listData as { text: string; [index: string]: any };
-		// 				afterBlockData.data.text = beforeBlock.data.text;
-		// 			}
-		// 		}
 
 		const nBlockData = blockDataArr.map((d) => (d.id === beforeBlockId ? afterBlockData : d));
 		handleSetBlockDataArr({ blockDataArr: nBlockData });
@@ -1022,6 +984,7 @@ export const useSetBlocksState = (): BlockControlType => {
 		getPureBlockData,
 		// mergeBlockData,
 		reorderBlock,
+		duplicateBlock,
 		handleAlignChange,
 		findParentWithClassNameAndPath,
 		getRangeElement,

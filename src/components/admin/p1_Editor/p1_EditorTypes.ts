@@ -161,9 +161,6 @@ export interface BlockControlType {
 
 	getPureBlockData: (text: string) => string;
 
-	// mergeBlockData: ({ defaultData, newData }: any) => {
-	// 	[x: string]: any;
-	// };
 	reorderBlock: ({
 		id,
 		dir,
@@ -171,6 +168,12 @@ export interface BlockControlType {
 		id: string;
 		dir: "up" | "down" | "del";
 	}) => void;
+
+	duplicateBlock: ({
+		id,
+	}: {
+		id: string;
+	}) => any;
 
 	handleAlignChange: (id: string, dir: "left" | "center" | "right") => void;
 
@@ -189,12 +192,10 @@ export interface BlockControlType {
 		className: string,
 	) => {
 		startEl: {
-			// startContainer: Node;
 			startOffset: number;
 			path: number[];
 		};
 		endEl: {
-			// endContainer: Node;
 			endOffset: number;
 			path: number[];
 		};
@@ -317,12 +318,6 @@ export interface BlockControlType {
 		beforeBlockId: string;
 		afterBlockType: string;
 	}) => void;
-
-	// undoTest?: any;
-	// scroll: {
-	// 	x: number;
-	// 	y: number;
-	// };
 }
 
 export interface BlockToolType {

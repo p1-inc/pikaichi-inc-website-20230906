@@ -87,10 +87,18 @@ type ImageGalleryComp = {
 	size: SizeType;
 	onImgUrlChange: (newData: MediaLib) => void;
 	onSizeChange?: (size: string) => void;
+	justify: "flex-start" | "center" | "flex-end";
 	readOnly?: boolean;
 };
 
-export const ImageSelectTrigger = ({ imgData, size = "m", onImgUrlChange, onSizeChange = () => {}, readOnly = false }: ImageGalleryComp) => {
+export const ImageSelectTrigger = ({
+	imgData,
+	size = "m",
+	onImgUrlChange,
+	onSizeChange = () => {},
+	justify = "flex-start",
+	readOnly = false,
+}: ImageGalleryComp) => {
 	//
 	const [mediaLib, setMediaLib] = useState<MediaLib[]>();
 
@@ -160,7 +168,7 @@ export const ImageSelectTrigger = ({ imgData, size = "m", onImgUrlChange, onSize
 
 	if (!readOnly) {
 		return (
-			<Box ref={ref} w="100%" fz="1em">
+			<Flex ref={ref} w="100%" fz="1em" justify={justify}>
 				{!image && (
 					<UnstyledButton
 						onClick={() => {
@@ -174,10 +182,9 @@ export const ImageSelectTrigger = ({ imgData, size = "m", onImgUrlChange, onSize
 				)}
 
 				{image && (
-					<Box
+					<Flex
 						w={getImageWrapperSize({ size, wrapW, aspectRatio })}
 						sx={{
-							label: "topImage",
 							position: "relative",
 							"&:hover": {
 								opacity: readOnly ? 1 : 0.8,
@@ -203,7 +210,7 @@ export const ImageSelectTrigger = ({ imgData, size = "m", onImgUrlChange, onSize
 								/>
 							</UnstyledButton>
 						</Tooltip>
-					</Box>
+					</Flex>
 				)}
 
 				<ImageSelector mediaLib={mediaLib} setMediaLib={setMediaLib} setImage={setImage} openImgDialog={openImgDialog} setOpenImgDialog={setOpenImgDialog} />
@@ -217,7 +224,7 @@ export const ImageSelectTrigger = ({ imgData, size = "m", onImgUrlChange, onSize
 					setSizeState={setSizeState}
 					setOpenImgDialog={setOpenImgDialog}
 				/>
-			</Box>
+			</Flex>
 		);
 	} else {
 		return (
