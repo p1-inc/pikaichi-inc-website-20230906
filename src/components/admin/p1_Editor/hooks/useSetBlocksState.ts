@@ -281,7 +281,6 @@ export const useSetBlocksState = (): BlockControlType => {
 	};
 
 	const duplicateBlock = ({ id }: { id: string }) => {
-		console.log(id);
 		const nBlocks = [...blockDataArr];
 		const blockIndex = nBlocks.findIndex((d) => d.id === id);
 		const newBlock = JSON.parse(JSON.stringify(nBlocks[blockIndex]));
