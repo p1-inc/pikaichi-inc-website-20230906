@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://pick-yoga.com
+
+# Sitemaps
+Sitemap: https://pick-yoga.com/sitemap.xml
