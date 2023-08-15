@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { AlertComp, AlertCompEX, BigDialog, BigDialog2, ConfirmComp, FullscreenLoading } from "../../components/commonComponents/alertComp";
+import { AlertComp, AlertCompEX, BigDialog, BigDialog2, ConfirmComp, FullscreenLoading, ModalWithJSXComp } from "../../components/commonComponents/alertComp";
 
 export const DialogProvider = ({ children }: { children: ReactNode }) => {
 	//
@@ -12,6 +12,7 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
 			<BigDialog />
 			<BigDialog2 />
 			<FullscreenLoading />
+			<ModalWithJSXComp />
 		</>
 	);
 };

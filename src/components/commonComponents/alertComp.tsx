@@ -10,6 +10,7 @@ import {
 	bigDialogState,
 	bigDialogState2,
 	fullscreenLoadingState,
+	modalWithJSXCompState,
 } from "../../recoil/atoms";
 
 import { c, cArr } from "../../styles/eStyle";
@@ -366,5 +367,51 @@ export const FullscreenLoading = () => {
 				</Flex>
 			</Overlay>
 		</Affix>
+	);
+};
+
+export const ModalWithJSXComp = () => {
+	const [modalWithJSXComp, setModalWithJSXComp] = useRecoilState(modalWithJSXCompState);
+
+	const handleClose = (prop: boolean) => {
+		if (modalWithJSXComp.onClose) {
+			modalWithJSXComp.onClose(prop);
+		}
+		setModalWithJSXComp({
+			visible: false,
+			onClose: undefined,
+			JSX: null,
+		});
+	};
+	return (
+		<Modal
+			zIndex={1000}
+			opened={modalWithJSXComp?.visible}
+			onClose={() => {
+				handleClose(true);
+			}}
+			title="title"
+		>
+			{modalWithJSXComp.JSX}
+			{/* <Flex direction="column" gap="1em">
+				<Flex ml="auto" mt="1em" gap="1em">
+					<Button
+						variant="outline"
+						onClick={() => {
+							handleClose(false);
+						}}
+					>
+						キャンセル
+					</Button>
+					<Button
+						onClick={() => {
+							handleClose(true);
+						}}
+					>
+						O K
+					</Button>
+				</Flex>
+			</Flex> */}
+		</Modal>
 	);
 };

@@ -5,6 +5,7 @@ import { OutputBlockData, BlockControlType, BlockToolType, InlineToolType, P1Glo
 import { autoID } from "../../../../util/autoID";
 
 import { LLABClassName, config, inlineToolClassNames } from "../p1_EditorConfig";
+import { useDebouncedState } from "@mantine/hooks";
 
 const historyLimit = 200;
 
@@ -50,6 +51,8 @@ export const useSetBlocksState = (): BlockControlType => {
 
 	const caretPos = useRef<{ top: number; left: number }>(null);
 
+	const [autoSave, setAutosave] = useDebouncedState<OutputBlockData[]>([], 10000);
+
 	useLayoutEffect(() => {
 		//
 		if (!inlineSel || !inlineSel.blockId) {
@@ -93,6 +96,7 @@ export const useSetBlocksState = (): BlockControlType => {
 
 		selection.removeAllRanges();
 		selection.addRange(range);
+		setAutosave(blockDataArr);
 	}, [blockDataArr]);
 
 	// useEffect(() => {
@@ -1019,5 +1023,6 @@ export const useSetBlocksState = (): BlockControlType => {
 		setViewGrid,
 		// undoTest,
 		// scroll,
+		autoSave,
 	};
 };

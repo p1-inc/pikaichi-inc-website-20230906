@@ -1,9 +1,12 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
 import { ImageTableComp } from "./imageTableComp";
-import { Box, Button, Flex, Modal, Space } from "@mantine/core";
+import { Box, Button, Collapse, Flex, Modal, Space, Text } from "@mantine/core";
 import { MediaLib } from "../../types/types";
 import { useDoubleClick } from "../../hooks/useDoubleClick";
+import { Dropzone } from "@mantine/dropzone";
+import { IconUpload, IconPhoto, IconX } from "@tabler/icons-react";
+import { ImageDropzone } from "../commonComponents/imageDropzone";
 
 type ImageSelector = {
 	mediaLib: MediaLib[];
@@ -15,6 +18,7 @@ type ImageSelector = {
 export const ImageSelector = ({ mediaLib, setMediaLib, setImage, openImgDialog, setOpenImgDialog }: ImageSelector) => {
 	//
 	const [checkedMediaLib, setCheckedMediaLib] = useState<string>();
+	const [dropZoneOpened, setDropZoneOpened] = useState<boolean>(false);
 
 	const handleEdit = async (id: string) => {
 		const mData = mediaLib.find((data) => data.id === id);
@@ -49,16 +53,35 @@ export const ImageSelector = ({ mediaLib, setMediaLib, setImage, openImgDialog, 
 				<Modal.Content>
 					<Modal.Header>
 						<Modal.Title>
-							<Flex direction="column">
+							<Flex w="100%" direction="column">
 								画像の変更
-								<Flex
-									h="4em"
-									align="center"
-									gap="1em"
-									sx={{
-										zIndex: 1000,
-									}}
-								>
+							</Flex>
+						</Modal.Title>
+						<Modal.CloseButton />
+					</Modal.Header>
+					<Modal.Body>
+						<Box m="0 auto">
+							<Flex
+								w="100%"
+								h="4em"
+								align="center"
+								gap="1em"
+								sx={{
+									zIndex: 1000,
+								}}
+								justify="space-between"
+							>
+								<Flex>
+									<Button
+										w="20em"
+										onClick={() => {
+											setDropZoneOpened(!dropZoneOpened);
+										}}
+									>
+										新規メディア
+									</Button>
+								</Flex>
+								<Flex gap="1em">
 									<Button variant="outline" w="10em" onClick={handleClose}>
 										CANCEL
 									</Button>
@@ -72,11 +95,8 @@ export const ImageSelector = ({ mediaLib, setMediaLib, setImage, openImgDialog, 
 									</Button>
 								</Flex>
 							</Flex>
-						</Modal.Title>
-						<Modal.CloseButton />
-					</Modal.Header>
-					<Modal.Body>
-						<Box m="0 auto">
+							<ImageDropzone mediaLib={mediaLib} setMediaLib={setMediaLib} dropZoneOpened={dropZoneOpened} w="100%" mb="1em" />
+
 							<ImageTableComp
 								uniqueKey={"media"}
 								media={mediaLib}

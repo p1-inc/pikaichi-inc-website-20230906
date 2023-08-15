@@ -318,6 +318,7 @@ export interface BlockControlType {
 		beforeBlockId: string;
 		afterBlockType: string;
 	}) => void;
+	autoSave: OutputBlockData[];
 }
 
 export interface BlockToolType {

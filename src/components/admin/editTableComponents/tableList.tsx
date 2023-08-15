@@ -3,13 +3,7 @@ import Head from "next/head";
 
 import { useRouter } from "next/router";
 
-import {
-	deleteTable,
-	getAllTables,
-	getAllTables_readOnly,
-	getAllComponent,
-	getlayoutUsage,
-} from "../../../firebase/firebase";
+import { deleteTable, getAllTables, getAllTables_readOnly, getAllComponent, getlayoutUsage } from "../../../firebase/firebase";
 
 import { AdminHeader } from "../adminHeader";
 
@@ -46,7 +40,9 @@ export default function TableList() {
 	useEffect(() => {
 		const f = async () => {
 			const tables = await getAllTables({});
+			console.log("tables : ", tables);
 			const tables_readOnly = await getAllTables_readOnly({});
+			console.log("tables_readOnly: ", tables_readOnly);
 
 			const nArr = tables.sort((a: TableType, b: TableType) => {
 				const a1 = a.updatedAt.replace(/-/g, "");
@@ -214,13 +210,7 @@ export default function TableList() {
 				}}
 			>
 				<Flex wrap="wrap" sx={{ paddingBottom: "2em" }}>
-					<TableListComp
-						checked={checked}
-						setChecked={setChecked}
-						tableData={tableData_readOnly}
-						thumb={thumb_readOnly}
-						handleEdit={handleEdit}
-					/>
+					<TableListComp checked={checked} setChecked={setChecked} tableData={tableData_readOnly} thumb={thumb_readOnly} handleEdit={handleEdit} />
 				</Flex>
 				<Box sx={{ position: "fixed", bottom: 20, right: 20 }}>
 					<Button disabled={checked.length < 1 ? true : false} onClick={handleDuplicate}>
@@ -230,13 +220,7 @@ export default function TableList() {
 			</Modal>
 
 			<Flex w="90%" m="0 auto" mt="1em" p="1em" wrap="wrap">
-				<TableListComp
-					checked={checked}
-					setChecked={setChecked}
-					tableData={tableData}
-					thumb={thumb}
-					handleEdit={handleEdit}
-				/>
+				<TableListComp checked={checked} setChecked={setChecked} tableData={tableData} thumb={thumb} handleEdit={handleEdit} />
 			</Flex>
 		</div>
 	);

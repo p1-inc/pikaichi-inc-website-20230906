@@ -92,8 +92,6 @@ export const adminPages = [
 
 const AdminHome = () => {
 	//
-	// const [submitLoading, setSubmitLoading] = useState<boolean>(false);
-
 	const { handleDeploy, loading } = useDeploy();
 
 	const adminContaine = {
@@ -102,23 +100,6 @@ const AdminHome = () => {
 		margin: "0 auto",
 		marginTop: "3em",
 	};
-
-	// 	const handleSubmit = async () => {
-	// 		setSubmitLoading(true);
-	// 		const res = await deployDatabase();
-	//
-	// 		const vercelDeployUrl = process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_URL;
-	// 		if (!vercelDeployUrl) throw new Error("環境変数が設定されていません。");
-	//
-	// 		if (res === "success") {
-	// 			await displayAlert("", "設定を反映しました", "");
-	// 			await fetch(vercelDeployUrl, { method: "POST" });
-	// 		} else {
-	// 			await displayAlert("", "反映に失敗しました", "red");
-	// 		}
-	// 		setSubmitLoading(false);
-	//
-	// 	};
 
 	const LinkBtnList = ({ txt, url }: { txt: string; url: string }) => {
 		return (

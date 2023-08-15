@@ -39,12 +39,36 @@ const auth = getAuth();
 const storage = getStorage(app);
 
 const AdminHome = dynamic(() => import("../../components/admin/adminHome"));
+
 const UserList = dynamic(() => import("../../components/admin/editUserComponents/userList"));
 const PostList = dynamic(() => import("../../components/admin/editPostComponents/postList"));
 const EditPost = dynamic(() => import("../../components/admin/editPostComponents/editPost"));
 const MediaManager = dynamic(() => import("../../components/admin/mediaManager/mediaManager"));
 
 const AdminLogin = dynamic(() => import("../../components/admin/adminLogin"));
+
+// const GeneralControls = dynamic(() => import("../../components/admin/generalControls/generalControls"));
+// const EditLayout = dynamic(() => import("../../components/admin/editLayoutComponents/editLayout"));
+// const EditMenu = dynamic(() => import("../../components/admin/editMenuComponents/editMenu"));
+// const TopWordList = dynamic(() => import("../../components/admin/editTopWordComponents/topWordList"));
+// const EditTopWord = dynamic(() => import("../../components/admin/editTopWordComponents/editTopWord"));
+// const SelTopImage = dynamic(() => import("../../components/admin/editTopImageComponents/selTopImage"));
+// const SelPhotoGallery = dynamic(() => import("../../components/admin/editPhotoGalleryComponents/selPhotoGallery"));
+// const EditTag = dynamic(() => import("../../components/admin/editTagComponents/editTag"));
+// const EditCategory = dynamic(() => import("../../components/admin/editCategoryComponents/editCategory"));
+const TableList = dynamic(() => import("../../components/admin/editTableComponents/tableList"));
+const EditTable = dynamic(() => import("../../components/admin/editTableComponents/editTable"));
+// const ShopInfoList = dynamic(() => import("../../components/admin/editShopInfoComponents/shopInfoList"));
+// const EditShopInfo = dynamic(() => import("../../components/admin/editShopInfoComponents/editShopInfo"));
+// const CampaignList = dynamic(() => import("../../components/admin/editCampagnComponents/campaignList"));
+// const EditCampaign = dynamic(() => import("../../components/admin/editCampagnComponents/editCampaign"));
+// const SelNews = dynamic(() => import("../../components/admin/editNewsComponents/selNews"));
+// const SelPeople = dynamic(() => import("../../components/admin/editPeopleComponents/selPeople"));
+// const EditForm = dynamic(() => import("../../components/admin/editFormComponents/editForm"));
+// const FormList = dynamic(() => import("../../components/admin/editFormComponents/formList"));
+// const ManageFixedComp = dynamic(() => import("../../components/admin/manageFixedComponents/manageFixedComp"));
+// const FixedCompList = dynamic(() => import("../../components/admin/manageFixedComponents/fixedCompList"));
+// const EditFooterComp = dynamic(() => import("../../components/admin/editFooterComponents/editFooterComp"));
 
 export default function Admin() {
 	//
@@ -135,9 +159,30 @@ export default function Admin() {
 		<Flex direction="column" sx={adminWrapper}>
 			<AuthWrapper>
 				{adminPage === "index" && <AdminHome />}
+				{/* {adminPage === "selTopImage" && <SelTopImage />} */}
+				{/* {adminPage === "topWordList" && <TopWordList />} */}
+				{/* {adminPage === "editTopWord" && <EditTopWord id={id} isDuplicate={strToBoolean(dup)} />} */}
+				{/* {adminPage === "editNews" && <SelNews />} */}
+				{adminPage === "tableList" && <TableList />}
+				{adminPage === "editTable" && <EditTable id={id} isDuplicate={strToBoolean(dup)} />}
+				{/* {adminPage === "campaignList" && <CampaignList />} */}
+				{/* {adminPage === "editCampaign" && <EditCampaign id={id} isDuplicate={strToBoolean(dup)} />} */}
+				{/* {adminPage === "editPeople" && <SelPeople />} */}
+				{/* {adminPage === "shopInfoList" && <ShopInfoList />} */}
+				{/* {adminPage === "editShopInfo" && <EditShopInfo id={id} isDuplicate={strToBoolean(dup)} />} */}
+				{/* {adminPage === "selPhotoGallery" && <SelPhotoGallery />} */}
+				{/* {adminPage === "fixedCompList" && <FixedCompList />} */}
+				{/* {adminPage === "manageFixedComp" && <ManageFixedComp id={id} isDuplicate={strToBoolean(dup)} logoImg={logoImg} />} */}
+				{/* {adminPage === "formList" && <FormList />} */}
+				{/* {adminPage === "editForm" && <EditForm id={id} isDuplicate={strToBoolean(dup)} />} */}
+				{/* {adminPage === "editFooter" && <EditFooterComp generalData={generalData} />} */}
 
-				{/* {adminPage === "userList" && <UserList />} */}
-				{/* {adminPage === "editUser" && <EditUser id={id} isDuplicate={strToBoolean(dup)} />} */}
+				{/* {adminPage === "generalControls" && <GeneralControls />} */}
+				{/* {adminPage === "editLayout" && <EditLayout generalData={generalData} />} */}
+				{/* {adminPage === "editMenu" && <EditMenu generalData={generalData} />} */}
+
+				{adminPage === "userList" && <UserList />}
+				{adminPage === "editUser" && <EditUser id={id} isDuplicate={strToBoolean(dup)} />}
 
 				{adminPage === "postList" && <PostList />}
 				{adminPage === "editPost" && <EditPost id={id} isDuplicate={strToBoolean(dup)} />}

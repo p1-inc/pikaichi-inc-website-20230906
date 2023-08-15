@@ -432,14 +432,18 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		[
 			"Backspace",
 			(event: KeyboardEvent<HTMLDivElement>) => {
-				handleDeleteText({ event, blockData, blockDataArr: api.blockDataArr });
+				if (!isComposing) {
+					handleDeleteText({ event, blockData, blockDataArr: api.blockDataArr });
+				}
 			},
 			{ preventDefault: false },
 		],
 		[
 			"mod+X",
 			(event: KeyboardEvent<HTMLDivElement>) => {
-				handleDeleteText({ event, blockData, blockDataArr: api.blockDataArr });
+				if (!isComposing) {
+					handleDeleteText({ event, blockData, blockDataArr: api.blockDataArr });
+				}
 			},
 			{ preventDefault: false },
 		],

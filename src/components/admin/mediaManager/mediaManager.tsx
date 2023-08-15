@@ -15,7 +15,7 @@ import { useDialogState } from "../../../hooks/useDialogState";
 import { c, cArr } from "../../../styles/eStyle";
 
 import { sortByUpdated } from "../../../util/sortByUpdated";
-import { resizeImage } from "../../../util/resizeImage";
+// import { resizeImage } from "../../../util/resizeImage";
 import { Box, Button, Checkbox, Collapse, Flex, Select, Text } from "@mantine/core";
 import { useRouter } from "next/router";
 import { itemsfilteredByUpdated, refineByUpdatedList } from "../../../util/itemfilteredByUpdated";
@@ -23,87 +23,88 @@ import { FormMainContainer } from "../../commonComponents/formContainer";
 import { AdminSubHeader } from "../adminSubHeader";
 import MediaEditModal from "./mediaEditModal";
 import { UseFormReturnType } from "@mantine/form";
-import { Dropzone, FileWithPath } from "@mantine/dropzone";
-import { IconUpload, IconPhoto, IconX } from "@tabler/icons-react";
+// import { Dropzone, FileWithPath } from "@mantine/dropzone";
+// import { IconUpload, IconPhoto, IconX } from "@tabler/icons-react";
 import { useDoubleClick } from "../../../hooks/useDoubleClick";
+import { ImageDropzone } from "../../commonComponents/imageDropzone";
 
-export const handleImportImage = async (
-	files: FileWithPath[],
-	mediaLib: MediaLib[],
-	setMediaLib: Dispatch<SetStateAction<MediaLib[]>>,
-	setProgress: Dispatch<SetStateAction<number>>,
-	displayAlert: (title?: string, msg?: string, color?: string) => Promise<boolean>,
-	displayConfirm: (title?: string, msg?: string, color?: string) => Promise<boolean>,
-	setCheckedMediaLib: Dispatch<SetStateAction<string>>,
-) => {
-	//
-	const reg = new RegExp("(__low__|__high__)");
-	const valiDateFile = files.flatMap((file) => {
-		const res = [];
-		if (file.size > 10 * 1024 * 1024) {
-			res.push("ファイルのサイズが大きすぎます。1つにつき最大10MB以内にしてください");
-		}
-		if (file.name.match(reg)) {
-			res.push(`適切ではないファイルが見つかりました（ファイル名に"__low__"、または"__high__"）を使用しないでください`);
-		}
-		return res;
-	});
-
-	if (valiDateFile.length > 0) {
-		await displayAlert("", valiDateFile[0], "red");
-		return;
-	}
-	const currentMediaName = mediaLib.map((media) => media.id);
-	const newMediaName = files.map((media) => media.name.replace(/\.[^.]*$/, ""));
-	const isExist = newMediaName.filter((d) => currentMediaName.includes(d));
-
-	let canOverWrite = false;
-	if (isExist.length > 0) {
-		const isConfirm = await displayConfirm("", `同じファイル名の画像が存在しています、上書きしますか?\n${isExist.join(" / ")}`, "");
-		if (!isConfirm) {
-			return;
-		} else {
-			canOverWrite = true;
-		}
-	}
-
-	const _mediaLib = mediaLib.filter((d) => !isExist.includes(d.id));
-	const dupMedia = mediaLib.filter((d) => isExist.includes(d.id)); //重複メディア
-
-	const mediaArrResize = await resizeImage(files);
-	if (!mediaArrResize) {
-		await displayAlert("", "アップロードに失敗しました::444", "red");
-		return;
-	}
-
-	let uploadedMediaData;
-
-	try {
-		uploadedMediaData = await setMediaToStorage(mediaArrResize, setProgress);
-
-		if (!uploadedMediaData) {
-			await displayAlert("", "アップロードに失敗しました::454", "red");
-			return;
-		}
-	} catch (error) {
-		console.log(error);
-		await displayAlert("", "アップロードに失敗しました::459", "red");
-		return;
-	}
-
-	const tmpImgDataArr = await setTempMedia(uploadedMediaData, canOverWrite);
-
-	if (tmpImgDataArr === "error") {
-		const nMedia = sortByUpdated(_mediaLib);
-		setMediaLib(nMedia);
-	} else {
-		const nMedia = sortByUpdated([..._mediaLib, ...tmpImgDataArr]);
-		setMediaLib(nMedia);
-		setProgress(0);
-		await displayAlert("", "アップロードしました", "");
-	}
-	setCheckedMediaLib(undefined);
-};
+// export const handleImportImage = async (
+// 	files: FileWithPath[],
+// 	mediaLib: MediaLib[],
+// 	setMediaLib: Dispatch<SetStateAction<MediaLib[]>>,
+// 	setProgress: Dispatch<SetStateAction<number>>,
+// 	displayAlert: (title?: string, msg?: string, color?: string) => Promise<boolean>,
+// 	displayConfirm: (title?: string, msg?: string, color?: string) => Promise<boolean>,
+// 	setCheckedMediaLib: Dispatch<SetStateAction<string>>,
+// ) => {
+// 	//
+// 	const reg = new RegExp("(__low__|__high__)");
+// 	const valiDateFile = files.flatMap((file) => {
+// 		const res = [];
+// 		if (file.size > 10 * 1024 * 1024) {
+// 			res.push("ファイルのサイズが大きすぎます。1つにつき最大10MB以内にしてください");
+// 		}
+// 		if (file.name.match(reg)) {
+// 			res.push(`適切ではないファイルが見つかりました（ファイル名に"__low__"、または"__high__"）を使用しないでください`);
+// 		}
+// 		return res;
+// 	});
+//
+// 	if (valiDateFile.length > 0) {
+// 		await displayAlert("", valiDateFile[0], "red");
+// 		return;
+// 	}
+// 	const currentMediaName = mediaLib.map((media) => media.id);
+// 	const newMediaName = files.map((media) => media.name.replace(/\.[^.]*$/, ""));
+// 	const isExist = newMediaName.filter((d) => currentMediaName.includes(d));
+//
+// 	let canOverWrite = false;
+// 	if (isExist.length > 0) {
+// 		const isConfirm = await displayConfirm("", `同じファイル名の画像が存在しています、上書きしますか?\n${isExist.join(" / ")}`, "");
+// 		if (!isConfirm) {
+// 			return;
+// 		} else {
+// 			canOverWrite = true;
+// 		}
+// 	}
+//
+// 	const _mediaLib = mediaLib.filter((d) => !isExist.includes(d.id));
+// 	const dupMedia = mediaLib.filter((d) => isExist.includes(d.id)); //重複メディア
+//
+// 	const mediaArrResize = await resizeImage(files);
+// 	if (!mediaArrResize) {
+// 		await displayAlert("", "アップロードに失敗しました::444", "red");
+// 		return;
+// 	}
+//
+// 	let uploadedMediaData;
+//
+// 	try {
+// 		uploadedMediaData = await setMediaToStorage(mediaArrResize, setProgress);
+//
+// 		if (!uploadedMediaData) {
+// 			await displayAlert("", "アップロードに失敗しました::454", "red");
+// 			return;
+// 		}
+// 	} catch (error) {
+// 		console.log(error);
+// 		await displayAlert("", "アップロードに失敗しました::459", "red");
+// 		return;
+// 	}
+//
+// 	const tmpImgDataArr = await setTempMedia(uploadedMediaData, canOverWrite);
+//
+// 	if (tmpImgDataArr === "error") {
+// 		const nMedia = sortByUpdated(_mediaLib);
+// 		setMediaLib(nMedia);
+// 	} else {
+// 		const nMedia = sortByUpdated([..._mediaLib, ...tmpImgDataArr]);
+// 		setMediaLib(nMedia);
+// 		setProgress(0);
+// 		await displayAlert("", "アップロードしました", "");
+// 	}
+// 	setCheckedMediaLib(undefined);
+// };
 
 type HandleImportImageType = {
 	event: ChangeEvent<HTMLInputElement>;
@@ -285,7 +286,9 @@ const MediaManager = () => {
 						>
 							新規メディア
 						</Button>
-						<Collapse in={dropZoneOpened} mt="1em">
+						<ImageDropzone mediaLib={mediaLib} setMediaLib={setMediaLib} dropZoneOpened={dropZoneOpened} w="100%" mb="1em" />
+
+						{/* <Collapse in={dropZoneOpened} mt="1em">
 							<Dropzone
 								loading={progress === 0 ? false : true}
 								onDrop={(files) => handleImportImage(files, mediaLib, setMediaLib, setProgress, displayAlert, displayConfirm, setCheckedMediaLib)}
@@ -312,7 +315,7 @@ const MediaManager = () => {
 									</Box>
 								</Flex>
 							</Dropzone>
-						</Collapse>
+						</Collapse> */}
 					</Flex>
 
 					<Flex

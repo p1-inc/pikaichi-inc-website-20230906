@@ -892,7 +892,7 @@ export const getListInLayoutUsage = async (key: string) => {
 	return filterd;
 };
 
-export const getListInTableUsage = async (key: string) => {
+export const getListInTableUsage = async () => {
 	//DB > usage > tableをリストにして返す
 
 	let usageData: string[];
@@ -1310,7 +1310,7 @@ export const setTableAsTemplate = async (data: TableType, node: HTMLElement, wid
 
 export const getAllTables = async ({ dbName = _dbName }: { dbName?: string }) => {
 	const _result: TableType[] = await getDocDataFromDB(dbName, "table");
-	const list = await getListInTableUsage("topWord");
+	const list = await getListInTableUsage();
 	let result: TableType[] = [TableInit];
 	if (_result && list) {
 		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
@@ -1319,7 +1319,11 @@ export const getAllTables = async ({ dbName = _dbName }: { dbName?: string }) =>
 };
 
 export const getAllTables_readOnly = async ({ dbName = _dbName }: { dbName?: string }) => {
-	const result: TableType[] = await getDocDataFromDB(dbName, "table_readOnly");
+	let result: TableType[] = [TableInit];
+	const _result = await getDocDataFromDB(dbName, "table_readOnly");
+	if (_result) {
+		result = _result;
+	}
 	return result;
 };
 
@@ -2024,7 +2028,6 @@ export const deployDatabase = async () => {
 	};
 	try {
 		const func = httpsCallable(functions, "restructureUsageDataOnCall");
-		console.log(' "restructureUsageDataOnCall": ');
 		await func(checksProp);
 	} catch (error) {
 		console.log("error: ", error);

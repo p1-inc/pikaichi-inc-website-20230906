@@ -158,6 +158,21 @@ export const fullscreenLoadingState = atom<FullscreenLoadingType>({
 	},
 });
 
+type ModalWithJSXCompStateType = {
+	visible: boolean;
+	onClose: (value: boolean | PromiseLike<boolean>) => void;
+	JSX: JSX.Element;
+};
+
+export const modalWithJSXCompState = atom<ModalWithJSXCompStateType>({
+	key: "modalWithJSXComp",
+	default: {
+		visible: false,
+		onClose: undefined,
+		JSX: null,
+	},
+});
+
 ///////////////////////////Admin（管理・編集かどうか）　　プレビュー用の画像生成する際に必要/////////////////////////////////
 export const isAdminState = atom<boolean>({
 	key: "isAdmin",

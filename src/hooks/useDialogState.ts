@@ -9,6 +9,7 @@ import {
 	bigDialogState,
 	bigDialogState2,
 	fullscreenLoadingState,
+	modalWithJSXCompState,
 } from "../recoil/atoms";
 
 export const useDialogState = () => {
@@ -23,6 +24,8 @@ export const useDialogState = () => {
 	const setBigDialog2 = useSetRecoilState(bigDialogState2);
 
 	const setFullscreenLoading = useSetRecoilState(fullscreenLoadingState);
+
+	const setModalWithJSXComp = useSetRecoilState(modalWithJSXCompState);
 
 	const displayAlert = (title = "", msg = "", color = "") => {
 		return new Promise<boolean>((resolve) => {
@@ -129,11 +132,15 @@ export const useDialogState = () => {
 		});
 	};
 
-	// const displayLoadingOverlay = (open: boolean) => {
-	// 	return new Promise((resolve) => {
-	// 		setLoadingOverlay(open);
-	// 	});
-	// };
+	const modalWithJSXComp = ({ visible = true, JSX = null }: { visible?: boolean; JSX: JSX.Element }) => {
+		return new Promise((resolve) => {
+			setModalWithJSXComp({
+				visible: visible,
+				onClose: resolve,
+				JSX: JSX,
+			});
+		});
+	};
 
 	return {
 		setDialogAlert,
@@ -157,7 +164,8 @@ export const useDialogState = () => {
 		displayBigDialog2,
 
 		displayFullscreenLoading,
-		// setLoadingOverlay,
-		// displayLoadingOverlay,
+
+		modalWithJSXComp,
+		setModalWithJSXComp,
 	};
 };

@@ -35,6 +35,7 @@ import { LLABClassName, config } from "../p1_Editor/p1_EditorConfig";
 import { P1_EditorStyle } from "../p1_Editor/p1_EditorStyle";
 
 import { getHotkeyHandler, useEventListener, useHotkeys } from "@mantine/hooks";
+import { useDeploy } from "../../../hooks/useDeploy";
 
 export type TagstateType = {
 	id: string;
@@ -69,7 +70,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 	const [metaTitle, setMetaTitle] = useState<string>("");
 	const [metaDescription, setMetaDescription] = useState<string>("");
 
-	const { displayAlert, displayAlertEX, displayConfirm, displayFullscreenLoading } = useDialogState();
+	const { displayAlert, displayAlertEX, displayConfirm, displayFullscreenLoading, modalWithJSXComp } = useDialogState();
 
 	const [saveLoading, setSaveLoading] = useState<boolean>(false);
 
@@ -86,6 +87,13 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 	const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
 	const [mediaLib, setMediaLib] = useState<MediaLib[]>();
+
+	const [confirmSaveOpen, setConfirmSaveOpen] = useState<{ visible: boolean; onClose: (value: string | PromiseLike<string>) => void }>({
+		visible: false,
+		onClose: undefined,
+	});
+
+	const { handleDeploy, loading } = useDeploy();
 
 	useEffect(() => {
 		const f = async () => {
@@ -193,6 +201,10 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 		f();
 	}, []);
 
+	useEffect(() => {
+		handleSave({ noReload: true, noDialog: true });
+	}, [api.autoSave]);
+
 	//　command+sのショートカット処理、
 	//　command+zなどは、エディタの機能に内包されるので、p1_editorContainer.tsx内でイベント処理する
 	//command+sは保存処理を分離したいので、このコンポーネントで処理する
@@ -255,16 +267,69 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 		handleSave({ nId });
 	};
 
-	const handleSave = async ({ nId = idState, noReload = false }: { nId?: string; noReload?: boolean } = {}) => {
+	const confirmSaveDialog = (visible = true) => {
+		return new Promise((resolve) => {
+			setConfirmSaveOpen({
+				visible: visible,
+				onClose: resolve,
+			});
+		});
+	};
+
+	const ConfirmSave = () => {
+		const handleClose = (prop: string) => {
+			if (confirmSaveOpen.onClose) {
+				confirmSaveOpen.onClose(prop);
+			}
+			setConfirmSaveOpen({
+				visible: false,
+				onClose: undefined,
+			});
+		};
+
+		return (
+			<Modal
+				size="lg"
+				zIndex={1000}
+				opened={confirmSaveOpen.visible}
+				onClose={() => {
+					handleClose("cancel");
+				}}
+				title="保存しました"
+			>
+				<Flex direction="column" gap="1em">
+					<Text>記事を本番のwebサイトに反映させるには【設定を反映させる】ボタンを押してください</Text>
+					<Text>※反映させるまで多少時間がかかります</Text>
+					<Flex w="100%" ml="auto" mt="1em" justify="flex-end">
+						<Flex gap="1em">
+							<Button
+								variant="outline"
+								onClick={() => {
+									handleClose("deploy");
+								}}
+							>
+								設定を反映させる
+							</Button>
+							<Button
+								w="8em"
+								onClick={() => {
+									handleClose("ok");
+								}}
+							>
+								O K
+							</Button>
+						</Flex>
+					</Flex>
+				</Flex>
+			</Modal>
+		);
+	};
+
+	const handleSave = async ({ nId = idState, noReload = false, noDialog = false }: { nId?: string; noReload?: boolean; noDialog?: boolean } = {}) => {
 		if (!postDataState) {
 			await displayAlert("", "保存に失敗しました", "red");
 			return;
 		}
-
-		// if (canPublic && isDraft) {
-		// 	await displayAlert("", "記事を公開として保存する場合は、下書きのチェックを外してください", "");
-		// 	return;
-		// }
 
 		const body = sanitizeBlockdata(api.blockDataArr);
 
@@ -311,13 +376,20 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 		try {
 			const result = await setPostData(nId, data);
 			displayFullscreenLoading(false);
-			if (result === "success") {
-				// await displayAlert("", "保存しました", "");
-				await displayAlertEX({
-					title: "保存しました",
-					msg: "記事を本番のwebサイトに反映させるには【設定を反映させる】ボタンを押してください\nまた、反映させるまで多少時間がかかります",
-				});
-			} else {
+
+			if (result === "success" && !noDialog) {
+				if (canPublic) {
+					const res = await confirmSaveDialog();
+					if (res === "deploy") {
+						await handleDeploy();
+					}
+				} else {
+					await displayAlertEX({
+						title: "保存しました",
+						msg: "記事はまだ公開されていません。公開する場合は、【公開】にチェックをしてください",
+					});
+				}
+			} else if (result === "error") {
 				await displayAlert("", "保存に失敗しました", "red");
 			}
 		} catch (error) {
@@ -456,6 +528,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 					<P1_EditorContainer api={api} readOnly={readOnly} maw="40em" />
 				</Box>
 			</Box>
+			<ConfirmSave />
 		</Box>
 	);
 }
