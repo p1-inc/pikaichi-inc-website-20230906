@@ -895,6 +895,21 @@ export const useSetBlocksState = (): BlockControlType => {
 		const range = selection.getRangeAt(0);
 		const _undoSel = getRangeObj(range);
 
+		//段落の一番最後に開業したかどうか？
+		// 		const contentEl = document.getElementById(`${id}-${config.p1GlobalClassName.blockContent}`);
+		// 		const lastChildren = contentEl.childNodes[contentEl.childNodes.length - 1];
+		//
+		// 		const breakElement = getElementFromParentUsingPath(contentEl, _undoSel.endEl.path) as Element;
+
+		// const last = Boolean(lastChildren.nodeType === Node.TEXT_NODE);
+		// console.log("last: ", last);
+		// const breakEl = Boolean(breakElement.nodeType === Node.TEXT_NODE);
+		// console.log("breakEl: ", breakEl);
+
+		// if (lastChildren.nodeType === Node.TEXT_NODE && breakElement.nodeType === Node.TEXT_NODE) {
+		// 	console.log("same");
+		// }
+
 		const startContainer = range.startContainer;
 
 		const startPos = range.startOffset;
@@ -910,11 +925,13 @@ export const useSetBlocksState = (): BlockControlType => {
 		const afterText = textContent.substring(endPos);
 
 		const brElement = document.createElement("br");
-		const tbElement = document.createElement("br");
-		tbElement.className = LLABClassName;
+		// const tbElement = document.createElement("br");
+		// tbElement.className = LLABClassName;
 
 		const beforeTextNode = document.createTextNode(beforeText);
-		const afterTextNode = afterText ? document.createTextNode(afterText) : tbElement;
+		const afterTextNode = document.createTextNode(afterText);
+
+		// const afterTextNode = afterText ? document.createTextNode(afterText) : tbElement;
 
 		const parentElement = startContainer.parentElement;
 		if (parentElement) {

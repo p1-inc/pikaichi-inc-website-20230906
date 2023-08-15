@@ -5,7 +5,7 @@ import { BlockControlType, BlockToolType, InlineSelType, OutputBlockData } from 
 import { Box } from "@mantine/core";
 import { useState, CompositionEvent, KeyboardEvent, useEffect, FormEvent, useRef } from "react";
 import { getHotkeyHandler, useDebouncedState, useDebouncedValue } from "@mantine/hooks";
-import { config } from "./p1_EditorConfig";
+import { config, LLABClassName } from "./p1_EditorConfig";
 import { getValidOffset } from "./hooks/useSetBlocksState";
 import { useGetComputedStyles } from "../../../hooks/useGetComputedStyles";
 
@@ -401,9 +401,8 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		const range = selection.getRangeAt(0);
 		const rangeObj = api.getRangeObj(range);
 
-		// const startOffset = range.startOffset;
-
 		if (rangeObj.startEl?.path?.[0] === 0 && rangeObj.startEl?.startOffset === 0) {
+			console.log("ssss");
 			//前のブロックと結合
 			handleMargeByBS({ event, blockData, blockDataArr, undoObj: rangeObj });
 		}
@@ -487,6 +486,9 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		},
 	};
 
+	const requireLastLine = pureBlockData.text.match(/^.*<br>$/);
+	const pureBlockText = requireLastLine ? `${pureBlockData.text}<br class="${LLABClassName}">` : pureBlockData.text;
+
 	return (
 		<Box
 			ref={contentRef}
@@ -497,7 +499,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 			className={`${p1_globalClassName.block} ${p1_globalClassName.blockContent} ${blockTool.className}`}
 			sx={{ ...props.sx, ...defaultStyle }}
 			// rome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-			dangerouslySetInnerHTML={{ __html: pureBlockData?.text }}
+			dangerouslySetInnerHTML={{ __html: pureBlockText }}
 			onPaste={(event) => {
 				handleOnPaste({ event, id: blockData.id });
 			}}

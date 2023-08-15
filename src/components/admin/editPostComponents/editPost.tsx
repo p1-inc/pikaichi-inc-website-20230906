@@ -252,7 +252,6 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			const _pureBlockText1 = api.getPureBlockData(d.data.text);
 			const _pureBlockText2 = validateClassName(_pureBlockText1);
 			const pureBlockText = _pureBlockText2.replace(`<br class="${LLABClassName}">`, "");
-
 			d.data.text = pureBlockText;
 
 			return d;
