@@ -202,7 +202,9 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 	}, []);
 
 	useEffect(() => {
-		handleSave({ noReload: true, noDialog: true });
+		if (postDataState) {
+			handleSave({ noReload: true, noDialog: true });
+		}
 	}, [api.autoSave]);
 
 	//　command+sのショートカット処理、
@@ -327,7 +329,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 
 	const handleSave = async ({ nId = idState, noReload = false, noDialog = false }: { nId?: string; noReload?: boolean; noDialog?: boolean } = {}) => {
 		if (!postDataState) {
-			await displayAlert("", "保存に失敗しました", "red");
+			await displayAlert("", "保存に失敗しました1", "red");
 			return;
 		}
 
