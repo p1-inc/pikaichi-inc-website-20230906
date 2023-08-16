@@ -402,7 +402,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		const rangeObj = api.getRangeObj(range);
 
 		if (rangeObj.startEl?.path?.[0] === 0 && rangeObj.startEl?.startOffset === 0) {
-			console.log("ssss");
 			//前のブロックと結合
 			handleMargeByBS({ event, blockData, blockDataArr, undoObj: rangeObj });
 		}
