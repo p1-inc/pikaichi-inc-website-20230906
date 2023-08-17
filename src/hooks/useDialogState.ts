@@ -25,7 +25,7 @@ export const useDialogState = () => {
 
 	const setFullscreenLoading = useSetRecoilState(fullscreenLoadingState);
 
-	const setModalWithJSXComp = useSetRecoilState(modalWithJSXCompState);
+	// const setModalWithJSXComp = useSetRecoilState(modalWithJSXCompState);
 
 	const displayAlert = (title = "", msg = "", color = "") => {
 		return new Promise<boolean>((resolve) => {
@@ -132,15 +132,15 @@ export const useDialogState = () => {
 		});
 	};
 
-	const modalWithJSXComp = ({ visible = true, JSX = null }: { visible?: boolean; JSX: JSX.Element }) => {
-		return new Promise((resolve) => {
-			setModalWithJSXComp({
-				visible: visible,
-				onClose: resolve,
-				JSX: JSX,
-			});
-		});
-	};
+	// const modalWithJSXComp = ({ visible = true, JSX = null }: { visible?: boolean; JSX: JSX.Element }) => {
+	// 	return new Promise((resolve) => {
+	// 		setModalWithJSXComp({
+	// 			visible: visible,
+	// 			onClose: resolve,
+	// 			JSX: JSX,
+	// 		});
+	// 	});
+	// };
 
 	return {
 		setDialogAlert,
@@ -165,7 +165,7 @@ export const useDialogState = () => {
 
 		displayFullscreenLoading,
 
-		modalWithJSXComp,
-		setModalWithJSXComp,
+		// modalWithJSXComp,
+		// setModalWithJSXComp,
 	};
 };

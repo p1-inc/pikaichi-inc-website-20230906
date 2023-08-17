@@ -70,7 +70,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 	const [metaTitle, setMetaTitle] = useState<string>("");
 	const [metaDescription, setMetaDescription] = useState<string>("");
 
-	const { displayAlert, displayAlertEX, displayConfirm, displayFullscreenLoading, modalWithJSXComp } = useDialogState();
+	const { displayAlert, displayAlertEX, displayConfirm, displayFullscreenLoading } = useDialogState();
 
 	const [saveLoading, setSaveLoading] = useState<boolean>(false);
 
@@ -327,7 +327,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 	};
 
 	const handleSave = async ({ nId = idState, noReload = false, noDialog = false }: { nId?: string; noReload?: boolean; noDialog?: boolean } = {}) => {
-		if (!postDataState) {
+		if (!postDataState && !noDialog) {
 			await displayAlert("", "保存に失敗しました1", "red");
 			return;
 		}
@@ -346,8 +346,8 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			createdAt = postDataState.createdAt;
 			updatedAt = now.format("YYYY-MM-DD-HH-mm-ss");
 		}
-		const HHmmss = now.format("HH-mm-ss");
-		const nData = dayjs(dateState).format("YYYY-MM-DD");
+		// const HHmmss = now.format("HH-mm-ss");
+		// const nData = dayjs(dateState).format("YYYY-MM-DD");
 
 		const data: PostDataType = {
 			id: nId || null,
@@ -355,7 +355,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			body: { blocks: body }, //メイン記事
 			canPublic: canPublic || null, //公開true,非公開false
 			// isDraft: isDraft || null, // 下書き
-			date: `${nData}-${HHmmss}` || null,
+			date: updatedAt || null,
 			mainImage: mainImage?.id || null,
 			src: "", //イメージのパス
 			srcHigh: null, //イメージのパス
@@ -372,7 +372,9 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			updatedAt: updatedAt || null,
 		};
 
-		displayFullscreenLoading(true);
+		if (!noDialog) {
+			displayFullscreenLoading(true);
+		}
 
 		try {
 			const result = await setPostData(nId, data);
@@ -470,8 +472,6 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 				setPin={setPin}
 				canPublic={canPublic}
 				setCanPublic={setCanPublic}
-				// isDraft={isDraft}
-				// setIsDraft={setIsDraft}
 				categoryState={categoryState}
 				setCategoryState={setCategoryState}
 				categoryList={categoryList}

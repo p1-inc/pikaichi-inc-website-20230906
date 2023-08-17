@@ -58,8 +58,6 @@ export const EditPost_SubHeader = ({
 	setPin,
 	canPublic,
 	setCanPublic,
-	// isDraft,
-	// setIsDraft,
 	categoryState,
 	setCategoryState,
 	categoryList,
@@ -109,22 +107,6 @@ export const EditPost_SubHeader = ({
 					valueFormat="YYYY年MM月DD日"
 				/>
 
-				{/* <Flex align="center" sx={{ flexShrink: 0 }}>
-					<Checkbox
-						label={<Text>ピン留め</Text>}
-						checked={pin}
-						onChange={() => {
-							setPin(!pin);
-						}}
-					/>
-
-					<Tooltip label="webページのトップに固定されます">
-						<Flex ml="0.2em">
-							<HelpOutlineIcon sx={{ color: c.mainBlack }} />
-						</Flex>
-					</Tooltip>
-				</Flex> */}
-
 				<Flex align="center" sx={{ flexShrink: 0 }}>
 					<Checkbox
 						label="公 開"
@@ -141,23 +123,6 @@ export const EditPost_SubHeader = ({
 						</Flex>
 					</Tooltip>
 				</Flex>
-
-				{/* <Flex align="center" sx={{ flexShrink: 0 }}>
-					<Checkbox
-						label="下書き"
-						checked={isDraft}
-						onChange={() => {
-							setIsDraft(!isDraft);
-						}}
-						styles={{ label: { paddingLeft: "0.5em" } }}
-					/>
-
-					<Tooltip label="下書き">
-						<Flex ml="0.2em">
-							<HelpOutlineIcon sx={{ color: cArr.gray[9] }} />
-						</Flex>
-					</Tooltip>
-				</Flex> */}
 
 				<Box sx={{ flexShrink: 0 }}>
 					<Select

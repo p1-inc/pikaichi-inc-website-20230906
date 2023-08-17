@@ -54,49 +54,6 @@ const headCells: HeadCellsType[] = [
 	},
 ];
 
-// const controlStyle = {
-// 	label: "controlStyle",
-// 	width: "100%",
-// 	padding: " 0.6em 0em 0.6em 1em",
-//
-// 	"&:hover": {
-// 		backgroundColor: cArr.gray[0],
-// 	},
-// };
-//
-// const iconStyle = {
-// 	label: "iconStyle",
-// 	width: 21,
-// 	height: 21,
-// 	borderRadius: 21,
-// };
-//
-// interface ThProps {
-// 	children: React.ReactNode;
-// 	reversed: boolean;
-// 	sorted: boolean;
-// 	onSort(): void;
-// 	width: string;
-// }
-
-// const Th = ({ children, reversed, sorted, onSort, width }: ThProps) => {
-// 	const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
-// 	return (
-// 		<Box component="th" p="0 !important" w={width}>
-// 			<UnstyledButton onClick={onSort} sx={controlStyle}>
-// 				<Group spacing={0} position="apart">
-// 					<Text weight={500} size="sm">
-// 						{children}
-// 					</Text>
-// 					<Center sx={iconStyle}>
-// 						<Icon size={14} stroke={1.5} />
-// 					</Center>
-// 				</Group>
-// 			</UnstyledButton>
-// 		</Box>
-// 	);
-// };
-
 const getDateFormatFull = (date: string) => {
 	const arr = date.split("-");
 
@@ -228,13 +185,7 @@ export default function UserList() {
 							</Box>
 
 							{headCells.map((h) => (
-								<ThComponent
-									key={h.id}
-									sorted={sortBy === h.id}
-									reversed={reverseSortDirection}
-									onSort={() => setSorting(h.id)}
-									width={h.width}
-								>
+								<ThComponent key={h.id} sorted={sortBy === h.id} reversed={reverseSortDirection} onSort={() => setSorting(h.id)} width={h.width}>
 									{h.label}
 								</ThComponent>
 							))}

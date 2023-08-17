@@ -318,6 +318,9 @@ export interface BlockControlType {
 		beforeBlockId: string;
 		afterBlockType: string;
 	}) => void;
+
+	handleSelectionChange: () => void;
+
 	autoSave: OutputBlockData[];
 }
 

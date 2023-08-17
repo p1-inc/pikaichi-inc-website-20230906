@@ -691,7 +691,7 @@ export const getDeployData = async () => {
 
 export const getAllUserList = async () => {
 	//
-	const result: UserType[] = [UserTypeInit];
+	const result: UserType[] = [];
 
 	const querySnapshot = await getDocs(collection(db, "users"));
 	querySnapshot.forEach((doc) => {

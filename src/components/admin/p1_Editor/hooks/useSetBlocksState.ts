@@ -139,12 +139,12 @@ export const useSetBlocksState = (): BlockControlType => {
 		setInlineSel({ ...rangeObj, displayInlineTune });
 	};
 
-	useEffect(() => {
-		document.addEventListener("mouseup", handleSelectionChange);
-		return () => {
-			document.removeEventListener("mouseup", handleSelectionChange);
-		};
-	}, [handleSelectionChange]);
+	// useEffect(() => {
+	// 	document.addEventListener("mouseup", handleSelectionChange);
+	// 	return () => {
+	// 		document.removeEventListener("mouseup", handleSelectionChange);
+	// 	};
+	// }, [handleSelectionChange]);
 
 	const getRangeElement = (range: Range, className: string) => {
 		const { startContainer, startOffset, endContainer, endOffset } = range;
@@ -894,64 +894,65 @@ export const useSetBlocksState = (): BlockControlType => {
 		}
 		const range = selection.getRangeAt(0);
 		const _undoSel = getRangeObj(range);
-
-		//段落の一番最後に開業したかどうか？
-		// 		const contentEl = document.getElementById(`${id}-${config.p1GlobalClassName.blockContent}`);
-		// 		const lastChildren = contentEl.childNodes[contentEl.childNodes.length - 1];
-		//
-		// 		const breakElement = getElementFromParentUsingPath(contentEl, _undoSel.endEl.path) as Element;
-
-		// const last = Boolean(lastChildren.nodeType === Node.TEXT_NODE);
-		// console.log("last: ", last);
-		// const breakEl = Boolean(breakElement.nodeType === Node.TEXT_NODE);
-		// console.log("breakEl: ", breakEl);
-
-		// if (lastChildren.nodeType === Node.TEXT_NODE && breakElement.nodeType === Node.TEXT_NODE) {
-		// 	console.log("same");
-		// }
-
 		const startContainer = range.startContainer;
 
 		const startPos = range.startOffset;
+		const child = startContainer.childNodes[startPos];
 		const endPos = range.endOffset;
 
-		if (startContainer.nodeType !== Node.TEXT_NODE) {
-			return;
-		}
-
-		const textContent = startContainer.nodeValue;
-
-		const beforeText = textContent.substring(0, startPos);
-		const afterText = textContent.substring(endPos);
-
-		const brElement = document.createElement("br");
-		// const tbElement = document.createElement("br");
-		// tbElement.className = LLABClassName;
-
-		const beforeTextNode = document.createTextNode(beforeText);
-		const afterTextNode = document.createTextNode(afterText);
-
-		// const afterTextNode = afterText ? document.createTextNode(afterText) : tbElement;
-
-		const parentElement = startContainer.parentElement;
-		if (parentElement) {
-			parentElement.replaceChild(afterTextNode, startContainer);
-			parentElement.insertBefore(brElement, afterTextNode);
-			parentElement.insertBefore(beforeTextNode, brElement);
-		}
-
-		const brParentEl = brElement.parentElement;
-		const brIndex = Array.from(brParentEl.childNodes).findIndex((child) => child === brElement);
-
 		const newRange = document.createRange();
+		const brElement = document.createElement("br");
 
-		newRange.setStart(brParentEl, brIndex + 1);
-		newRange.setEnd(brParentEl, brIndex + 1);
+		if (startContainer.nodeType === Node.TEXT_NODE) {
+			//改行位置がテキストの途中だった場合
+			const textContent = startContainer.nodeValue;
 
-		newRange.collapse(true);
+			const beforeText = textContent.substring(0, startPos);
+			const afterText = textContent.substring(endPos);
 
-		selection.removeAllRanges();
-		selection.addRange(newRange);
+			const beforeTextNode = document.createTextNode(beforeText);
+			const afterTextNode = document.createTextNode(afterText);
+
+			const parentElement = startContainer.parentElement;
+
+			let caretIndex = 1;
+
+			if (startPos === 0) {
+				//改行位置がテキストの最初だった場合
+				parentElement.replaceChild(afterTextNode, startContainer);
+				parentElement.insertBefore(brElement, afterTextNode);
+				caretIndex = 1;
+			} else if (startPos === textContent.length) {
+				//改行位置がテキストの最後だった場合
+				parentElement.replaceChild(brElement, startContainer);
+				parentElement.insertBefore(beforeTextNode, brElement);
+				caretIndex = 2;
+			} else {
+				//改行位置がテキストの途中だった場合
+				parentElement.replaceChild(afterTextNode, startContainer);
+				parentElement.insertBefore(brElement, afterTextNode);
+				parentElement.insertBefore(beforeTextNode, brElement);
+				caretIndex = 2;
+			}
+
+			const brParentEl = brElement.parentElement;
+			const brIndex = Array.from(brParentEl.childNodes).findIndex((child) => child === brElement);
+
+			newRange.setStart(parentElement, caretIndex);
+			newRange.setEnd(parentElement, caretIndex);
+
+			newRange.collapse(true);
+
+			selection.removeAllRanges();
+			selection.addRange(newRange);
+		} else {
+			//改行位置がテキストの前、後、など<br>を追加するだけの場合
+			startContainer.insertBefore(brElement, (startContainer as Element).childNodes[startPos]);
+			newRange.setStart(startContainer, startPos + 1);
+			newRange.setEnd(startContainer, startPos + 1);
+
+			newRange.collapse(true);
+		}
 
 		const _redoSel = getRangeObj(newRange);
 
@@ -1025,6 +1026,7 @@ export const useSetBlocksState = (): BlockControlType => {
 		handleinsertLineBreak,
 		handleDeleteInlineStyle,
 		handleTuneBlocks,
+		handleSelectionChange,
 		// inlineActiveClassName,
 		// setInlineActiveClassName,
 		// unwrapInlineTags,

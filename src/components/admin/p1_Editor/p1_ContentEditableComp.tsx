@@ -4,7 +4,7 @@ import { BlockControlType, BlockToolType, InlineSelType, OutputBlockData } from 
 
 import { Box } from "@mantine/core";
 import { useState, CompositionEvent, KeyboardEvent, useEffect, FormEvent, useRef } from "react";
-import { getHotkeyHandler, useDebouncedState, useDebouncedValue } from "@mantine/hooks";
+import { getHotkeyHandler, useDebouncedState, useDebouncedValue, useTextSelection } from "@mantine/hooks";
 import { config, LLABClassName } from "./p1_EditorConfig";
 import { getValidOffset } from "./hooks/useSetBlocksState";
 import { useGetComputedStyles } from "../../../hooks/useGetComputedStyles";
@@ -48,6 +48,12 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 	const contentId = useRef<string>(`${blockData.id}-pe-block__content`);
 
 	const { ref: contentRef, fz } = useGetComputedStyles();
+
+	const selection = useTextSelection();
+	useEffect(() => {
+		//inlineTune発火
+		api.handleSelectionChange();
+	}, [selection?.toString()]);
 
 	useEffect(() => {
 		if (!inputDebounced) {

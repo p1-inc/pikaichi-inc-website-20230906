@@ -161,7 +161,7 @@ export const Header = ({ blockData, blockTool, api }: InitialToolPropsType) => {
 						w="100%"
 						ta={textAlign}
 						order={headerLevel}
-						weight="normal"
+						weight="bold"
 						fz={`${headerStyle.fz}em`}
 						lh={1.6}
 					/>

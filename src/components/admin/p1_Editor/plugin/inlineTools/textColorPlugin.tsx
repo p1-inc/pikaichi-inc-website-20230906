@@ -16,11 +16,7 @@ export const textColorList = [
 	{ label: "none", value: cArr.gray[8] },
 ];
 
-export const TextColorSubPalette = ({
-	tool,
-	api,
-	isActive,
-}: { tool: InlineToolType; api: BlockControlType; isActive: boolean }) => {
+export const TextColorSubPalette = ({ tool, api, isActive }: { tool: InlineToolType; api: BlockControlType; isActive: boolean }) => {
 	//
 
 	const handleSubmit = ({
@@ -50,6 +46,9 @@ export const TextColorSubPalette = ({
 			return;
 		}
 
+		if (color.label === "none") {
+			return;
+		}
 		const element = document.createElement("span");
 		element.classList.add(tool.className, afterClassName);
 
