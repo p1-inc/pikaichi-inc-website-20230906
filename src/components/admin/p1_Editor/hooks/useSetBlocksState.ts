@@ -897,7 +897,6 @@ export const useSetBlocksState = (): BlockControlType => {
 		const startContainer = range.startContainer;
 
 		const startPos = range.startOffset;
-		const child = startContainer.childNodes[startPos];
 		const endPos = range.endOffset;
 
 		const newRange = document.createRange();
@@ -915,24 +914,26 @@ export const useSetBlocksState = (): BlockControlType => {
 
 			const parentElement = startContainer.parentElement;
 
+			const startContainerIndex = Array.from(parentElement.childNodes).indexOf(startContainer as Element);
+
 			let caretIndex = 1;
 
 			if (startPos === 0) {
 				//改行位置がテキストの最初だった場合
 				parentElement.replaceChild(afterTextNode, startContainer);
 				parentElement.insertBefore(brElement, afterTextNode);
-				caretIndex = 1;
+				caretIndex = startContainerIndex + 1;
 			} else if (startPos === textContent.length) {
 				//改行位置がテキストの最後だった場合
 				parentElement.replaceChild(brElement, startContainer);
 				parentElement.insertBefore(beforeTextNode, brElement);
-				caretIndex = 2;
+				caretIndex = startContainerIndex + 2;
 			} else {
 				//改行位置がテキストの途中だった場合
 				parentElement.replaceChild(afterTextNode, startContainer);
 				parentElement.insertBefore(brElement, afterTextNode);
 				parentElement.insertBefore(beforeTextNode, brElement);
-				caretIndex = 2;
+				caretIndex = startContainerIndex + 2;
 			}
 
 			const brParentEl = brElement.parentElement;
