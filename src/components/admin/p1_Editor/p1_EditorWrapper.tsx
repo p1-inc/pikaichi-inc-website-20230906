@@ -58,7 +58,7 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 	//
 	const { blockTools, addNewBlock }: BlockControlType = api;
 	const [menuName, setMenuName] = useState<null | "add" | "tune">(null);
-	const [menuPosition, setMenuPosition] = useState<FloatingPosition>("bottom-start");
+	// const [menuPosition, setMenuPosition] = useState<FloatingPosition>("bottom-end");
 
 	const [menuBtnPos, setMenuBtnPos] = useState<number>(0);
 	const ref = useClickOutside(() => setMenuName(null));
@@ -90,13 +90,13 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 							shadow="md"
 							width={200}
 							h={MenuBtnHeight}
-							position={menuPosition}
+							position="bottom-end"
 							opened={Boolean(menuName)}
 							// opened={true}
 							offset={0}
-							onPositionChange={(e) => {
-								setMenuPosition(e);
-							}}
+							// onPositionChange={(e) => {
+							// 	setMenuPosition(e);
+							// }}
 							mt={menuBtnPos}
 						>
 							<Menu.Target>

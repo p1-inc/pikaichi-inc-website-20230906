@@ -1,40 +1,16 @@
 import { ActionIcon, Box, Flex, Portal, Tooltip } from "@mantine/core";
 
-import { BlockControlType, InlineSelType } from "../../p1_EditorTypes";
+import { BlockControlType } from "../../p1_EditorTypes";
 import { cArr } from "../../../../../styles/eStyle";
 
 import { IconCircleOff } from "@tabler/icons-react";
 
-// const isActiveColor = ({ className, inlineSel }: { className: string; inlineSel: InlineSelType }) => {
-// 	if (!inlineSel || !inlineSel.childWrapper) {
-// 		return false;
-// 	}
-//
-// 	const _classNames = new Set(inlineSel.childWrapper.classNames);
-// 	if (inlineSel?.wrapper?.className) {
-// 		_classNames.add(inlineSel?.wrapper?.className);
-// 	}
-// 	const classNames = Array.from(_classNames);
-// 	if (classNames.includes(className)) {
-// 		return true;
-// 	}
-// 	return false;
-// };
-
 export const InlineTunes = ({ api }: { api: BlockControlType }) => {
 	//
-	const {
-		containerRef,
-		inlineSel,
-		inlineTools,
-		inlineSubPalette,
-		handleDeleteInlineStyle,
-		// handleDeleteInlineStyle2,
-		blockDataArr,
-	} = api;
+	const { containerRef, inlineSel, inlineTools, inlineSubPalette, handleDeleteInlineStyle, blockDataArr } = api;
 	const { displayInlineTune, top, left } = inlineSel || {};
 
-	const offSetPosition = 40;
+	const offSetPosition = -40;
 
 	return (
 		<Portal target={containerRef.current}>
@@ -57,7 +33,6 @@ export const InlineTunes = ({ api }: { api: BlockControlType }) => {
 			>
 				<Flex gap="0.5em" sx={{ userSelect: "none" }}>
 					{inlineTools.map((tool) => {
-						// const isActive: boolean = tool.className === inlineSel?.wrapper?.className;
 						const isActive = Boolean(inlineSel?.wrappedStyles?.find((d) => d.classNames.includes(tool.className)));
 						let disabled = false;
 						if (inlineSubPalette && inlineSubPalette.name !== tool.id) {
@@ -68,7 +43,6 @@ export const InlineTunes = ({ api }: { api: BlockControlType }) => {
 								<ActionIcon
 									disabled={disabled}
 									color={isActive ? cArr.skyblue[6] : undefined}
-									// color={isActiveColor({ className: tool.className, inlineSel }) ? cArr.skyblue[6] : undefined}
 									size="xs"
 									onClick={() => {
 										tool.handle(tool, api, isActive);
@@ -83,7 +57,6 @@ export const InlineTunes = ({ api }: { api: BlockControlType }) => {
 						<ActionIcon
 							size="xs"
 							onClick={() => {
-								// handleDeleteInlineStyle({ id: inlineSel.blockId, blockDataArr });
 								handleDeleteInlineStyle({ inlineSel });
 							}}
 						>
