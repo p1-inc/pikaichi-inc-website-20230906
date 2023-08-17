@@ -140,10 +140,10 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 				const { left: textLeft, right: textRight } = testRange.getBoundingClientRect();
 
 				const left = i === 0 ? 0 : textLeft;
-				// const right = i === nextTextNode.length - 1 ? 999999 : textRight;
 
 				if (left <= caretLeft && textRight >= caretLeft) {
 					targetPosition = i;
+					break;
 				}
 			}
 
