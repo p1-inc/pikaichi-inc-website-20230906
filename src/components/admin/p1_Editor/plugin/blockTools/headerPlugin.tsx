@@ -13,7 +13,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import NotInterestedIcon from "@mui/icons-material/NotInterested";
 
 const colorStyle: { id: string; colorCode: string; label: string }[] = [
-	{ id: "none", colorCode: null, label: "なし" },
+	{ id: "none", colorCode: c.mainBlack, label: "なし" },
 	{ id: "pink", colorCode: cArr.pink[5], label: "ピンク" },
 	{ id: "orange", colorCode: cArr.orange[5], label: "オレンジ" },
 	{ id: "yelloworange", colorCode: cArr.yelloworange[6], label: "イエロー" },
@@ -102,7 +102,11 @@ const fz = (level: TitleOrder) => {
 };
 
 const HeaderWrapper = ({ blockData, headerLevel, children }: { blockData: DataType; headerLevel: TitleOrder; children: ReactNode }) => {
-	const { style, color } = blockData;
+	const { style, color: _color } = blockData;
+	let color = _color;
+	if (_color === "" || _color === "none") {
+		color = c.mainBlack;
+	}
 	const borderWeight = Math.max(fz(headerLevel) * 2, 1);
 	return (
 		<>
@@ -114,12 +118,17 @@ const HeaderWrapper = ({ blockData, headerLevel, children }: { blockData: DataTy
 				</Flex>
 			)}
 			{style === "filled" && (
-				<Box px="1em" py="0.8em" sx={{ backgroundColor: color, color: "#FFF", borderRadius: "0.5em" }}>
+				<Box w="fit-content" px="1em" py={`${fz(headerLevel) * 0.3}em`} sx={{ backgroundColor: color, color: "#FFF", borderRadius: "0.5em" }}>
 					{children}
 				</Box>
 			)}
 			{style === "outlined" && (
-				<Box px="1em" py="0.8em" sx={{ color: color, border: `${borderWeight}px solid ${color}`, borderRadius: "0.5em" }}>
+				<Box
+					w="fit-content"
+					px="1em"
+					py={`${fz(headerLevel) * 0.3}em`}
+					sx={{ color: color, border: `${borderWeight}px solid ${color}`, borderRadius: "0.5em" }}
+				>
 					{children}
 				</Box>
 			)}

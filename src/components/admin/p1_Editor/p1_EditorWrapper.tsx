@@ -36,7 +36,7 @@ const MarkerColorWrapper = ({ api, blockData, children }: { api: BlockControlTyp
 
 	return (
 		<>
-			<Text fz="0.8em" color="#FFF" pos="absolute" right={5}>
+			<Text display={api.viewGrid ? "block" : "none"} fz="0.8em" color="#FFF" pos="absolute" right={5}>
 				{labelStr}
 			</Text>
 			<Box
