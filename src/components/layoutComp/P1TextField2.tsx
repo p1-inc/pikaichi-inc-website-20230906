@@ -41,14 +41,14 @@ const useStylesP1TextField2 = createStyles((theme, { floating, borderWeight, bor
 type P1TextField2Type = {
 	borderWeight: string;
 	borderColor: string;
-	fontSize: any;
 	label: string;
 	placeholder?: string;
 	textColor: string;
 	form: any;
+	[key: string]: any;
 };
 
-export const P1TextField2 = ({ borderWeight, borderColor, fontSize, label, placeholder, textColor, form }: P1TextField2Type) => {
+export const P1TextField2 = ({ borderWeight, borderColor, fontSize, label, placeholder, textColor, form, ...props }: P1TextField2Type) => {
 	const { value, onChange, error } = form;
 	//
 	const [focused, setFocused] = useState(false);
@@ -67,6 +67,7 @@ export const P1TextField2 = ({ borderWeight, borderColor, fontSize, label, place
 			mt="md"
 			autoComplete="off"
 			error={error}
+			{...props}
 		/>
 	);
 };
@@ -110,6 +111,8 @@ const useStylesP1TextAreaField2 = createStyles((theme, { floating, borderWeight,
 type P1TextAreaField2Type = {
 	borderWeight: string;
 	borderColor: string;
+	fontSize: string;
+	radius: string;
 	label: string;
 	placeholder?: string;
 	textColor: string;
@@ -117,7 +120,7 @@ type P1TextAreaField2Type = {
 	[key: string]: any;
 };
 
-export const P1TextAreaField2 = ({ borderWeight, borderColor, fontSize, label, placeholder, textColor, form, ...props }: P1TextAreaField2Type) => {
+export const P1TextAreaField2 = ({ borderWeight, borderColor, fontSize, radius, label, placeholder, textColor, form, ...props }: P1TextAreaField2Type) => {
 	const { value, onChange } = form;
 	//
 	const [focused, setFocused] = useState(false);

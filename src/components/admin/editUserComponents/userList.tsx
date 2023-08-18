@@ -61,6 +61,7 @@ const getDateFormatFull = (date: string) => {
 };
 
 const roleName = {
+	super: "管理者（最上位）",
 	admin: "管理者",
 	staff: "スタッフ",
 	user: "一般",
