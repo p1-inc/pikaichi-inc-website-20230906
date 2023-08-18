@@ -368,7 +368,7 @@ export const PeopleTypeInit: PeopleType = {
 	updatedAt: "",
 };
 
-export type UserRoleType = "admin" | "staff" | "user";
+export type UserRoleType = "super" | "admin" | "staff" | "user";
 
 export interface TagType {
 	id: string;

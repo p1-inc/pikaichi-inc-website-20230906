@@ -100,11 +100,8 @@ export default function Admin() {
 		const getRole = async (user: User, auth: Auth) => {
 			if (user) {
 				const token = await user?.getIdTokenResult();
-
-				if (user.emailVerified && token?.claims.role === "admin") {
+				if (user.emailVerified && (token?.claims.role === "super" || token?.claims.role === "admin")) {
 					setAuthUser({ uid: user.uid, displayName: user.displayName, email: user.email });
-					// const mediaLib = await getMediaLib();
-					// setMediaState(mediaLib);
 				} else {
 					try {
 						const res = await signOut(auth);

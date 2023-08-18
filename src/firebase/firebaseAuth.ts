@@ -57,12 +57,12 @@ export const loginAsAdminFunc = async (uid: string, password: string) => {
 		const user = userCredential.user;
 		const token = await user.getIdTokenResult();
 
-		if (user.emailVerified && token?.claims.role === "admin") {
+		if (user.emailVerified && (token?.claims.role === "super" || token?.claims.role === "admin")) {
 			return user;
 		} else if (!user.emailVerified) {
 			await signOut(auth);
 			return "noEmailVerified";
-		} else if (token?.claims.role !== "admin") {
+		} else if (token?.claims.role !== "super" && token?.claims.role !== "admin") {
 			await signOut(auth);
 			return "noAdminRole";
 		} else {

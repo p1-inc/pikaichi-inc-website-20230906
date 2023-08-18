@@ -85,7 +85,6 @@ const AdminLogin = () => {
 			} else {
 				displayName = res.displayName;
 			}
-
 			setAuthUser({ uid: v.pass, displayName: displayName, email: res.email });
 			router.push("/admin/index/");
 		} else if (res === "noEmailVerified") {

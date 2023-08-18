@@ -28,6 +28,7 @@ type FormTextFieldComponentType = {
 	displayHint?: boolean;
 	setDisplayHint?: Dispatch<SetStateAction<boolean>>;
 	name?: string;
+	[key: string]: any;
 };
 
 const getRightIcon = (props: { require: boolean; readOnly: boolean }) => {
@@ -76,6 +77,7 @@ export const FormTextFieldComponent = ({
 	displayHint,
 	setDisplayHint,
 	name = "",
+	...props
 }: FormTextFieldComponentType) => {
 	//
 	const readOnlyStyle: CSSObject = {
@@ -115,6 +117,7 @@ export const FormTextFieldComponent = ({
 									value={getdefaultValue(value, formProps) || ""}
 									onChange={formProps?.onChange}
 									name={name}
+									{...props}
 								/>
 							)}
 							{readOnly && <Box sx={readOnlyStyle}>{getdefaultValue(value, formProps)}</Box>}
@@ -152,6 +155,7 @@ export const FormTextFieldComponentWithCheckBtn = ({
 	checkbox,
 	displayHint,
 	setDisplayHint,
+	...props
 }: FormTextFieldComponentType & {
 	checkbox: { formProps: any; label?: string };
 }) => {
@@ -183,6 +187,7 @@ export const FormTextFieldComponentWithCheckBtn = ({
 							rightSection={getRightIcon({ require: require, readOnly: readOnly })}
 							value={getdefaultValue(value, formProps) || ""}
 							onChange={readOnly ? null : formProps?.onChange}
+							{...props}
 						/>
 					</Tooltip>
 					{checkbox && <Checkbox ml="1em" labelPosition="left" label={checkbox.label} checked={checkbox.formProps.value} {...checkbox.formProps} />}
@@ -218,6 +223,7 @@ export const FormNumberFieldComponent = ({
 	setDisplayHint,
 	precision = 0,
 	step = 1,
+	...props
 }: FormTextFieldComponentType) => {
 	//
 	return (
@@ -248,6 +254,7 @@ export const FormNumberFieldComponent = ({
 								onChange={readOnly ? () => {} : formProps?.onChange}
 								precision={precision}
 								step={step}
+								{...props}
 							/>
 						</Tooltip>
 						{unit && (
@@ -282,6 +289,7 @@ export const FormTextAreaComponent = ({
 	value,
 	displayHint,
 	setDisplayHint,
+	...props
 }: FormTextFieldComponentType) => {
 	//
 	return (
@@ -312,6 +320,7 @@ export const FormTextAreaComponent = ({
 							value={getdefaultValue(value, formProps)}
 							onChange={readOnly ? null : formProps.onChange}
 							rightSection={require && <IconAsterisk size="0.5em" color="red" />}
+							{...props}
 						/>
 					</Tooltip>
 					{unit && (
@@ -334,6 +343,7 @@ type FormSelectFieldComponentType = FormTextFieldComponentType & {
 	data: { value: string; label: string }[];
 	itemComponent: any;
 	icon?: any;
+	[key: string]: any;
 };
 export const FormSelectFieldComponent = ({
 	title,
@@ -353,6 +363,7 @@ export const FormSelectFieldComponent = ({
 	data,
 	itemComponent,
 	icon,
+	...props
 }: FormSelectFieldComponentType) => {
 	return (
 		<Flex align="center" mb="0.9em">
@@ -381,6 +392,7 @@ export const FormSelectFieldComponent = ({
 							// value={value}
 							value={getdefaultValue(value, formProps)}
 							icon={icon}
+							{...props}
 						/>
 					</Tooltip>
 					{unit && (

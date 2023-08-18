@@ -195,6 +195,7 @@ export default function EditUser({ id, isDuplicate }: { id: string; isDuplicate:
 	};
 
 	const userRole: { value: UserRoleType; label: string }[] = [
+		{ value: "super", label: "管理者（最上位）" },
 		{ value: "admin", label: "管理者" },
 		{ value: "staff", label: "スタッフ" },
 		{ value: "user", label: "一般" },
@@ -255,7 +256,9 @@ export default function EditUser({ id, isDuplicate }: { id: string; isDuplicate:
 						data={userRole}
 						itemComponent={SelectItem}
 						formProps={form.getInputProps("role")}
-						helperText="※注意：管理者はすべてのユーザーデータを閲覧・変更することができます"
+						helperText="※注意：管理者はすべてのユーザーデータを閲覧・変更することができます。管理者(最上位)は権限を変更することはできません
+						"
+						disabled={form.values.role === "super"}
 					/>
 
 					<FormTextFieldComponent title="郵便番号" width="10em" titleWidth="7em" placeholder="123-4567" formProps={form.getInputProps("zipCode")} />

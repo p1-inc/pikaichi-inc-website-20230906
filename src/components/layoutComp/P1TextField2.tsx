@@ -16,7 +16,6 @@ const useStylesP1TextField2 = createStyles((theme, { floating, borderWeight, bor
 		pointerEvents: "none",
 		color: floating ? (theme.colorScheme === "dark" ? theme.white : textColor) : theme.colorScheme === "dark" ? theme.colors.dark[3] : theme.colors.gray[5],
 		transition: "0.2s all",
-		// transform: "translate(4%,-50%)",
 		fontSize: floating ? theme.fontSizes.xs : fontSize,
 		fontWeight: floating ? 500 : 400,
 	},
@@ -42,14 +41,14 @@ const useStylesP1TextField2 = createStyles((theme, { floating, borderWeight, bor
 type P1TextField2Type = {
 	borderWeight: string;
 	borderColor: string;
+	fontSize: any;
 	label: string;
 	placeholder?: string;
 	textColor: string;
 	form: any;
-	[key: string]: any;
 };
 
-export const P1TextField2 = ({ borderWeight, borderColor, fontSize, label, placeholder, textColor, form, ...props }: P1TextField2Type) => {
+export const P1TextField2 = ({ borderWeight, borderColor, fontSize, label, placeholder, textColor, form }: P1TextField2Type) => {
 	const { value, onChange, error } = form;
 	//
 	const [focused, setFocused] = useState(false);
@@ -68,7 +67,6 @@ export const P1TextField2 = ({ borderWeight, borderColor, fontSize, label, place
 			mt="md"
 			autoComplete="off"
 			error={error}
-			{...props}
 		/>
 	);
 };
@@ -87,7 +85,6 @@ const useStylesP1TextAreaField2 = createStyles((theme, { floating, borderWeight,
 		pointerEvents: "none",
 		color: floating ? (theme.colorScheme === "dark" ? theme.white : textColor) : theme.colorScheme === "dark" ? theme.colors.dark[3] : theme.colors.gray[5],
 		transition: "0.2s all",
-		// transform: "translate(4%,-50%)",
 		fontSize: floating ? theme.fontSizes.xs : fontSize,
 		fontWeight: floating ? 500 : 400,
 	},
@@ -150,22 +147,6 @@ const useStylesP1SelectField2 = createStyles((theme, { floating, borderWeight, b
 		position: "relative",
 	},
 
-	// label: {
-	// 	position: "absolute",
-	// 	zIndex: 2,
-	// 	top: floating ? "-0.9em" : "50%",
-	// 	left: theme.spacing.sm,
-	// 	pointerEvents: "none",
-	// 	color: floating ? (theme.colorScheme === "dark" ? theme.white : textColor) : theme.colorScheme === "dark" ? theme.colors.dark[3] : theme.colors.gray[5],
-	// 	transition: "0.2s all",
-	// 	transform: "translate(4%,-50%)",
-	// 	fontSize: floating ? theme.fontSizes.xs : fontSize,
-	// 	fontWeight: floating ? 500 : 400,
-	// },
-	// required: {
-	// 	transition: "opacity 150ms ease",
-	// 	opacity: floating ? 1 : 0,
-	// },
 	item: {
 		"&[data-selected], &[data-selected]:hover": {
 			backgroundColor: borderColor,
@@ -180,10 +161,6 @@ const useStylesP1SelectField2 = createStyles((theme, { floating, borderWeight, b
 		"&:focus-within": {
 			border: `${borderWeight} solid ${borderColor}`,
 		},
-		// "&::placeholder": {
-		// 	transition: "color 150ms ease",
-		// 	color: !floating ? "transparent" : undefined,
-		// },
 	},
 }));
 
@@ -204,17 +181,5 @@ export const P1SelectField2 = ({ data, borderWeight, borderColor, fontSize, labe
 
 	const { classes } = useStylesP1SelectField2({ floating: value.trim().length !== 0 || focused, borderWeight, borderColor, fontSize, textColor });
 
-	return (
-		<Select
-			data={data}
-			placeholder={placeholder}
-			classNames={classes}
-			value={value}
-			onChange={onChange}
-			// onFocus={() => setFocused(true)}
-			// onBlur={() => setFocused(false)}
-			// mt="md"
-			{...props}
-		/>
-	);
+	return <Select data={data} placeholder={placeholder} classNames={classes} value={value} onChange={onChange} {...props} />;
 };

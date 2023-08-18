@@ -14,30 +14,30 @@ dayjs.tz.setDefault("Asia/Tokyo");
 const generateSiteMap = (posts: { id: string; lastmod: string }[]) => {
 	const today = dayjs().toISOString();
 	return `<?xml version="1.0" encoding="UTF-8"?>
-   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-     <url>
-       <loc>${process.env.NEXT_PUBLIC_SITE_URL}</loc>
-	   <lastmod>${today}</lastmod>
-	   <priority>1.0</priority>
-
-     </url>
-     <url>
-	   <loc>${process.env.NEXT_PUBLIC_SITE_URL}/posts/postIndex</loc>
-	   <lastmod>${today}</lastmod>
-
-     </url>
-     ${posts
-				.map((post) => {
-					return `
-       <url>
-           <loc>${process.env.NEXT_PUBLIC_SITE_URL}/posts/${post.id}</loc>
-		   <lastmod>${post.lastmod}</lastmod>
-       </url>
-     `;
-				})
-				.join("")}
-   </urlset>
- `;
+		<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+		<url>
+		<loc>${process.env.NEXT_PUBLIC_SITE_URL}</loc>
+		<lastmod>${today}</lastmod>
+		<priority>1.0</priority>
+		
+		</url>
+		<url>
+		<loc>${process.env.NEXT_PUBLIC_SITE_URL}/posts/postIndex</loc>
+		<lastmod>${today}</lastmod>
+		
+		</url>
+		${posts
+			.map((post) => {
+				return `
+					<url>
+					<loc>${process.env.NEXT_PUBLIC_SITE_URL}/posts/${post.id}</loc>
+					<lastmod>${post.lastmod}</lastmod>
+					</url>
+					`;
+			})
+			.join("")}
+				</urlset>
+				`;
 };
 
 function SiteMap() {
@@ -52,7 +52,6 @@ export async function getServerSideProps({ res }: { res: ServerResponse }) {
 		const lm = post.updatedAt.split("-");
 		const date = dayjs(post.updatedAt, "YYYY-MM-DD-HH-mm-ss");
 		const isoString = date.toISOString();
-		console.log("isoString: ", isoString);
 		return { id: post.id, lastmod: isoString };
 	});
 
