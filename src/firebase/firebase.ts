@@ -1718,11 +1718,11 @@ export const setPostCategory = async (categoryArr: CategoryType[]) => {
 };
 
 export const getMenuList = async ({ dbName = _dbName }) => {
-	const _result: MenuType[] = await getDocDataFromDB(dbName, "menu");
+	const _result: MenuType[][] = await getDocDataFromDB(dbName, "menu");
 
 	let result = [MenuInit];
 	if (_result) {
-		result = _result;
+		result = _result[0];
 	}
 	return [result];
 };

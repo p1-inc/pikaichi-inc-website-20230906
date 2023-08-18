@@ -12,8 +12,9 @@ import { adminPages } from "./adminHome";
 
 import { c, cArr } from "../../styles/eStyle";
 
-import { Burger, Button, Drawer, Flex, Header, Menu, UnstyledButton, Navbar, Box, Text } from "@mantine/core";
+import { Burger, Button, Container, Drawer, Flex, Group, Header, Menu, UnstyledButton, Navbar, NavLink, Box, Text, Divider } from "@mantine/core";
 import { useDeploy } from "../../hooks/useDeploy";
+import { IconHome } from "@tabler/icons-react";
 
 type AdminHeaderType = {
 	title: string;
@@ -51,9 +52,7 @@ export const AdminHeader = ({ title, color = c.defaultBlue }: AdminHeaderType) =
 
 	const navList = {
 		label: "navList",
-		marginBottom: "1em",
 		fontSize: "0.9em",
-		color: c.mainBlack,
 		cursor: "pointer",
 		transition: "all 0.1s",
 		"&:hover": {
@@ -121,13 +120,54 @@ export const AdminHeader = ({ title, color = c.defaultBlue }: AdminHeaderType) =
 
 				<Drawer opened={openMenu} onClose={() => setOpenMenu(false)}>
 					<Navbar p="xl" styles={{ root: { border: "none" } }}>
-						<Navbar.Section sx={{ display: "flex", flexDirection: "column" }}>
-							{adminPages.map((menu, index, arr) => (
-								<NextLink key={menu.id} href={`/admin/${menu.id}`} passHref>
-									<Box sx={navList}> {menu.name}</Box>
+						<Navbar.Section sx={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
+							<NextLink href="/admin/index" passHref>
+								<Flex sx={navList} gap="0.8em">
+									<IconHome width="1em" />
+									<Box> ホーム</Box>
+								</Flex>
+							</NextLink>
+						</Navbar.Section>
+
+						<Divider my="1em" w="15em" />
+
+						<Navbar.Section sx={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
+							{adminPages.config.map((item, index, arr) => (
+								<NextLink key={item.id} href={`/admin/${item.id}`} passHref>
+									<Flex sx={navList} gap="0.8em">
+										<item.icon width="1em" />
+										<Box> {item.name}</Box>
+									</Flex>
 								</NextLink>
 							))}
 						</Navbar.Section>
+
+						<Divider my="1em" w="15em" />
+
+						<Navbar.Section sx={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
+							{adminPages.contents.map((item, index, arr) => (
+								<NextLink key={item.id} href={`/admin/${item.id}`} passHref>
+									<Flex sx={navList} gap="0.8em">
+										<item.icon width="1em" />
+										<Box> {item.name}</Box>
+									</Flex>
+								</NextLink>
+							))}
+						</Navbar.Section>
+
+						<Divider my="1em" w="15em" />
+
+						<Navbar.Section sx={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
+							{adminPages.posts.map((item, index, arr) => (
+								<NextLink key={item.id} href={`/admin/${item.id}`} passHref>
+									<Flex sx={navList} gap="0.8em">
+										<item.icon width="1em" />
+										<Box> {item.name}</Box>
+									</Flex>
+								</NextLink>
+							))}
+						</Navbar.Section>
+
 						<Navbar.Section
 							sx={{
 								display: "flex",

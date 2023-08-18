@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import NextLink from "next/link";
 
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
@@ -6,20 +7,8 @@ import { c, cArr } from "../../styles/eStyle";
 
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 
-import {
-	ActionIcon,
-	Box,
-	Button,
-	Container,
-	CopyButton,
-	CSSObject,
-	Flex,
-	Group,
-	HoverCard,
-	Stack,
-	Switch,
-	Tooltip,
-} from "@mantine/core";
+import { ActionIcon, Box, Button, Container, CopyButton, CSSObject, Flex, Group, HoverCard, Stack, Switch, Tooltip } from "@mantine/core";
+import { IconHome } from "@tabler/icons-react";
 
 type AdminSubHeaderType = {
 	idState?: string;
@@ -33,7 +22,6 @@ type AdminSubHeaderType = {
 	handleSetNew?: any;
 	handlePreview?: any;
 	handleDispHelp?: any;
-
 	displayPreview?: any;
 	setDisplayPreview?: any;
 	saveLoading?: boolean;
@@ -50,7 +38,6 @@ export const AdminSubHeader = ({
 	handleSaveAs,
 	handleSetNew,
 	handleDispHelp,
-
 	displayPreview,
 	setDisplayPreview,
 	saveLoading,
@@ -217,6 +204,12 @@ export const AdminSubHeader = ({
 								保 存
 							</Button>
 						)}
+
+						<NextLink href="/admin/index" passHref>
+							<ActionIcon>
+								<IconHome size="2em" />
+							</ActionIcon>
+						</NextLink>
 					</Flex>
 				</Group>
 			</Flex>
