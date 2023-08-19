@@ -49,12 +49,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 
 	const { ref: contentRef, fz } = useGetComputedStyles();
 
-	const selection = useTextSelection();
-	useEffect(() => {
-		//inlineTune発火
-		api.handleSelectionChange();
-	}, [selection?.toString()]);
-
 	useEffect(() => {
 		if (!inputDebounced) {
 			return;

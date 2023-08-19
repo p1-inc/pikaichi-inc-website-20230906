@@ -16,11 +16,7 @@ export const markerColorList = [
 	{ label: "none", value: cArr.gray[8] },
 ];
 
-export const MarkerSubPalette = ({
-	tool,
-	api,
-	isActive,
-}: { tool: InlineToolType; api: BlockControlType; isActive: boolean }) => {
+export const MarkerSubPalette = ({ tool, api, isActive }: { tool: InlineToolType; api: BlockControlType; isActive: boolean }) => {
 	//
 
 	const handleSubmit = ({

@@ -6,7 +6,7 @@ import { ActionIcon } from "@mantine/core";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DoneIcon from "@mui/icons-material/Done";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const InlineLinkSubPalette = ({
 	tool,
@@ -17,14 +17,9 @@ export const InlineLinkSubPalette = ({
 	//
 	const [value, setValue] = useState<string>();
 
-	const handleSubmit = ({
-		tool,
-		api,
-		href,
-		isActive,
-	}: { tool: InlineToolType; api: BlockControlType; href: string; isActive: boolean }) => {
+	const handleSubmit = ({ tool, api, href, isActive }: { tool: InlineToolType; api: BlockControlType; href: string; isActive: boolean }) => {
 		//
-		const { inlineSel, submitInlineTune, updateInlineClassName } = api;
+		const { inlineSel, submitInlineTune, updateInlineClassName, hideInlineSel } = api;
 
 		const beforeClassNames = [tool.className];
 
@@ -32,6 +27,7 @@ export const InlineLinkSubPalette = ({
 			return;
 		}
 
+		console.log("isActive: ", isActive);
 		if (isActive) {
 			updateInlineClassName({ inlineSel, beforeClassNames });
 			return;
@@ -42,8 +38,11 @@ export const InlineLinkSubPalette = ({
 		element.classList.add(beforeClassNames[0]);
 
 		submitInlineTune({ inlineSel, element });
+		hideInlineSel();
 	};
-
+	useEffect(() => {
+		console.log("isActive: ", isActive);
+	}, [isActive]);
 	return (
 		<Flex align="center" gap={0}>
 			<TextInput

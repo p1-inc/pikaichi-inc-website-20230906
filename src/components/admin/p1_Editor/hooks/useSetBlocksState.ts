@@ -5,9 +5,21 @@ import { OutputBlockData, BlockControlType, BlockToolType, InlineToolType, P1Glo
 import { autoID } from "../../../../util/autoID";
 
 import { LLABClassName, config, inlineToolClassNames } from "../p1_EditorConfig";
-import { useDebouncedState } from "@mantine/hooks";
+import { useDebouncedState, useTextSelection } from "@mantine/hooks";
 
 const historyLimit = 200;
+
+const getEffectiveOffset = (node: Node, offset: number) => {
+	if (node.nodeType === Node.TEXT_NODE) {
+		const len = (node as Text).length;
+		return Math.min(len, offset);
+	} else if (node.nodeType === Node.ELEMENT_NODE) {
+		const len = node.childNodes.length;
+		return Math.min(len, offset);
+	} else {
+		return 0;
+	}
+};
 
 export const getValidOffset = (node: Node, offset: number) => {
 	//指定されたオフセットが対象ノードの長さを超えている場合は、その上限。超えてない場合はオフセットをそのまま返す
@@ -53,6 +65,16 @@ export const useSetBlocksState = (): BlockControlType => {
 
 	const [autoSave, setAutosave] = useDebouncedState<OutputBlockData[]>([], 10000);
 
+	const selection = useTextSelection();
+	useEffect(() => {
+		//inlineTune発火
+		handleSelectionChange();
+	}, [selection?.toString()]);
+
+	const hideInlineSel = () => {
+		setInlineSel(null);
+	};
+
 	useLayoutEffect(() => {
 		//
 		if (!inlineSel || !inlineSel.blockId) {
@@ -90,9 +112,8 @@ export const useSetBlocksState = (): BlockControlType => {
 		const selection = window.getSelection();
 
 		const range = document.createRange();
-
-		range.setStart(startContainer, nStartOffset);
-		range.setEnd(endContainer, nEndOffset);
+		range.setStart(startContainer, getEffectiveOffset(startContainer, nStartOffset));
+		range.setEnd(endContainer, getEffectiveOffset(endContainer, nEndOffset));
 
 		selection.removeAllRanges();
 		selection.addRange(range);
@@ -446,6 +467,8 @@ export const useSetBlocksState = (): BlockControlType => {
 				const nClassNmaes = obj.classNames.map((d) => (beforeClassNames.includes(d) ? afterClassName : d));
 				targetEl.className = nClassNmaes.join(" ");
 			});
+			const cInlineSel = JSON.parse(JSON.stringify(inlineSel));
+			afterSel = reSetInlineSel({ node: contentEl, inlineSel: cInlineSel, startText, endText });
 		}
 
 		const undoSel = { ...inlineSel, displayInlineTune: false };
@@ -681,8 +704,8 @@ export const useSetBlocksState = (): BlockControlType => {
 		const endContainer = getElementFromParentUsingPath(contentEl, inlineSel.endEl.path);
 
 		const range = new Range();
-		range.setStart(startContainer, inlineSel.startEl.startOffset);
-		range.setEnd(endContainer, inlineSel.endEl.endOffset);
+		range.setStart(startContainer, getEffectiveOffset(startContainer, inlineSel.startEl.startOffset));
+		range.setEnd(endContainer, getEffectiveOffset(endContainer, inlineSel.endEl.endOffset));
 
 		try {
 			range.surroundContents(element);
@@ -939,8 +962,8 @@ export const useSetBlocksState = (): BlockControlType => {
 			const brParentEl = brElement.parentElement;
 			const brIndex = Array.from(brParentEl.childNodes).findIndex((child) => child === brElement);
 
-			newRange.setStart(parentElement, caretIndex);
-			newRange.setEnd(parentElement, caretIndex);
+			range.setStart(parentElement, getEffectiveOffset(parentElement, caretIndex));
+			range.setEnd(parentElement, getEffectiveOffset(parentElement, caretIndex));
 
 			newRange.collapse(true);
 
@@ -1027,7 +1050,8 @@ export const useSetBlocksState = (): BlockControlType => {
 		handleinsertLineBreak,
 		handleDeleteInlineStyle,
 		handleTuneBlocks,
-		handleSelectionChange,
+		hideInlineSel,
+		// handleSelectionChange,
 		// inlineActiveClassName,
 		// setInlineActiveClassName,
 		// unwrapInlineTags,

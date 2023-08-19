@@ -319,7 +319,7 @@ export interface BlockControlType {
 		afterBlockType: string;
 	}) => void;
 
-	handleSelectionChange: () => void;
+	hideInlineSel: () => void;
 
 	autoSave: OutputBlockData[];
 }

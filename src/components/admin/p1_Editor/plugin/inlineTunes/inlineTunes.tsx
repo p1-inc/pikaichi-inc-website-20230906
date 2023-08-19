@@ -4,17 +4,19 @@ import { BlockControlType } from "../../p1_EditorTypes";
 import { cArr } from "../../../../../styles/eStyle";
 
 import { IconCircleOff } from "@tabler/icons-react";
+import { useElementSize } from "@mantine/hooks";
 
 export const InlineTunes = ({ api }: { api: BlockControlType }) => {
 	//
 	const { containerRef, inlineSel, inlineTools, inlineSubPalette, handleDeleteInlineStyle, blockDataArr } = api;
 	const { displayInlineTune, top, left } = inlineSel || {};
-
-	const offSetPosition = -40;
+	const { ref, width, height } = useElementSize();
+	const offSetPosition = -20 - height;
 
 	return (
 		<Portal target={containerRef.current}>
 			<Flex
+				ref={ref}
 				className="inlineTuneEl"
 				contentEditable={false}
 				direction="column"
@@ -29,6 +31,7 @@ export const InlineTunes = ({ api }: { api: BlockControlType }) => {
 					borderRadius: "0.2em",
 					filter: "drop-shadow(3px 3px 3px rgba(0,0,0,0.3))",
 					zIndex: 1,
+					transition: "top 0.2s",
 				}}
 			>
 				<Flex gap="0.5em" sx={{ userSelect: "none" }}>
