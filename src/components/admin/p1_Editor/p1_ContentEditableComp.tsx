@@ -403,11 +403,10 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		if (!selection || selection.rangeCount === 0) {
 			return;
 		}
-
 		const range = selection.getRangeAt(0);
 		const rangeObj = api.getRangeObj(range);
 
-		if (rangeObj.startEl?.path?.[0] === 0 && rangeObj.startEl?.startOffset === 0) {
+		if ((rangeObj.startEl?.path?.[0] === 0 && rangeObj.startEl?.startOffset === 0) || rangeObj.startEl?.path?.length === 0) {
 			//前のブロックと結合
 			handleMargeByBS({ event, blockData, blockDataArr, undoObj: rangeObj });
 		}

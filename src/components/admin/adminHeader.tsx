@@ -145,6 +145,19 @@ export const AdminHeader = ({ title, color = c.defaultBlue }: AdminHeaderType) =
 						<Divider my="1em" w="15em" />
 
 						<Navbar.Section sx={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
+							{adminPages.media.map((item, index, arr) => (
+								<NextLink key={item.id} href={`/admin/${item.id}`} passHref>
+									<Flex sx={navList} gap="0.8em">
+										<item.icon width="1em" />
+										<Box> {item.name}</Box>
+									</Flex>
+								</NextLink>
+							))}
+						</Navbar.Section>
+
+						<Divider my="1em" w="15em" />
+
+						<Navbar.Section sx={{ display: "flex", flexDirection: "column", gap: "0.5em" }}>
 							{adminPages.contents.map((item, index, arr) => (
 								<NextLink key={item.id} href={`/admin/${item.id}`} passHref>
 									<Flex sx={navList} gap="0.8em">

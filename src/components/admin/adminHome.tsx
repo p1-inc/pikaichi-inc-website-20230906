@@ -19,6 +19,7 @@ import {
 	IconMenu2,
 	IconMist,
 	IconNews,
+	IconPhoto,
 	IconSection,
 	IconSettings,
 	IconStack2,
@@ -31,6 +32,7 @@ import {
 
 type AdminPagesType = {
 	config: { id: string; name: string; icon: (props: TablerIconsProps) => JSX.Element }[];
+	media: { id: string; name: string; icon: (props: TablerIconsProps) => JSX.Element }[];
 	contents: { id: string; name: string; icon: (props: TablerIconsProps) => JSX.Element }[];
 	posts: { id: string; name: string; icon: (props: TablerIconsProps) => JSX.Element }[];
 };
@@ -56,6 +58,13 @@ export const adminPages: AdminPagesType = {
 			id: "editMenu",
 			name: "メニューの管理",
 			icon: IconMenu2,
+		},
+	],
+	media: [
+		{
+			id: "mediaManager",
+			name: "メディアの管理",
+			icon: IconPhoto,
 		},
 	],
 	contents: [
@@ -179,6 +188,25 @@ const AdminHome = () => {
 							))}
 						</Flex>
 					</Flex>
+
+					<Flex direction="column" gap="0.5em">
+						<Flex gap="0.5em">
+							<IconBox width="1.3em" />
+							<Text>メディア</Text>
+						</Flex>
+						<Flex wrap="wrap" gap="0.5em">
+							{adminPages.media.map((item) => (
+								<NextLink key={item.id} href={`/admin/${item.id}`} passHref>
+									<Button w="20em" h="4em" variant="outline" leftIcon={<item.icon width="1.5em" />}>
+										<Flex>
+											<Box>{item.name}</Box>
+										</Flex>
+									</Button>
+								</NextLink>
+							))}
+						</Flex>
+					</Flex>
+
 					<Flex direction="column" gap="0.5em">
 						<Flex gap="0.5em">
 							<IconBox width="1.3em" />

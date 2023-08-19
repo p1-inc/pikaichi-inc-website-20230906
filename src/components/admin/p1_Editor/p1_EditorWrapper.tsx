@@ -80,7 +80,14 @@ export const P1_EditorWrapper = ({ blockData, BlockTuneMenu, api, children, ...p
 			<Box {...props} fz="16px">
 				<Menu trigger="hover" position="left-start" openDelay={0} closeDelay={0} offset={-32} zIndex={1} classNames={classes}>
 					<Menu.Target>
-						<Box ref={contentRef} px="2em" sx={{ label: "content", zIndex: 10000 }}>
+						<Box
+							ref={contentRef}
+							onMouseLeave={() => {
+								setMenuName(null);
+							}}
+							px="2em"
+							sx={{ label: "content", zIndex: 10000 }}
+						>
 							{children}
 						</Box>
 					</Menu.Target>
