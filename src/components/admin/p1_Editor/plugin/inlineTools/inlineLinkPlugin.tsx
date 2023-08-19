@@ -8,18 +8,20 @@ import DoneIcon from "@mui/icons-material/Done";
 
 import { useEffect, useState } from "react";
 
-export const InlineLinkSubPalette = ({
-	tool,
-	api,
-	isActive,
-	defaultValue,
-}: { tool: InlineToolType; api: BlockControlType; isActive: boolean; defaultValue: string }) => {
+type InlineLinkSubPaletteType = {
+	tool: InlineToolType;
+	api: BlockControlType;
+	isActive: boolean;
+	wrapperEl: { href: string; wrapperEl: Element };
+};
+
+export const InlineLinkSubPalette = ({ tool, api, isActive, wrapperEl }: InlineLinkSubPaletteType) => {
 	//
 	const [value, setValue] = useState<string>();
 
 	const handleSubmit = ({ tool, api, href, isActive }: { tool: InlineToolType; api: BlockControlType; href: string; isActive: boolean }) => {
 		//
-		const { inlineSel, submitInlineTune, updateInlineClassName, hideInlineSel } = api;
+		const { inlineSel, submitInlineTune } = api;
 
 		const beforeClassNames = [tool.className];
 
@@ -27,9 +29,12 @@ export const InlineLinkSubPalette = ({
 			return;
 		}
 
-		console.log("isActive: ", isActive);
 		if (isActive) {
-			updateInlineClassName({ inlineSel, beforeClassNames });
+			console.log("inlineSel: ", inlineSel);
+			console.log("wrapperEl: ", wrapperEl.wrapperEl);
+			//TODOhrefの中身だけ更新
+			// const href = wrapperEl.wrapperEl.href;
+			// updateInlineClassName({ inlineSel, beforeClassNames });
 			return;
 		}
 
@@ -38,18 +43,16 @@ export const InlineLinkSubPalette = ({
 		element.classList.add(beforeClassNames[0]);
 
 		submitInlineTune({ inlineSel, element });
-		hideInlineSel();
+		// hideInlineSel();
 	};
-	useEffect(() => {
-		console.log("isActive: ", isActive);
-	}, [isActive]);
+
 	return (
 		<Flex align="center" gap={0}>
 			<TextInput
 				size="xs"
 				pr={0}
 				placeholder="https://"
-				defaultValue={defaultValue}
+				defaultValue={wrapperEl.href}
 				onChange={(e) => {
 					setValue(e.currentTarget.value);
 				}}
@@ -60,6 +63,7 @@ export const InlineLinkSubPalette = ({
 						color={cArr.skyblue[3]}
 						onClick={() => {
 							handleSubmit({ tool, api, isActive, href: value });
+							api.setInlineSubPalette(null);
 						}}
 					>
 						<DoneIcon />
@@ -94,13 +98,11 @@ export const handleToInlineLink = (tool: InlineToolType, api: BlockControlType, 
 	const wrapperEls = inlineSel.wrappedStyles.flatMap((d) => {
 		const wrapperEl = api.getElementFromParentUsingPath(contentEl, d.path) as HTMLElement;
 		const isHref = wrapperEl.getAttribute("href");
-		return isHref ? isHref : [];
+		return isHref ? { href: isHref, wrapperEl: wrapperEl } : [];
 	});
-
-	const defaultValue = wrapperEls[0];
 
 	setInlineSubPalette({
 		name: tool.id,
-		component: <InlineLinkSubPalette tool={tool} api={api} isActive={isActive} defaultValue={defaultValue} />,
+		component: <InlineLinkSubPalette tool={tool} api={api} isActive={isActive} wrapperEl={wrapperEls[0]} />,
 	});
 };

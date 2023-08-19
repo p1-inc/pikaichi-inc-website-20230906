@@ -53,6 +53,7 @@ export const TextColorSubPalette = ({ tool, api, isActive }: { tool: InlineToolT
 		element.classList.add(tool.className, afterClassName);
 
 		submitInlineTune({ inlineSel, element });
+		console.log(api.inlineSubPalette);
 	};
 
 	return (

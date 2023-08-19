@@ -56,7 +56,7 @@ export const useSetBlocksState = (): BlockControlType => {
 	const [inlineSel, setInlineSel] = useState<InlineSelType>(null);
 	// const [inlineSelDebounced] = useDebouncedValue(inlineSel, 10);
 
-	const [inlineSubPalette, setInlineSubPalette] = useState<{ name: string; component: JSX.Element | null }>();
+	const [inlineSubPalette, setInlineSubPalette] = useState<{ name: string; component: JSX.Element | null }>(null);
 
 	const undo = useRef<UndoType[]>([]);
 	const redo = useRef<UndoType[]>([]);
