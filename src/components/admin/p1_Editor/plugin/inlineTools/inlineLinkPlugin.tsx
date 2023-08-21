@@ -30,11 +30,7 @@ export const InlineLinkSubPalette = ({ tool, api, isActive, wrapperEl }: InlineL
 		}
 
 		if (isActive) {
-			console.log("inlineSel: ", inlineSel);
-			console.log("wrapperEl: ", wrapperEl.wrapperEl);
-			//TODOhrefの中身だけ更新
-			// const href = wrapperEl.wrapperEl.href;
-			// updateInlineClassName({ inlineSel, beforeClassNames });
+			wrapperEl.wrapperEl.setAttribute("href", href);
 			return;
 		}
 
@@ -43,7 +39,6 @@ export const InlineLinkSubPalette = ({ tool, api, isActive, wrapperEl }: InlineL
 		element.classList.add(beforeClassNames[0]);
 
 		submitInlineTune({ inlineSel, element });
-		// hideInlineSel();
 	};
 
 	return (
