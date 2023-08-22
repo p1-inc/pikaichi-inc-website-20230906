@@ -321,6 +321,7 @@ export interface BlockControlType {
 
 	hideInlineSel: () => void;
 
+	sanitizeBlockdata: (blockDataArr: OutputBlockData[]) => OutputBlockData[];
 	autoSave: OutputBlockData[];
 }
 

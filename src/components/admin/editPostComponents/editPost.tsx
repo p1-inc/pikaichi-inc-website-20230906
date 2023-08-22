@@ -225,40 +225,6 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 		}
 	};
 
-	const validateClassName = (text: string) => {
-		const temporaryDiv = document.createElement("div");
-		temporaryDiv.innerHTML = text;
-		const boldElements = temporaryDiv.getElementsByTagName("b");
-		for (const boldElement of boldElements) {
-			boldElement.classList.add("pe-inline_bold");
-		}
-		const italicElements = temporaryDiv.getElementsByTagName("i");
-		for (const italicElement of italicElements) {
-			italicElement.classList.add("pe-inline_italic");
-		}
-		const linkElements = temporaryDiv.getElementsByTagName("a");
-		for (const linkElement of linkElements) {
-			linkElement.classList.add("pe-inline_link");
-		}
-		return temporaryDiv.innerHTML;
-	};
-
-	const sanitizeBlockdata = (blockDataArr: OutputBlockData[]) => {
-		const nBlockDataArr = blockDataArr.map((d) => {
-			const blockTool = config.blockTools.find((d2) => d2.id === d.type);
-			if (!blockTool.isContentEditable || !("text" in d.data)) {
-				return d;
-			}
-			const _pureBlockText1 = api.getPureBlockData(d.data.text);
-			const _pureBlockText2 = validateClassName(_pureBlockText1);
-			const pureBlockText = _pureBlockText2.replace(`<br class="${LLABClassName}">`, "");
-			d.data.text = pureBlockText;
-
-			return d;
-		});
-		return nBlockDataArr;
-	};
-
 	const handleSaveAs = async () => {
 		const nId = autoID();
 		const isConfirm = await displayConfirm("", `別IDとして保存します。  新ID : ${nId.slice(0, 8)}`, "");
@@ -332,7 +298,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 			return;
 		}
 
-		const body = sanitizeBlockdata(api.blockDataArr);
+		const body = api.sanitizeBlockdata(api.blockDataArr);
 
 		let createdAt;
 		let updatedAt;

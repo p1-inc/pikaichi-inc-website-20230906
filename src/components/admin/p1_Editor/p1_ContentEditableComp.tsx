@@ -95,6 +95,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 
 		const contentId = `${id}-pe-block__content`;
 		const contentEl = document.getElementById(contentId);
+		const childnodes = contentEl.childNodes;
 
 		const textNodes = getAllTextNodes(contentEl);
 
@@ -173,31 +174,31 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		}
 	};
 
-	const scrollWithCaretPos = async () => {
-		// const range = await getNextCaretPos();
-		const selection = document.getSelection();
-		if (!selection || selection.rangeCount === 0) {
-			return;
-		}
-
-		const range = selection.getRangeAt(0);
-		const rects = range.getBoundingClientRect();
-
-		const viewportWidth = window.innerWidth; // ビューポートの幅
-		const viewportHeight = window.innerHeight; // ビューポートの高さ
-
-		if (rects.left < 40) {
-			window.scrollBy(rects.left - 40, 0); // 20pxのマージンを加えてスクロール
-		} else if (rects.left > viewportWidth - 40) {
-			window.scrollBy(rects.left - viewportWidth + 40, 0); // 20pxのマージンを加えてスクロール
-		}
-
-		if (rects.top < 40) {
-			window.scrollBy(0, rects.top + 40); // 20pxのマージンを加えてスクロール
-		} else if (rects.top > viewportHeight - 40) {
-			window.scrollBy(0, rects.top - viewportHeight + 40); // 20pxのマージンを加えてスクロール
-		}
-	};
+	// 	const scrollWithCaretPos = async () => {
+	// 		// const range = await getNextCaretPos();
+	// 		const selection = document.getSelection();
+	// 		if (!selection || selection.rangeCount === 0) {
+	// 			return;
+	// 		}
+	//
+	// 		const range = selection.getRangeAt(0);
+	// 		const rects = range.getBoundingClientRect();
+	//
+	// 		const viewportWidth = window.innerWidth; // ビューポートの幅
+	// 		const viewportHeight = window.innerHeight; // ビューポートの高さ
+	//
+	// 		if (rects.left < 40) {
+	// 			window.scrollBy(rects.left - 40, 0); // 20pxのマージンを加えてスクロール
+	// 		} else if (rects.left > viewportWidth - 40) {
+	// 			window.scrollBy(rects.left - viewportWidth + 40, 0); // 20pxのマージンを加えてスクロール
+	// 		}
+	//
+	// 		if (rects.top < 40) {
+	// 			window.scrollBy(0, rects.top + 40); // 20pxのマージンを加えてスクロール
+	// 		} else if (rects.top > viewportHeight - 40) {
+	// 			window.scrollBy(0, rects.top - viewportHeight + 40); // 20pxのマージンを加えてスクロール
+	// 		}
+	// 	};
 
 	const handleMoveCaretByLeftRight = ({
 		event,
@@ -217,36 +218,118 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 			return;
 		}
 
+		const contentEl = document.getElementById(contentId.current);
+		const childnodes = contentEl.childNodes;
+
 		const range = selection.getRangeAt(0);
+		const startContainer = range.startContainer;
+		const startOffset = range.startOffset;
+
 		const caretRects = range.getBoundingClientRect();
 
 		if (!api.caretPos.current) {
 			api.caretPos.current = { top: caretRects.top, left: caretRects.left };
 		}
 
-		const contentEl = document.getElementById(contentId.current);
+		const blockDataIndex = blockDataArr.findIndex((d) => d.id === id);
+
 		const textNodes = getAllTextNodes(contentEl);
 		const startNode = textNodes[0][0];
 		const endNode = textNodes[textNodes.length - 1][0];
 
-		const blockDataIndex = blockDataArr.findIndex((d) => d.id === id);
+		//direction === "Left" or "right"
+		//--toplineまたはbottomlineがtextNodeかどうか？
+		//----現在のcaret位置が,最初または最後かどうか？
+		if (direction === "Left") {
+			let isOnLeft = false;
 
-		if (contentEl) {
-			const isCaretAtStart = range.startContainer === startNode && range.startOffset === 0;
-			const isCaretAtEnd = range.endContainer === endNode && range.endOffset === endNode.textContent.length;
-
-			if (isCaretAtStart && direction === "Left") {
-				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
-				const nCaretRects: DOMRect = { ...caretRects, left: 999999 };
-				handleSetCaretPos({ event, id: nextBlockId, caretRects: nCaretRects, direction: "Left" });
+			if (childnodes[0].nodeType === Node.TEXT_NODE) {
+				if (range.startContainer === startNode && range.startOffset === 0) {
+					isOnLeft = true;
+				}
+			} else {
+				if (startContainer.childNodes[startOffset] === childnodes[0]) {
+					isOnLeft = true;
+				}
 			}
 
-			if (isCaretAtEnd && direction === "Right") {
-				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
-				const nCaretRects: DOMRect = { ...caretRects, left: 0 };
-				handleSetCaretPos({ event, id: nextBlockId, caretRects: nCaretRects, direction: "Right" });
+			if (isOnLeft) {
+				console.log("isOnLeft: ");
+			}
+		} else if (direction === "Right") {
+			let isOnRight = false;
+
+			if (childnodes[childnodes.length - 1].nodeType === Node.TEXT_NODE) {
+				if (range.startContainer === endNode && range.startOffset === range.startContainer.nodeValue.length) {
+					isOnRight = true;
+				}
+			} else {
+				console.log("xxxx");
+
+				console.log("startContainer: ", startContainer);
+				console.log("startContainer.childNodes[startOffset]: ", startContainer.childNodes[startOffset]);
+				console.log("childnodes[childnodes.length - 1]: ", childnodes[childnodes.length - 1]);
+				if (startContainer.childNodes[startOffset] === childnodes[childnodes.length - 1]) {
+					console.log("yyyy");
+					isOnRight = true;
+				}
 			}
 		}
+
+		// 		if (childnodes[0].nodeType === Node.TEXT_NODE) {
+		// 			const textNodes = getAllTextNodes(contentEl);
+		// 			const startNode = textNodes[0][0];
+		// 			const endNode = textNodes[textNodes.length - 1][0];
+		// 			const isCaretAtStart = range.startContainer === startNode && range.startOffset === 0;
+		// 			const isCaretAtEnd = range.endContainer === endNode && range.endOffset === endNode.textContent.length;
+		//
+		// 			if (range.startContainer === childnodes[0] && isCaretAtStart && direction === "Left") {
+		// 				console.log("llllll");
+		// 				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+		// 				const nCaretRects: DOMRect = { ...caretRects, left: 999999 };
+		// 				console.log("nCaretRects: ", nCaretRects);
+		// 				handleSetCaretPos({ event, id: nextBlockId, caretRects: nCaretRects, direction: "Left" });
+		// 			} else if (range.startContainer === childnodes[childnodes.length - 1] && isCaretAtEnd && direction === "Right") {
+		// 				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+		// 				const nCaretRects: DOMRect = { ...caretRects, left: 0 };
+		// 				handleSetCaretPos({ event, id: nextBlockId, caretRects: nCaretRects, direction: "Right" });
+		// 			}
+		// 		} else {
+		// 			if (range.startContainer.childNodes[range.startOffset] === childnodes[0]) {
+		// 				if (direction === "Left") {
+		// 					const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+		// 					const nCaretRects: DOMRect = { ...caretRects, left: 999999 };
+		// 					handleSetCaretPos({ event, id: nextBlockId, caretRects: nCaretRects, direction: "Left" });
+		// 				}
+		// 			} else if (range.startContainer.childNodes[range.startOffset] === childnodes[childnodes.length - 1]) {
+		// 				if (direction === "Right") {
+		// 					const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+		// 					const nCaretRects: DOMRect = { ...caretRects, left: 0 };
+		// 					handleSetCaretPos({ event, id: nextBlockId, caretRects: nCaretRects, direction: "Right" });
+		// 				}
+		// 			}
+		// 		}
+
+		// 		if (range.startContainer.nodeType === Node.TEXT_NODE) {
+		// 			if (contentEl) {
+		// 				const isCaretAtStart = range.startContainer === startNode && range.startOffset === 0;
+		// 				const isCaretAtEnd = range.endContainer === endNode && range.endOffset === endNode.textContent.length;
+		//
+		// 				if (isCaretAtStart && direction === "Left") {
+		// 					const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+		// 					const nCaretRects: DOMRect = { ...caretRects, left: 999999 };
+		// 					handleSetCaretPos({ event, id: nextBlockId, caretRects: nCaretRects, direction: "Left" });
+		// 				}
+		//
+		// 				if (isCaretAtEnd && direction === "Right") {
+		// 					const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+		// 					const nCaretRects: DOMRect = { ...caretRects, left: 0 };
+		// 					handleSetCaretPos({ event, id: nextBlockId, caretRects: nCaretRects, direction: "Right" });
+		// 				}
+		// 			}
+		// 		} else {
+		// 			console.log("hidsochdos");
+		// 		}
 	};
 
 	const handleMoveCaretByUpDown = ({
@@ -265,14 +348,19 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		if (!selection || selection.rangeCount === 0) {
 			return;
 		}
+
+		const contentEl = document.getElementById(contentId.current);
+		const childnodes = contentEl.childNodes;
+
 		const range = selection.getRangeAt(0);
+		const startContainer = range.startContainer;
+		const startOffset = range.startOffset;
+
 		const caretRects = range.getBoundingClientRect();
 
 		if (!api.caretPos.current) {
 			api.caretPos.current = { top: caretRects.top, left: caretRects.left };
 		}
-
-		const contentEl = document.getElementById(contentId.current);
 
 		const lineHeight = parseFloat(getComputedStyle(contentEl).lineHeight);
 
@@ -292,15 +380,72 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 
 		const blockDataIndex = blockDataArr.findIndex((d) => d.id === id);
 
-		if (caretPosition - elementPositionTop < lineHeight * 0.9 && direction === "Up") {
-			const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
-			handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
-		} else if (elementPositionBottom - caretPosition < lineHeight * 0.9 && direction === "Down") {
-			const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
-			handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
-		}
+		//direction === "Up" or "Down"
+		//--toplineまたはbottomlineがtextNodeかどうか？
+		//----現在のcaret位置が,topまたはbottomかどうか？
+		if (direction === "Up") {
+			let isOnTop = false;
 
-		scrollWithCaretPos();
+			if (childnodes[0].nodeType === Node.TEXT_NODE) {
+				if (caretPosition - elementPositionTop < lineHeight * 0.9) {
+					isOnTop = true;
+				}
+			} else {
+				if (startContainer.childNodes[startOffset] === childnodes[0]) {
+					isOnTop = true;
+				}
+			}
+			if (isOnTop) {
+				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+				handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
+			}
+		} else if (direction === "Down") {
+			let isOnBottom = false;
+
+			if (childnodes[childnodes.length - 1].nodeType === Node.TEXT_NODE) {
+				if (elementPositionBottom - caretPosition < lineHeight * 0.9) {
+					isOnBottom = true;
+				}
+			} else {
+				if (startContainer.childNodes[startOffset] === childnodes[childnodes.length - 1]) {
+					isOnBottom = true;
+				}
+			}
+			if (isOnBottom) {
+				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+				handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
+			}
+		}
+		//最初のNodeがTextNodeだった場合と要素Nodeだった場合で処理を分ける
+		// if (direction === "Up" && childnodes[0].nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
+		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
+		// } else if (
+		// 	direction === "Down" &&
+		// 	childnodes[childnodes.length - 1].nodeType === Node.TEXT_NODE &&
+		// 	elementPositionBottom - caretPosition < lineHeight * 0.9
+		// ) {
+		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
+		// } else if (direction === "Up" && childnodes[0].nodeType !== Node.TEXT_NODE && startContainer.childNodes[startOffset] === childnodes[0]) {
+		// 	console.log("uuuu");
+		// } else if (
+		// 	direction === "Down" &&
+		// 	childnodes[childnodes.length - 1].nodeType !== Node.TEXT_NODE &&
+		// 	startContainer.childNodes[startOffset] === childnodes[childnodes.length - 1]
+		// ) {
+		// 	console.log("bbbb");
+		// }
+
+		// if (caretPosition - elementPositionTop < lineHeight * 0.9 && direction === "Up") {
+		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
+		// } else if (elementPositionBottom - caretPosition < lineHeight * 0.9 && direction === "Down") {
+		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
+		// }
+
+		// scrollWithCaretPos();
 	};
 
 	const handleMargeByBS = ({
@@ -430,6 +575,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 			"Backspace",
 			(event: KeyboardEvent<HTMLDivElement>) => {
 				if (!isComposing) {
+					console.log("dede");
 					handleDeleteText({ event, blockData, blockDataArr: api.blockDataArr });
 				}
 			},

@@ -131,6 +131,40 @@ export const useSetBlocksState = (): BlockControlType => {
 
 	const containerRef: RefObject<HTMLElement> = useRef(null);
 
+	const sanitizeBlockdata = (blockDataArr: OutputBlockData[]) => {
+		const validateClassName = (text: string) => {
+			const temporaryDiv = document.createElement("div");
+			temporaryDiv.innerHTML = text;
+			const boldElements = temporaryDiv.getElementsByTagName("b");
+			for (const boldElement of boldElements) {
+				boldElement.classList.add("pe-inline_bold");
+			}
+			const italicElements = temporaryDiv.getElementsByTagName("i");
+			for (const italicElement of italicElements) {
+				italicElement.classList.add("pe-inline_italic");
+			}
+			const linkElements = temporaryDiv.getElementsByTagName("a");
+			for (const linkElement of linkElements) {
+				linkElement.classList.add("pe-inline_link");
+			}
+			return temporaryDiv.innerHTML;
+		};
+
+		const nBlockDataArr = blockDataArr.map((d) => {
+			const blockTool = config.blockTools.find((d2) => d2.id === d.type);
+			if (!blockTool.isContentEditable || !("text" in d.data)) {
+				return d;
+			}
+			const _pureBlockText1 = getPureBlockData(d.data.text);
+			const _pureBlockText2 = validateClassName(_pureBlockText1);
+			const pureBlockText = _pureBlockText2.replace(`<br class="${LLABClassName}">`, "");
+			d.data.text = pureBlockText;
+
+			return d;
+		});
+		return nBlockDataArr;
+	};
+
 	const handleSelectionChange = () => {
 		caretPos.current = null;
 
@@ -330,9 +364,10 @@ export const useSetBlocksState = (): BlockControlType => {
 	}) => {
 		//
 
+		const puredata = sanitizeBlockdata(blockDataArr);
 		const _undoSel = undoSel ? JSON.stringify(undoSel) : null;
 		const _redoSel = redoSel ? JSON.stringify(redoSel) : null;
-		const _blockDataArr = blockDataArr ? JSON.stringify(blockDataArr) : null;
+		const _blockDataArr = blockDataArr ? JSON.stringify(puredata) : null;
 
 		setInlineSel(selObj);
 		setBlockDataArr(JSON.parse(_blockDataArr));
@@ -962,8 +997,8 @@ export const useSetBlocksState = (): BlockControlType => {
 			const brParentEl = brElement.parentElement;
 			const brIndex = Array.from(brParentEl.childNodes).findIndex((child) => child === brElement);
 
-			range.setStart(parentElement, getEffectiveOffset(parentElement, caretIndex));
-			range.setEnd(parentElement, getEffectiveOffset(parentElement, caretIndex));
+			newRange.setStart(parentElement, getEffectiveOffset(parentElement, caretIndex));
+			newRange.setEnd(parentElement, getEffectiveOffset(parentElement, caretIndex));
 
 			newRange.collapse(true);
 
@@ -1024,6 +1059,7 @@ export const useSetBlocksState = (): BlockControlType => {
 		readOnly,
 		setReadOnly,
 		handleAddBlockData,
+		sanitizeBlockdata,
 		// handleSetBlockData,
 		// setBlockDataOnInput,
 		getPureBlockData,
