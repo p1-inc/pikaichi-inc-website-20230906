@@ -350,11 +350,12 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		}
 
 		const contentEl = document.getElementById(contentId.current);
-		const childnodes = contentEl.childNodes;
+		const topOfcontentEl = contentEl.childNodes[0];
+		const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
 
 		const range = selection.getRangeAt(0);
-		const startContainer = range.startContainer;
-		const startOffset = range.startOffset;
+		const selectContainer = range.commonAncestorContainer;
+		const selectOffset = range.startOffset;
 
 		const caretRects = range.getBoundingClientRect();
 
@@ -383,15 +384,23 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		//direction === "Up" or "Down"
 		//--toplineまたはbottomlineがtextNodeかどうか？
 		//----現在のcaret位置が,topまたはbottomかどうか？
+		//startContainerがtextNodeでtopLineまたはbottomlineがELEMENT_NODEの場合もある
+		//その場合は、  ELEMENT_NODEが親に対して一番上（下）かどうか確認し
 		if (direction === "Up") {
 			let isOnTop = false;
 
-			if (childnodes[0].nodeType === Node.TEXT_NODE) {
+			if (topOfcontentEl.nodeType === Node.TEXT_NODE) {
 				if (caretPosition - elementPositionTop < lineHeight * 0.9) {
 					isOnTop = true;
 				}
 			} else {
-				if (startContainer.childNodes[startOffset] === childnodes[0]) {
+				if (selectContainer.nodeType === Node.TEXT_NODE) {
+					//selectContainerがtextNodeでtopLineがELEMENT_NODEの場合
+					if ((selectContainer.parentNode as Node) === contentEl.childNodes[0]) {
+						isOnTop = true;
+					}
+				}
+				if (selectContainer.childNodes[selectOffset] === topOfcontentEl) {
 					isOnTop = true;
 				}
 			}
@@ -402,12 +411,19 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		} else if (direction === "Down") {
 			let isOnBottom = false;
 
-			if (childnodes[childnodes.length - 1].nodeType === Node.TEXT_NODE) {
+			if (bottomOfcontentEl.nodeType === Node.TEXT_NODE) {
 				if (elementPositionBottom - caretPosition < lineHeight * 0.9) {
 					isOnBottom = true;
 				}
 			} else {
-				if (startContainer.childNodes[startOffset] === childnodes[childnodes.length - 1]) {
+				if (selectContainer.nodeType === Node.TEXT_NODE) {
+					//selectContainerがtextNodeでbottomlineがELEMENT_NODEの場合
+					if ((selectContainer.parentNode as Node) === contentEl.childNodes[contentEl.childNodes.length - 1]) {
+						isOnBottom = true;
+					}
+				}
+
+				if (selectContainer.childNodes[selectOffset] === bottomOfcontentEl) {
 					isOnBottom = true;
 				}
 			}
