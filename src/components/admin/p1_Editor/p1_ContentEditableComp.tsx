@@ -36,20 +36,28 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 
 	const { ref: contentRef, fz } = useGetComputedStyles();
 
-	const [tmpInnerHTML, setTmpInnerHTML] = useState<{
+	const [debouncedTmpInnerHTML, setDebouncedTmpInnerHTML] = useDebouncedState<{
 		id: string;
 		contentEl: Element;
-		undoSel: InlineSelType;
-	}>(null);
+	}>(null, 200);
 
-	const [debouncedTmpInnerHTML] = useDebouncedValue(tmpInnerHTML, 200);
+	const [debouncedndoSel, setDebouncedUndoSel] = useState<InlineSelType>();
+	// const [tmpInnerHTML, setTmpInnerHTML] = useState<{
+	// 	id: string;
+	// 	contentEl: Element;
+	// 	undoSel: InlineSelType;
+	// }>(null);
+
+	// const [debouncedTmpInnerHTML] = useDebouncedValue(tmpInnerHTML, 200);
 
 	useEffect(() => {
 		if (!debouncedTmpInnerHTML) {
 			return;
 		}
-		handleContentEditableOnChange(tmpInnerHTML);
-		setTmpInnerHTML(null);
+		console.log(debouncedndoSel.startEl.startOffset);
+		handleContentEditableOnChange({ ...debouncedTmpInnerHTML, undoSel: debouncedndoSel });
+		setDebouncedTmpInnerHTML(null);
+		setDebouncedUndoSel(null);
 	}, [debouncedTmpInnerHTML]);
 
 	// 	useEffect(() => {
@@ -622,11 +630,14 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		const range = selection.getRangeAt(0);
 		const rangeObj = api.getRangeObj(range);
 
-		setTmpInnerHTML({
+		setDebouncedTmpInnerHTML({
 			id: blockData.id,
 			contentEl: contentEl,
-			undoSel: rangeObj,
+			// undoSel: rangeObj,
 		});
+		if (!debouncedndoSel) {
+			setDebouncedUndoSel(rangeObj);
+		}
 		// setTimeout(() => {
 		// 	setTmpInnerHTML({
 		// 		id: blockData.id,
@@ -751,12 +762,16 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 							return;
 						}
 						const range = selection.getRangeAt(0);
+						console.log("range : ", range);
 						const rangeObj = api.getRangeObj(range);
 
-						setTmpInnerHTML({
+						if (!debouncedndoSel) {
+							setDebouncedUndoSel(rangeObj);
+						}
+
+						setDebouncedTmpInnerHTML({
 							id: blockData.id,
 							contentEl: e.currentTarget,
-							undoSel: rangeObj,
 						});
 
 						// const text = bufferText + inputEvent.data;

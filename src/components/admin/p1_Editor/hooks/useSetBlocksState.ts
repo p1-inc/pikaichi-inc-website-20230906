@@ -1001,8 +1001,6 @@ export const useSetBlocksState = (): BlockControlType => {
 
 	const handleContentEditableOnChange = ({ id, contentEl, undoSel: _undoSel }: { id: string; contentEl: Element; undoSel: InlineSelType }) => {
 		//
-		console.log("contentEl.innerHTML : ", contentEl.innerHTML);
-		console.log("_undoSel: ", _undoSel);
 
 		const selection = document.getSelection();
 		if (selection.rangeCount === 0) {
