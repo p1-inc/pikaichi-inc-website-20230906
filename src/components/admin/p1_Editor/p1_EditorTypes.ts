@@ -251,11 +251,11 @@ export interface BlockControlType {
 	handleContentEditableOnChange: ({
 		id,
 		contentEl,
-		changedCount,
+		undoSel,
 	}: {
 		id: string;
 		contentEl: Element;
-		changedCount: number;
+		undoSel: InlineSelType;
 	}) => void;
 
 	// handleContentEditableOnChange: ({

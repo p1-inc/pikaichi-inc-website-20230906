@@ -39,7 +39,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 	const [tmpInnerHTML, setTmpInnerHTML] = useState<{
 		id: string;
 		contentEl: Element;
-		changedCount: number;
+		undoSel: InlineSelType;
 	}>(null);
 
 	const [debouncedTmpInnerHTML] = useDebouncedValue(tmpInnerHTML, 200);
@@ -614,13 +614,27 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		const contentId = `${blockData.id}-${config.p1GlobalClassName.blockContent}`;
 		const contentEl = document.getElementById(contentId);
 
-		setTimeout(() => {
-			setTmpInnerHTML({
-				id: blockData.id,
-				contentEl: contentEl,
-				changedCount: tmpInnerHTML?.changedCount ? tmpInnerHTML.changedCount - 1 : -1,
-			});
-		}, 0);
+		const selection = document.getSelection();
+		if (selection.rangeCount === 0) {
+			return;
+		}
+
+		const range = selection.getRangeAt(0);
+		const rangeObj = api.getRangeObj(range);
+
+		setTmpInnerHTML({
+			id: blockData.id,
+			contentEl: contentEl,
+			undoSel: rangeObj,
+		});
+		// setTimeout(() => {
+		// 	setTmpInnerHTML({
+		// 		id: blockData.id,
+		// 		contentEl: contentEl,
+		// 		changedCount: tmpInnerHTML?.changedCount ? tmpInnerHTML.changedCount - 1 : -1,
+		// 		undoSel: rangeObj,
+		// 	});
+		// }, 0);
 
 		// setDelDebounced({ id: blockData.id, beforeInlineSel: rangeObj });
 	};
@@ -732,10 +746,17 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 				if (!isComposing) {
 					const inputEvent = e.nativeEvent as InputEvent;
 					if (inputEvent.data !== null) {
+						const selection = document.getSelection();
+						if (selection.rangeCount === 0) {
+							return;
+						}
+						const range = selection.getRangeAt(0);
+						const rangeObj = api.getRangeObj(range);
+
 						setTmpInnerHTML({
 							id: blockData.id,
 							contentEl: e.currentTarget,
-							changedCount: tmpInnerHTML?.changedCount ? tmpInnerHTML.changedCount + inputEvent.data.length : inputEvent.data.length,
+							undoSel: rangeObj,
 						});
 
 						// const text = bufferText + inputEvent.data;

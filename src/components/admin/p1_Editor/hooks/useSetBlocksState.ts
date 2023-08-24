@@ -160,7 +160,6 @@ export const useSetBlocksState = (): BlockControlType => {
 			const _pureBlockText2 = validateClassName(_pureBlockText1);
 			const pureBlockText = _pureBlockText2.replace("<br>", "\n");
 			// const pureBlockText = _pureBlockText2.replace(`<br class="${LLABClassName}">`, "");
-			console.log("cdscdsl;cdksl;");
 			d.data.text = pureBlockText;
 
 			return d;
@@ -1000,8 +999,10 @@ export const useSetBlocksState = (): BlockControlType => {
 	// 		handleAddBlockData({ id, data: { text: innerHTML }, undoSel, redoSel, selObj });
 	// 	};
 
-	const handleContentEditableOnChange = ({ id, contentEl, changedCount }: { id: string; contentEl: Element; changedCount: number }) => {
+	const handleContentEditableOnChange = ({ id, contentEl, undoSel: _undoSel }: { id: string; contentEl: Element; undoSel: InlineSelType }) => {
 		//
+		console.log("contentEl.innerHTML : ", contentEl.innerHTML);
+		console.log("_undoSel: ", _undoSel);
 
 		const selection = document.getSelection();
 		if (selection.rangeCount === 0) {
@@ -1009,12 +1010,12 @@ export const useSetBlocksState = (): BlockControlType => {
 		}
 		const range = selection.getRangeAt(0);
 		const rangeObj = getRangeObj(range);
-		const offset = rangeObj.startEl.startOffset - changedCount;
-		const _undoSel = {
-			...rangeObj,
-			startEl: { ...rangeObj.startEl, startOffset: offset },
-			endEl: { ...rangeObj.endEl, endOffset: offset },
-		};
+		// const offset = rangeObj.startEl.startOffset - changedCount;
+		// const _undoSel = {
+		// 	...rangeObj,
+		// 	startEl: { ...rangeObj.startEl, startOffset: offset },
+		// 	endEl: { ...rangeObj.endEl, endOffset: offset },
+		// };
 
 		const undoSel = { ..._undoSel, displayInlineTune: false };
 		const redoSel = { ...rangeObj, displayInlineTune: false };
