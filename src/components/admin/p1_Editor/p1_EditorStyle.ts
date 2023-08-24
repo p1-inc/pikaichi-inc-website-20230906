@@ -40,7 +40,7 @@ export const P1_EditorStyle = ({ bg = false }) => {
 		".pe-block ": {},
 
 		".pe-block *": {},
-		".pe-block__content": {},
+		".pe-block__content ": { "&,& > *": { whiteSpace: "pre-wrap" } },
 
 		".pe-block__content:focus-within": {
 			outline: "none",

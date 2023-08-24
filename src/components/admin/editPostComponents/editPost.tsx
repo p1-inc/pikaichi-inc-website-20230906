@@ -31,7 +31,7 @@ import { EditPost_LinkBar } from "./editPost_LinkBar";
 import { P1_EditorContainer } from "../p1_Editor/p1_EditorContainer";
 import { useSetBlocksState } from "../p1_Editor/hooks/useSetBlocksState";
 import { BlockControlType, OutputBlockData, OutputData } from "../p1_Editor/p1_EditorTypes";
-import { LLABClassName, config } from "../p1_Editor/p1_EditorConfig";
+import { config } from "../p1_Editor/p1_EditorConfig";
 import { P1_EditorStyle } from "../p1_Editor/p1_EditorStyle";
 
 import { getHotkeyHandler, useEventListener, useHotkeys } from "@mantine/hooks";

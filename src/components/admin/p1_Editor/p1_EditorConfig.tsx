@@ -192,4 +192,4 @@ export const config: ConfigType = {
 
 export const inlineToolClassNames = config.inlineTools.map((d) => d.className);
 
-export const LLABClassName = "last-line-after-break";
+// export const LLABClassName = "last-line-after-break";

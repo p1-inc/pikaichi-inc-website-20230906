@@ -4,7 +4,7 @@ import DOMPurify from "dompurify";
 import { OutputBlockData, BlockControlType, BlockToolType, InlineToolType, P1GlobalClassNameType, InlineSelType, UndoType } from "../p1_EditorTypes";
 import { autoID } from "../../../../util/autoID";
 
-import { LLABClassName, config, inlineToolClassNames } from "../p1_EditorConfig";
+import { config, inlineToolClassNames } from "../p1_EditorConfig";
 import { useDebouncedState, useTextSelection } from "@mantine/hooks";
 
 const historyLimit = 200;
@@ -157,7 +157,8 @@ export const useSetBlocksState = (): BlockControlType => {
 			}
 			const _pureBlockText1 = getPureBlockData(d.data.text);
 			const _pureBlockText2 = validateClassName(_pureBlockText1);
-			const pureBlockText = _pureBlockText2.replace(`<br class="${LLABClassName}">`, "");
+			const pureBlockText = _pureBlockText2.replace("<br>", "\n");
+			// const pureBlockText = _pureBlockText2.replace(`<br class="${LLABClassName}">`, "");
 			d.data.text = pureBlockText;
 
 			return d;
@@ -349,6 +350,150 @@ export const useSetBlocksState = (): BlockControlType => {
 		return newBlock.id;
 	};
 
+	const getCaretRelativePositionToContent = ({ contentEl, range }: { contentEl: Element; range: Range }) => {
+		//
+		const topOfcontentEl = contentEl.childNodes[0];
+		const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
+		console.log("contentEl.childNodes: ", contentEl.childNodes);
+
+		const elementRect = contentEl.getBoundingClientRect();
+		const computedStyle = window.getComputedStyle(contentEl);
+
+		const paddingTop = parseFloat(computedStyle.paddingTop);
+		const paddingBottom = parseFloat(computedStyle.paddingBottom);
+		const borderTop = parseFloat(computedStyle.borderTopWidth);
+		const borderBottom = parseFloat(computedStyle.borderBottomWidth);
+
+		const caretContainer = range.startContainer;
+		const caretOffset = range.startOffset;
+		const caretElement = caretContainer.nodeType === Node.TEXT_NODE ? caretContainer : caretContainer.childNodes[caretOffset];
+
+		const caretRects = range.getBoundingClientRect();
+
+		const lineHeight = parseFloat(getComputedStyle(contentEl).lineHeight);
+		const caretPosition = caretRects.top + lineHeight / 2;
+
+		const elementPositionTop = elementRect.top + paddingTop + borderTop;
+		const elementPositionBottom = elementRect.bottom - paddingBottom - borderBottom;
+
+		const isTextNodeAtTopinContentEl = topOfcontentEl.nodeType === Node.TEXT_NODE; //contentElementの最初の行(top)がtextNodeか他Nodeか(true/false)
+		const isTextNodeAtBottominContentEl = bottomOfcontentEl.nodeType === Node.TEXT_NODE; //contentElementの最後の行(bottom)がtextNodeか他Nodeか(true/false)
+
+		const isTextNodeAtSelection = caretContainer.nodeType === Node.TEXT_NODE;
+
+		const endIndex = caretContainer.childNodes.length;
+
+		let isCaretAtTopLine = false;
+		let isCaretAtBottomLine = false;
+
+		if (caretContainer.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
+			isCaretAtTopLine = true;
+		}
+		if (caretContainer.nodeType !== Node.TEXT_NODE && caretContainer.childNodes[caretOffset] === topOfcontentEl) {
+			isCaretAtTopLine = true;
+		}
+
+		if (caretContainer.nodeType === Node.TEXT_NODE && elementPositionBottom - caretPosition < lineHeight * 0.99) {
+			isCaretAtBottomLine = true;
+		}
+		if (caretContainer.nodeType !== Node.TEXT_NODE && caretContainer.childNodes[caretOffset] === bottomOfcontentEl) {
+			isCaretAtBottomLine = true;
+		}
+
+		let isCaretAtLeftEnd = false;
+		let isCaretAtRightEnd = false;
+
+		if (caretContainer.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9 && caretOffset === 0) {
+			isCaretAtLeftEnd = true;
+		}
+
+		if (caretContainer.nodeType !== Node.TEXT_NODE && caretOffset === 0) {
+			isCaretAtLeftEnd = true;
+		}
+
+		if (
+			caretContainer.nodeType === Node.TEXT_NODE &&
+			elementPositionBottom - caretPosition < lineHeight * 0.99 &&
+			caretOffset === caretContainer.nodeValue.length
+		) {
+			isCaretAtRightEnd = true;
+		}
+
+		if (caretContainer.nodeType !== Node.TEXT_NODE && caretOffset === endIndex) {
+			isCaretAtRightEnd = true;
+		}
+		// console.log("caretContainer.nodeType !== Node.TEXT_NODE : ", caretContainer.nodeType !== Node.TEXT_NODE);
+		// console.log("caretOffset: ", caretOffset);
+		// console.log("caretContainer.childNodes.length: ", caretContainer.childNodes.length);
+		// console.log(" caretContainer: ", caretContainer);
+
+		console.table({
+			isTextNodeAtTopinContentEl,
+			isTextNodeAtBottominContentEl,
+			isTextNodeAtSelection,
+			isCaretAtTopLine,
+			isCaretAtBottomLine,
+			isCaretAtLeftEnd,
+			isCaretAtRightEnd,
+		});
+
+		const caretPos2: { top: boolean; bottom: boolean; left: boolean; right: boolean } = { top: null, bottom: null, left: null, right: null };
+		if (topOfcontentEl.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
+			caretPos2.top = true;
+		} else {
+			if (caretContainer.nodeType === Node.TEXT_NODE) {
+				if ((caretContainer.parentNode as Node) === contentEl.childNodes[0]) {
+					caretPos2.top = true;
+				}
+			}
+			if (caretContainer.childNodes[caretOffset] === topOfcontentEl) {
+				caretPos2.top = true;
+			}
+		}
+		if (bottomOfcontentEl.nodeType === Node.TEXT_NODE && elementPositionBottom - caretPosition < lineHeight * 0.9) {
+			caretPos2.bottom = true;
+		} else {
+			if (caretContainer.nodeType === Node.TEXT_NODE) {
+				if ((caretContainer.parentNode as Node) === contentEl.childNodes[contentEl.childNodes.length - 1]) {
+					caretPos2.bottom = true;
+				}
+			}
+			if (caretContainer.childNodes[caretOffset] === bottomOfcontentEl) {
+				caretPos2.top = true;
+			}
+		}
+		// if (topOfcontentEl.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
+		// 	caretPos.top = true;
+		// } else if (bottomOfcontentEl.nodeType === Node.TEXT_NODE && elementPositionBottom - caretPosition < lineHeight * 0.9) {
+		// 	caretPos.bottom = true;
+		// } else if (
+		// 	topOfcontentEl.nodeType === Node.TEXT_NODE &&
+		// 	caretPosition - elementPositionTop < lineHeight * 0.9 &&
+		// 	bottomOfcontentEl.nodeType === Node.TEXT_NODE &&
+		// 	elementPositionBottom - caretPosition < lineHeight * 0.9
+		// ) {
+		// 	caretPos.top = true;
+		// 	caretPos.bottom = true;
+		// } else {
+		// 	if (selectContainer.nodeType === Node.TEXT_NODE) {
+		// 		//selectContainerがtextNodeでtopLineがELEMENT_NODEの場合
+		// 		if ((selectContainer.parentNode as Node) === contentEl.childNodes[0]) {
+		// 			caretPos.top = true;
+		// 		}
+		// 		if ((selectContainer.parentNode as Node) === contentEl.childNodes[contentEl.childNodes.length - 1]) {
+		// 			caretPos.bottom = true;
+		// 		}
+		// 	}
+		// 	if (selectContainer.childNodes[selectOffset] === topOfcontentEl) {
+		// 		caretPos.top = true;
+		// 	}
+		// 	if (selectContainer.childNodes[selectOffset] === bottomOfcontentEl) {
+		// 		caretPos.bottom = true;
+		// 	}
+		// }
+
+		return caretPos2;
+	};
 	const handleSetBlockDataArr = ({
 		blockDataArr,
 		history = true,
@@ -826,7 +971,35 @@ export const useSetBlocksState = (): BlockControlType => {
 		handleAddBlockData({ id, data: { text: event.currentTarget.innerHTML }, undoSel, redoSel, selObj });
 	};
 
-	const handleContentEditableOnInput = ({ id, innerHTML, textContent }: { id: string; innerHTML: string; textContent: string }) => {
+	// 	const handleContentEditableOnInput = ({ id, innerHTML, textContent }: { id: string; innerHTML: string; textContent: string }) => {
+	// 		//
+	// 		if (!innerHTML) {
+	// 			return;
+	// 		}
+	//
+	// 		const selection = document.getSelection();
+	// 		if (selection.rangeCount === 0) {
+	// 			return;
+	// 		}
+	// 		const range = selection.getRangeAt(0);
+	// 		const rangeObj = getRangeObj(range);
+	// 		const textLength = textContent.length;
+	// 		const offset = rangeObj.startEl.startOffset - textLength;
+	// 		const _undoSel = {
+	// 			...rangeObj,
+	// 			startEl: { ...rangeObj.startEl, startOffset: offset },
+	// 			endEl: { ...rangeObj.endEl, endOffset: offset },
+	// 		};
+	//
+	// 		const undoSel = { ..._undoSel, displayInlineTune: false };
+	// 		const redoSel = { ...rangeObj, displayInlineTune: false };
+	//
+	// 		const selObj = redoSel;
+	//
+	// 		handleAddBlockData({ id, data: { text: innerHTML }, undoSel, redoSel, selObj });
+	// 	};
+
+	const handleContentEditableOnChange = ({ id, innerHTML, changedCount }: { id: string; innerHTML: string; changedCount: number }) => {
 		//
 		if (!innerHTML) {
 			return;
@@ -838,8 +1011,7 @@ export const useSetBlocksState = (): BlockControlType => {
 		}
 		const range = selection.getRangeAt(0);
 		const rangeObj = getRangeObj(range);
-		const textLength = textContent.length;
-		const offset = rangeObj.startEl.startOffset - textLength;
+		const offset = rangeObj.startEl.startOffset - changedCount;
 		const _undoSel = {
 			...rangeObj,
 			startEl: { ...rangeObj.startEl, startOffset: offset },
@@ -854,24 +1026,24 @@ export const useSetBlocksState = (): BlockControlType => {
 		handleAddBlockData({ id, data: { text: innerHTML }, undoSel, redoSel, selObj });
 	};
 
-	const handleContentEditableOnChange = ({ id, beforeInlineSel }: { id: string; beforeInlineSel: InlineSelType }) => {
-		const selection = document.getSelection();
-		if (selection.rangeCount === 0) {
-			return;
-		}
-		const range = selection.getRangeAt(0);
-		const rangeObj = getRangeObj(range);
-
-		const contentId = `${id}-${p1_globalClassName.current.blockContent}`;
-		const contentEl = document.getElementById(contentId);
-
-		const undoSel = { ...beforeInlineSel, displayInlineTune: false };
-		const redoSel = { ...rangeObj, displayInlineTune: false };
-
-		const selObj = redoSel;
-
-		handleAddBlockData({ id, data: { text: contentEl.innerHTML }, undoSel, redoSel, selObj });
-	};
+	// 	const handleContentEditableOnChange = ({ id, beforeInlineSel }: { id: string; beforeInlineSel: InlineSelType }) => {
+	// 		const selection = document.getSelection();
+	// 		if (selection.rangeCount === 0) {
+	// 			return;
+	// 		}
+	// 		const range = selection.getRangeAt(0);
+	// 		const rangeObj = getRangeObj(range);
+	//
+	// 		const contentId = `${id}-${p1_globalClassName.current.blockContent}`;
+	// 		const contentEl = document.getElementById(contentId);
+	//
+	// 		const undoSel = { ...beforeInlineSel, displayInlineTune: false };
+	// 		const redoSel = { ...rangeObj, displayInlineTune: false };
+	//
+	// 		const selObj = redoSel;
+	//
+	// 		handleAddBlockData({ id, data: { text: contentEl.innerHTML }, undoSel, redoSel, selObj });
+	// 	};
 
 	const handleBlockSplit = ({ event, id }: { event: KeyboardEvent<HTMLElement>; id: string }) => {
 		const eTarget = event.target;
@@ -938,7 +1110,6 @@ export const useSetBlocksState = (): BlockControlType => {
 		const selObj = redoSel;
 		handleSetBlockDataArr({ blockDataArr: _blockDataArr, undoSel, redoSel, selObj });
 	};
-
 	const handleinsertLineBreak = ({ event, id }: { event: KeyboardEvent<HTMLElement>; id: string }) => {
 		const eTarget = event.target;
 
@@ -951,69 +1122,91 @@ export const useSetBlocksState = (): BlockControlType => {
 			return;
 		}
 		const range = selection.getRangeAt(0);
+		// const newRange = range.cloneRange();
 		const _undoSel = getRangeObj(range);
-		const startContainer = range.startContainer;
 
-		const startPos = range.startOffset;
-		const endPos = range.endOffset;
+		const textNode = document.createTextNode("\n");
+		range.insertNode(textNode);
 
-		const newRange = document.createRange();
-		const brElement = document.createElement("br");
+		// newRange.setStartAfter(textNode);
+		// newRange.setEndAfter(textNode);
 
-		if (startContainer.nodeType === Node.TEXT_NODE) {
-			//改行位置がテキストの途中だった場合
-			const textContent = startContainer.nodeValue;
+		// selection.removeAllRanges();
+		// selection.addRange(newRange);
 
-			const beforeText = textContent.substring(0, startPos);
-			const afterText = textContent.substring(endPos);
+		// newRange.setStartAfter(range.endContainer);
+		// newRange.setEndAfter(range.endContainer);
+		// selection.removeAllRanges();
+		// console.log("newRange : ", newRange);
 
-			const beforeTextNode = document.createTextNode(beforeText);
-			const afterTextNode = document.createTextNode(afterText);
-
-			const parentElement = startContainer.parentElement;
-
-			const startContainerIndex = Array.from(parentElement.childNodes).indexOf(startContainer as Element);
-
-			let caretIndex = 1;
-
-			if (startPos === 0) {
-				//改行位置がテキストの最初だった場合
-				parentElement.replaceChild(afterTextNode, startContainer);
-				parentElement.insertBefore(brElement, afterTextNode);
-				caretIndex = startContainerIndex + 1;
-			} else if (startPos === textContent.length) {
-				//改行位置がテキストの最後だった場合
-				parentElement.replaceChild(brElement, startContainer);
-				parentElement.insertBefore(beforeTextNode, brElement);
-				caretIndex = startContainerIndex + 2;
-			} else {
-				//改行位置がテキストの途中だった場合
-				parentElement.replaceChild(afterTextNode, startContainer);
-				parentElement.insertBefore(brElement, afterTextNode);
-				parentElement.insertBefore(beforeTextNode, brElement);
-				caretIndex = startContainerIndex + 2;
-			}
-
-			const brParentEl = brElement.parentElement;
-			const brIndex = Array.from(brParentEl.childNodes).findIndex((child) => child === brElement);
-
-			newRange.setStart(parentElement, getEffectiveOffset(parentElement, caretIndex));
-			newRange.setEnd(parentElement, getEffectiveOffset(parentElement, caretIndex));
-
-			newRange.collapse(true);
-
-			selection.removeAllRanges();
-			selection.addRange(newRange);
-		} else {
-			//改行位置がテキストの前、後、など<br>を追加するだけの場合
-			startContainer.insertBefore(brElement, (startContainer as Element).childNodes[startPos]);
-			newRange.setStart(startContainer, startPos + 1);
-			newRange.setEnd(startContainer, startPos + 1);
-
-			newRange.collapse(true);
-		}
-
-		const _redoSel = getRangeObj(newRange);
+		const _redoSel = {
+			..._undoSel,
+			startEl: { ..._undoSel.startEl, startOffset: _undoSel.startEl.startOffset + 1 },
+			endEl: { ..._undoSel.endEl, endOffset: _undoSel.endEl.endOffset + 1 },
+		};
+		// console.log("_redoSel : ", _redoSel);
+		// 		const startContainer = range.startContainer;
+		//
+		// 		const startPos = range.startOffset;
+		// 		const endPos = range.endOffset;
+		//
+		// 		const newRange = document.createRange();
+		// 		const brElement = document.createElement("br");
+		//
+		// 		if (startContainer.nodeType === Node.TEXT_NODE) {
+		// 			//改行位置がテキストの途中だった場合
+		// 			const textContent = startContainer.nodeValue;
+		//
+		// 			const beforeText = textContent.substring(0, startPos);
+		// 			const afterText = textContent.substring(endPos);
+		//
+		// 			const beforeTextNode = document.createTextNode(beforeText);
+		// 			const afterTextNode = document.createTextNode(afterText);
+		//
+		// 			const parentElement = startContainer.parentElement;
+		//
+		// 			const startContainerIndex = Array.from(parentElement.childNodes).indexOf(startContainer as Element);
+		//
+		// 			let caretIndex = 1;
+		//
+		// 			if (startPos === 0) {
+		// 				//改行位置がテキストの最初だった場合
+		// 				parentElement.replaceChild(afterTextNode, startContainer);
+		// 				parentElement.insertBefore(brElement, afterTextNode);
+		// 				caretIndex = startContainerIndex + 1;
+		// 			} else if (startPos === textContent.length) {
+		// 				//改行位置がテキストの最後だった場合
+		// 				parentElement.replaceChild(brElement, startContainer);
+		// 				parentElement.insertBefore(beforeTextNode, brElement);
+		// 				caretIndex = startContainerIndex + 2;
+		// 			} else {
+		// 				//改行位置がテキストの途中だった場合
+		// 				parentElement.replaceChild(afterTextNode, startContainer);
+		// 				parentElement.insertBefore(brElement, afterTextNode);
+		// 				parentElement.insertBefore(beforeTextNode, brElement);
+		// 				caretIndex = startContainerIndex + 2;
+		// 			}
+		//
+		// 			const brParentEl = brElement.parentElement;
+		// 			const brIndex = Array.from(brParentEl.childNodes).findIndex((child) => child === brElement);
+		//
+		// 			newRange.setStart(parentElement, getEffectiveOffset(parentElement, caretIndex));
+		// 			newRange.setEnd(parentElement, getEffectiveOffset(parentElement, caretIndex));
+		//
+		// 			newRange.collapse(true);
+		//
+		// 			selection.removeAllRanges();
+		// 			selection.addRange(newRange);
+		// 		} else {
+		// 			//改行位置がテキストの前、後、など<br>を追加するだけの場合
+		// 			startContainer.insertBefore(brElement, (startContainer as Element).childNodes[startPos]);
+		// 			newRange.setStart(startContainer, startPos + 1);
+		// 			newRange.setEnd(startContainer, startPos + 1);
+		//
+		// 			newRange.collapse(true);
+		// 		}
+		//
+		// 		const _redoSel = getRangeObj(newRange);
 
 		const undoSel = { ..._undoSel, displayInlineTune: false };
 		const redoSel = { ..._redoSel, displayInlineTune: false };
@@ -1022,6 +1215,90 @@ export const useSetBlocksState = (): BlockControlType => {
 		const content = eTarget.innerHTML;
 		handleAddBlockData({ id, data: { text: content }, undoSel, redoSel, selObj });
 	};
+
+	// 	const handleinsertLineBreak = ({ event, id }: { event: KeyboardEvent<HTMLElement>; id: string }) => {
+	// 		const eTarget = event.target;
+	//
+	// 		if (!(eTarget instanceof HTMLElement)) {
+	// 			return;
+	// 		}
+	//
+	// 		const selection = document.getSelection();
+	// 		if (!selection || selection.rangeCount === 0) {
+	// 			return;
+	// 		}
+	// 		const range = selection.getRangeAt(0);
+	// 		const _undoSel = getRangeObj(range);
+	// 		const startContainer = range.startContainer;
+	//
+	// 		const startPos = range.startOffset;
+	// 		const endPos = range.endOffset;
+	//
+	// 		const newRange = document.createRange();
+	// 		const brElement = document.createElement("br");
+	//
+	// 		if (startContainer.nodeType === Node.TEXT_NODE) {
+	// 			//改行位置がテキストの途中だった場合
+	// 			const textContent = startContainer.nodeValue;
+	//
+	// 			const beforeText = textContent.substring(0, startPos);
+	// 			const afterText = textContent.substring(endPos);
+	//
+	// 			const beforeTextNode = document.createTextNode(beforeText);
+	// 			const afterTextNode = document.createTextNode(afterText);
+	//
+	// 			const parentElement = startContainer.parentElement;
+	//
+	// 			const startContainerIndex = Array.from(parentElement.childNodes).indexOf(startContainer as Element);
+	//
+	// 			let caretIndex = 1;
+	//
+	// 			if (startPos === 0) {
+	// 				//改行位置がテキストの最初だった場合
+	// 				parentElement.replaceChild(afterTextNode, startContainer);
+	// 				parentElement.insertBefore(brElement, afterTextNode);
+	// 				caretIndex = startContainerIndex + 1;
+	// 			} else if (startPos === textContent.length) {
+	// 				//改行位置がテキストの最後だった場合
+	// 				parentElement.replaceChild(brElement, startContainer);
+	// 				parentElement.insertBefore(beforeTextNode, brElement);
+	// 				caretIndex = startContainerIndex + 2;
+	// 			} else {
+	// 				//改行位置がテキストの途中だった場合
+	// 				parentElement.replaceChild(afterTextNode, startContainer);
+	// 				parentElement.insertBefore(brElement, afterTextNode);
+	// 				parentElement.insertBefore(beforeTextNode, brElement);
+	// 				caretIndex = startContainerIndex + 2;
+	// 			}
+	//
+	// 			const brParentEl = brElement.parentElement;
+	// 			const brIndex = Array.from(brParentEl.childNodes).findIndex((child) => child === brElement);
+	//
+	// 			newRange.setStart(parentElement, getEffectiveOffset(parentElement, caretIndex));
+	// 			newRange.setEnd(parentElement, getEffectiveOffset(parentElement, caretIndex));
+	//
+	// 			newRange.collapse(true);
+	//
+	// 			selection.removeAllRanges();
+	// 			selection.addRange(newRange);
+	// 		} else {
+	// 			//改行位置がテキストの前、後、など<br>を追加するだけの場合
+	// 			startContainer.insertBefore(brElement, (startContainer as Element).childNodes[startPos]);
+	// 			newRange.setStart(startContainer, startPos + 1);
+	// 			newRange.setEnd(startContainer, startPos + 1);
+	//
+	// 			newRange.collapse(true);
+	// 		}
+	//
+	// 		const _redoSel = getRangeObj(newRange);
+	//
+	// 		const undoSel = { ..._undoSel, displayInlineTune: false };
+	// 		const redoSel = { ..._redoSel, displayInlineTune: false };
+	// 		const selObj = redoSel;
+	//
+	// 		const content = eTarget.innerHTML;
+	// 		handleAddBlockData({ id, data: { text: content }, undoSel, redoSel, selObj });
+	// 	};
 
 	const handleTuneBlocks = ({ beforeBlockId, afterBlockType }: { beforeBlockId: string; afterBlockType: string }) => {
 		const _defaultBlockData = config.blockTools.find((d) => d.id === afterBlockType);
@@ -1080,13 +1357,13 @@ export const useSetBlocksState = (): BlockControlType => {
 		inlineSubPalette,
 		setInlineSubPalette,
 		handleOnCompositionEnd,
-		handleContentEditableOnInput,
 		handleContentEditableOnChange,
 		handleBlockSplit,
 		handleinsertLineBreak,
 		handleDeleteInlineStyle,
 		handleTuneBlocks,
 		hideInlineSel,
+		getCaretRelativePositionToContent,
 		// handleSelectionChange,
 		// inlineActiveClassName,
 		// setInlineActiveClassName,

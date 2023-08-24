@@ -247,23 +247,24 @@ export interface BlockControlType {
 		event: CompositionEvent<HTMLElement>;
 		id: string;
 	}) => void;
-	handleContentEditableOnInput: ({
-		id,
-		innerHTML,
-		textContent,
-	}: {
-		id: string;
-		innerHTML: string;
-		textContent: string;
-	}) => void;
 
 	handleContentEditableOnChange: ({
 		id,
-		beforeInlineSel,
+		innerHTML,
+		changedCount,
 	}: {
 		id: string;
-		beforeInlineSel: InlineSelType;
+		innerHTML: string;
+		changedCount: number;
 	}) => void;
+
+	// handleContentEditableOnChange: ({
+	// 	id,
+	// 	beforeInlineSel,
+	// }: {
+	// 	id: string;
+	// 	beforeInlineSel: InlineSelType;
+	// }) => void;
 
 	handleBlockSplit: ({
 		event,
@@ -320,6 +321,19 @@ export interface BlockControlType {
 	}) => void;
 
 	hideInlineSel: () => void;
+
+	getCaretRelativePositionToContent: ({
+		contentEl,
+		range,
+	}: {
+		contentEl: Element;
+		range: Range;
+	}) => {
+		top: boolean;
+		bottom: boolean;
+		left: boolean;
+		right: boolean;
+	};
 
 	sanitizeBlockdata: (blockDataArr: OutputBlockData[]) => OutputBlockData[];
 	autoSave: OutputBlockData[];

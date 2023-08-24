@@ -5,7 +5,7 @@ import { BlockControlType, BlockToolType, InlineSelType, OutputBlockData } from 
 import { Box } from "@mantine/core";
 import { useState, CompositionEvent, KeyboardEvent, useEffect, FormEvent, useRef } from "react";
 import { getHotkeyHandler, useDebouncedState, useDebouncedValue, useTextSelection } from "@mantine/hooks";
-import { config, LLABClassName } from "./p1_EditorConfig";
+import { config } from "./p1_EditorConfig";
 import { getValidOffset } from "./hooks/useSetBlocksState";
 import { useGetComputedStyles } from "../../../hooks/useGetComputedStyles";
 
@@ -24,7 +24,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		p1_globalClassName,
 		handleOnPaste,
 		handleOnCompositionEnd,
-		handleContentEditableOnInput,
 		handleContentEditableOnChange,
 		handleBlockSplit,
 		handleinsertLineBreak,
@@ -33,36 +32,41 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 	const [isComposing, setIsComposing] = useState<boolean>(false);
 	const [isComposingDebounced] = useDebouncedValue(isComposing, 30);
 
-	const [inputDebounced, setInputDebounced] = useDebouncedState<{
-		id: string;
-		innerHTML: string;
-	}>(null, 200);
-
-	const [delDebounced, setDelDebounced] = useDebouncedState<{
-		id: string;
-		beforeInlineSel: InlineSelType;
-	}>(null, 200);
-
-	const [bufferText, setBufferText] = useState<string>("");
-
 	const contentId = useRef<string>(`${blockData.id}-pe-block__content`);
 
 	const { ref: contentRef, fz } = useGetComputedStyles();
 
-	useEffect(() => {
-		if (!inputDebounced) {
-			return;
-		}
-		handleContentEditableOnInput({ ...inputDebounced, textContent: bufferText });
-		setBufferText("");
-	}, [inputDebounced]);
+	const [tmpInnerHTML, setTmpInnerHTML] = useState<{
+		id: string;
+		innerHTML: string;
+		changedCount: number;
+	}>(null);
+
+	const [debouncedTmpInnerHTML] = useDebouncedValue(tmpInnerHTML, 200);
 
 	useEffect(() => {
-		if (!delDebounced) {
+		if (!debouncedTmpInnerHTML) {
 			return;
 		}
-		handleContentEditableOnChange(delDebounced);
-	}, [delDebounced]);
+		handleContentEditableOnChange(tmpInnerHTML);
+		setTmpInnerHTML(null);
+	}, [debouncedTmpInnerHTML]);
+
+	// 	useEffect(() => {
+	// 		if (!inputDebounced) {
+	// 			return;
+	// 		}
+	//
+	// 		handleContentEditableOnInput({ ...inputDebounced, textContent: bufferText });
+	// 		setBufferText("");
+	// 	}, [inputDebounced]);
+
+	// useEffect(() => {
+	// 	if (!delDebounced) {
+	// 		return;
+	// 	}
+	// 	handleContentEditableOnChange(delDebounced);
+	// }, [delDebounced]);
 
 	const getAllTextNodes = (element: HTMLElement): [Text, DOMRect][] => {
 		let textNodes: [Text, DOMRect][] = [];
@@ -264,11 +268,11 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 					isOnRight = true;
 				}
 			} else {
-				console.log("xxxx");
-
-				console.log("startContainer: ", startContainer);
-				console.log("startContainer.childNodes[startOffset]: ", startContainer.childNodes[startOffset]);
-				console.log("childnodes[childnodes.length - 1]: ", childnodes[childnodes.length - 1]);
+				// 				console.log("xxxx");
+				//
+				// 				console.log("startContainer: ", startContainer);
+				// 				console.log("startContainer.childNodes[startOffset]: ", startContainer.childNodes[startOffset]);
+				// 				console.log("childnodes[childnodes.length - 1]: ", childnodes[childnodes.length - 1]);
 				if (startContainer.childNodes[startOffset] === childnodes[childnodes.length - 1]) {
 					console.log("yyyy");
 					isOnRight = true;
@@ -387,49 +391,17 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		//startContainerがtextNodeでtopLineまたはbottomlineがELEMENT_NODEの場合もある
 		//その場合は、  ELEMENT_NODEが親に対して一番上（下）かどうか確認し
 		if (direction === "Up") {
-			let isOnTop = false;
-
-			if (topOfcontentEl.nodeType === Node.TEXT_NODE) {
-				if (caretPosition - elementPositionTop < lineHeight * 0.9) {
-					isOnTop = true;
-				}
-			} else {
-				if (selectContainer.nodeType === Node.TEXT_NODE) {
-					//selectContainerがtextNodeでtopLineがELEMENT_NODEの場合
-					if ((selectContainer.parentNode as Node) === contentEl.childNodes[0]) {
-						isOnTop = true;
-					}
-				}
-				if (selectContainer.childNodes[selectOffset] === topOfcontentEl) {
-					isOnTop = true;
-				}
-			}
-			if (isOnTop) {
+			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
+			if (caretPos.top) {
 				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
-				handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
+				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
 			}
 		} else if (direction === "Down") {
-			let isOnBottom = false;
+			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
 
-			if (bottomOfcontentEl.nodeType === Node.TEXT_NODE) {
-				if (elementPositionBottom - caretPosition < lineHeight * 0.9) {
-					isOnBottom = true;
-				}
-			} else {
-				if (selectContainer.nodeType === Node.TEXT_NODE) {
-					//selectContainerがtextNodeでbottomlineがELEMENT_NODEの場合
-					if ((selectContainer.parentNode as Node) === contentEl.childNodes[contentEl.childNodes.length - 1]) {
-						isOnBottom = true;
-					}
-				}
-
-				if (selectContainer.childNodes[selectOffset] === bottomOfcontentEl) {
-					isOnBottom = true;
-				}
-			}
-			if (isOnBottom) {
+			if (caretPos.bottom) {
 				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
-				handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
+				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
 			}
 		}
 		//最初のNodeがTextNodeだった場合と要素Nodeだった場合で処理を分ける
@@ -462,6 +434,80 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		// }
 
 		// scrollWithCaretPos();
+	};
+
+	const handleMoveCaret = ({
+		event,
+		id,
+		blockDataArr,
+		direction,
+	}: {
+		event: KeyboardEvent<HTMLDivElement>;
+		id: string;
+		blockDataArr: OutputBlockData[];
+		direction: "Up" | "Down" | "Left" | "Right";
+	}) => {
+		//
+		const selection = document.getSelection();
+		if (!selection || selection.rangeCount === 0) {
+			return;
+		}
+
+		const contentEl = document.getElementById(contentId.current);
+		const topOfcontentEl = contentEl.childNodes[0];
+		const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
+
+		const range = selection.getRangeAt(0);
+		const selectContainer = range.commonAncestorContainer;
+		const selectOffset = range.startOffset;
+
+		const caretRects = range.getBoundingClientRect();
+
+		if (!api.caretPos.current) {
+			api.caretPos.current = { top: caretRects.top, left: caretRects.left };
+		}
+
+		const lineHeight = parseFloat(getComputedStyle(contentEl).lineHeight);
+
+		const _caretPosition = caretRects.top;
+		const caretPosition = _caretPosition + lineHeight / 2;
+
+		const elementRect = contentEl.getBoundingClientRect();
+		const computedStyle = window.getComputedStyle(contentEl);
+
+		const paddingTop = parseFloat(computedStyle.paddingTop);
+		const paddingBottom = parseFloat(computedStyle.paddingBottom);
+		const borderTop = parseFloat(computedStyle.borderTopWidth);
+		const borderBottom = parseFloat(computedStyle.borderBottomWidth);
+
+		const elementPositionTop = elementRect.top + paddingTop + borderTop;
+		const elementPositionBottom = elementRect.bottom - paddingBottom - borderBottom;
+
+		const blockDataIndex = blockDataArr.findIndex((d) => d.id === id);
+
+		//direction === "Up" or "Down"
+		//--toplineまたはbottomlineがtextNodeかどうか？
+		//----現在のcaret位置が,topまたはbottomかどうか？
+		//startContainerがtextNodeでtopLineまたはbottomlineがELEMENT_NODEの場合もある
+		//その場合は、  ELEMENT_NODEが親に対して一番上（下）かどうか確認し
+		if (direction === "Up") {
+			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
+			if (caretPos.top) {
+				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
+			}
+		} else if (direction === "Down") {
+			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
+
+			if (caretPos.bottom) {
+				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
+			}
+		} else if (direction === "Left") {
+			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
+		} else if (direction === "Right") {
+			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
+		}
 	};
 
 	const handleMargeByBS = ({
@@ -554,18 +600,29 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		blockData,
 		blockDataArr,
 	}: { event: KeyboardEvent<HTMLDivElement>; blockData: OutputBlockData; blockDataArr: OutputBlockData[] }) => {
-		const selection = document.getSelection();
-		if (!selection || selection.rangeCount === 0) {
-			return;
-		}
-		const range = selection.getRangeAt(0);
-		const rangeObj = api.getRangeObj(range);
+		// const selection = document.getSelection();
+		// if (!selection || selection.rangeCount === 0) {
+		// 	return;
+		// }
+		// const range = selection.getRangeAt(0);
+		// const rangeObj = api.getRangeObj(range);
 
-		if ((rangeObj.startEl?.path?.[0] === 0 && rangeObj.startEl?.startOffset === 0) || rangeObj.startEl?.path?.length === 0) {
-			//前のブロックと結合
-			handleMargeByBS({ event, blockData, blockDataArr, undoObj: rangeObj });
-		}
-		setDelDebounced({ id: blockData.id, beforeInlineSel: rangeObj });
+		// if ((rangeObj.startEl?.path?.[0] === 0 && rangeObj.startEl?.startOffset === 0) || rangeObj.startEl?.path?.length === 0) {
+		// 	//前のブロックと結合
+		// 	handleMargeByBS({ event, blockData, blockDataArr, undoObj: rangeObj });
+		// }
+		const contentId = `${blockData.id}-${config.p1GlobalClassName.blockContent}`;
+		const contentEl = document.getElementById(contentId);
+
+		setTimeout(() => {
+			setTmpInnerHTML({
+				id: blockData.id,
+				innerHTML: contentEl.innerHTML,
+				changedCount: tmpInnerHTML?.changedCount ? tmpInnerHTML.changedCount - 1 : -1,
+			});
+		}, 0);
+
+		// setDelDebounced({ id: blockData.id, beforeInlineSel: rangeObj });
 	};
 
 	const handleOnKeyDown = getHotkeyHandler([
@@ -591,7 +648,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 			"Backspace",
 			(event: KeyboardEvent<HTMLDivElement>) => {
 				if (!isComposing) {
-					console.log("dede");
 					handleDeleteText({ event, blockData, blockDataArr: api.blockDataArr });
 				}
 			},
@@ -609,28 +665,34 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		[
 			"ArrowUp",
 			(event: KeyboardEvent<HTMLDivElement>) => {
-				handleMoveCaretByUpDown({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Up" });
+				handleMoveCaret({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Up" });
+				// handleMoveCaretByUpDown({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Up" });
 			},
 			{ preventDefault: false },
 		],
 		[
 			"ArrowDown",
 			(event: KeyboardEvent<HTMLDivElement>) => {
-				handleMoveCaretByUpDown({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Down" });
+				handleMoveCaret({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Down" });
+				// handleMoveCaretByUpDown({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Down" });
 			},
 			{ preventDefault: false },
 		],
 		[
 			"ArrowLeft",
 			(event: KeyboardEvent<HTMLDivElement>) => {
-				handleMoveCaretByLeftRight({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Left" });
+				handleMoveCaret({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Left" });
+
+				// handleMoveCaretByLeftRight({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Left" });
 			},
 			{ preventDefault: false },
 		],
 		[
 			"ArrowRight",
 			(event: KeyboardEvent<HTMLDivElement>) => {
-				handleMoveCaretByLeftRight({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Right" });
+				handleMoveCaret({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Right" });
+
+				// handleMoveCaretByLeftRight({ event, id: blockData.id, blockDataArr: api.blockDataArr, direction: "Right" });
 			},
 			{ preventDefault: false },
 		],
@@ -646,8 +708,8 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		},
 	};
 
-	const requireLastLine = pureBlockData.text.match(/^.*<br>$/);
-	const pureBlockText = requireLastLine ? `${pureBlockData.text}<br class="${LLABClassName}">` : pureBlockData.text;
+	// const requireLastLine = pureBlockData.text.match(/^.*<br>$/);
+	// const pureBlockText = requireLastLine ? `${pureBlockData.text}<br class="${LLABClassName}">` : pureBlockData.text;
 
 	return (
 		<Box
@@ -659,7 +721,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 			className={`${p1_globalClassName.block} ${p1_globalClassName.blockContent} ${blockTool.className}`}
 			sx={{ ...props.sx, ...defaultStyle }}
 			// rome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
-			dangerouslySetInnerHTML={{ __html: pureBlockText }}
+			dangerouslySetInnerHTML={{ __html: pureBlockData.text }}
 			onPaste={(event) => {
 				handleOnPaste({ event, id: blockData.id });
 			}}
@@ -670,13 +732,14 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 				if (!isComposing) {
 					const inputEvent = e.nativeEvent as InputEvent;
 					if (inputEvent.data !== null) {
-						setInputDebounced({
+						setTmpInnerHTML({
 							id: blockData.id,
 							innerHTML: e.currentTarget.innerHTML,
+							changedCount: tmpInnerHTML?.changedCount ? tmpInnerHTML.changedCount + inputEvent.data.length : inputEvent.data.length,
 						});
 
-						const text = bufferText + inputEvent.data;
-						setBufferText(text);
+						// const text = bufferText + inputEvent.data;
+						// setBufferText(text);
 					}
 					// console.log("通常のキーボード入力");
 				} else {
@@ -687,7 +750,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 				setIsComposing(true);
 			}}
 			onCompositionEnd={(e) => {
-				// console.log("IME確定!!!");
 				setIsComposing(false);
 				handleOnCompositionEnd({ event: e, id: blockData.id });
 			}}
