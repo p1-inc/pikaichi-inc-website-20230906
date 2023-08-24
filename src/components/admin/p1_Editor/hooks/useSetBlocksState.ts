@@ -132,6 +132,7 @@ export const useSetBlocksState = (): BlockControlType => {
 	const containerRef: RefObject<HTMLElement> = useRef(null);
 
 	const sanitizeBlockdata = (blockDataArr: OutputBlockData[]) => {
+		//
 		const validateClassName = (text: string) => {
 			const temporaryDiv = document.createElement("div");
 			temporaryDiv.innerHTML = text;
@@ -159,6 +160,7 @@ export const useSetBlocksState = (): BlockControlType => {
 			const _pureBlockText2 = validateClassName(_pureBlockText1);
 			const pureBlockText = _pureBlockText2.replace("<br>", "\n");
 			// const pureBlockText = _pureBlockText2.replace(`<br class="${LLABClassName}">`, "");
+			console.log("cdscdsl;cdksl;");
 			d.data.text = pureBlockText;
 
 			return d;
@@ -354,7 +356,6 @@ export const useSetBlocksState = (): BlockControlType => {
 		//
 		const topOfcontentEl = contentEl.childNodes[0];
 		const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
-		console.log("contentEl.childNodes: ", contentEl.childNodes);
 
 		const elementRect = contentEl.getBoundingClientRect();
 		const computedStyle = window.getComputedStyle(contentEl);
@@ -999,11 +1000,8 @@ export const useSetBlocksState = (): BlockControlType => {
 	// 		handleAddBlockData({ id, data: { text: innerHTML }, undoSel, redoSel, selObj });
 	// 	};
 
-	const handleContentEditableOnChange = ({ id, innerHTML, changedCount }: { id: string; innerHTML: string; changedCount: number }) => {
+	const handleContentEditableOnChange = ({ id, contentEl, changedCount }: { id: string; contentEl: Element; changedCount: number }) => {
 		//
-		if (!innerHTML) {
-			return;
-		}
 
 		const selection = document.getSelection();
 		if (selection.rangeCount === 0) {
@@ -1020,10 +1018,12 @@ export const useSetBlocksState = (): BlockControlType => {
 
 		const undoSel = { ..._undoSel, displayInlineTune: false };
 		const redoSel = { ...rangeObj, displayInlineTune: false };
-
 		const selObj = redoSel;
 
-		handleAddBlockData({ id, data: { text: innerHTML }, undoSel, redoSel, selObj });
+		// const contentEl = document.getElementById(`${id}-${config.p1GlobalClassName.blockContent}`);
+		contentEl.normalize();
+
+		handleAddBlockData({ id, data: { text: contentEl.innerHTML }, undoSel, redoSel, selObj });
 	};
 
 	// 	const handleContentEditableOnChange = ({ id, beforeInlineSel }: { id: string; beforeInlineSel: InlineSelType }) => {

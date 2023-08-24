@@ -250,11 +250,11 @@ export interface BlockControlType {
 
 	handleContentEditableOnChange: ({
 		id,
-		innerHTML,
+		contentEl,
 		changedCount,
 	}: {
 		id: string;
-		innerHTML: string;
+		contentEl: Element;
 		changedCount: number;
 	}) => void;
 

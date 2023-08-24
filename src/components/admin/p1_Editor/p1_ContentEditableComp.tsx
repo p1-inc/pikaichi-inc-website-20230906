@@ -38,7 +38,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 
 	const [tmpInnerHTML, setTmpInnerHTML] = useState<{
 		id: string;
-		innerHTML: string;
+		contentEl: Element;
 		changedCount: number;
 	}>(null);
 
@@ -617,7 +617,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		setTimeout(() => {
 			setTmpInnerHTML({
 				id: blockData.id,
-				innerHTML: contentEl.innerHTML,
+				contentEl: contentEl,
 				changedCount: tmpInnerHTML?.changedCount ? tmpInnerHTML.changedCount - 1 : -1,
 			});
 		}, 0);
@@ -734,7 +734,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 					if (inputEvent.data !== null) {
 						setTmpInnerHTML({
 							id: blockData.id,
-							innerHTML: e.currentTarget.innerHTML,
+							contentEl: e.currentTarget,
 							changedCount: tmpInnerHTML?.changedCount ? tmpInnerHTML.changedCount + inputEvent.data.length : inputEvent.data.length,
 						});
 
