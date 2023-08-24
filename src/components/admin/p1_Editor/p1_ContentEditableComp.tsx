@@ -762,7 +762,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 							return;
 						}
 						const range = selection.getRangeAt(0);
-						console.log("range : ", range);
 						const rangeObj = api.getRangeObj(range);
 
 						if (!debouncedndoSel) {
