@@ -386,6 +386,9 @@ export const useSetBlocksState = (): BlockControlType => {
 		let isCaretAtTopLine = false;
 		let isCaretAtBottomLine = false;
 
+		console.log("caretPosition: ", caretPosition);
+		console.log("elementPositionTop: ", elementPositionTop);
+		console.log("lineHeight * 0.9: ", lineHeight * 0.9);
 		if (caretContainer.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
 			isCaretAtTopLine = true;
 		}
@@ -427,15 +430,28 @@ export const useSetBlocksState = (): BlockControlType => {
 		// console.log("caretContainer.childNodes.length: ", caretContainer.childNodes.length);
 		// console.log(" caretContainer: ", caretContainer);
 
-		console.table({
-			isTextNodeAtTopinContentEl,
-			isTextNodeAtBottominContentEl,
-			isTextNodeAtSelection,
-			isCaretAtTopLine,
-			isCaretAtBottomLine,
-			isCaretAtLeftEnd,
-			isCaretAtRightEnd,
-		});
+		// console.table({
+		// 	isTextNodeAtTopinContentEl,
+		// 	isTextNodeAtBottominContentEl,
+		// 	isTextNodeAtSelection,
+		// 	isCaretAtTopLine,
+		// 	isCaretAtBottomLine,
+		// 	isCaretAtLeftEnd,
+		// 	isCaretAtRightEnd,
+		// });
+		if (isCaretAtTopLine) {
+			console.log("isTop: ", isCaretAtTopLine);
+		}
+
+		if (isCaretAtBottomLine) {
+			console.log("isBottom: ", isCaretAtBottomLine);
+		}
+		if (isCaretAtLeftEnd) {
+			console.log("isLeft: ", isCaretAtLeftEnd);
+		}
+		if (isCaretAtRightEnd) {
+			console.log("isRight: ", isCaretAtRightEnd);
+		}
 
 		const caretPos2: { top: boolean; bottom: boolean; left: boolean; right: boolean } = { top: null, bottom: null, left: null, right: null };
 		if (topOfcontentEl.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {

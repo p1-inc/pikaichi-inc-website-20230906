@@ -166,6 +166,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 			event.preventDefault();
 		}
 	};
+
 	const getNextTextBlock = ({
 		blockDataArr,
 		blockDataIndex,
