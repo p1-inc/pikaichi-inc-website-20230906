@@ -329,10 +329,10 @@ export interface BlockControlType {
 		contentEl: Element;
 		range: Range;
 	}) => {
-		top: boolean;
-		bottom: boolean;
-		left: boolean;
-		right: boolean;
+		isCaretAtTopLine: boolean;
+		isCaretAtBottomLine: boolean;
+		isCaretAtLeftEnd: boolean;
+		isCaretAtRightEnd: boolean;
 	};
 
 	sanitizeBlockdata: (blockDataArr: OutputBlockData[]) => OutputBlockData[];

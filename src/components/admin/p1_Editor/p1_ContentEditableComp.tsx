@@ -107,37 +107,51 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 
 		const contentId = `${id}-pe-block__content`;
 		const contentEl = document.getElementById(contentId);
-		const childnodes = contentEl.childNodes;
+		// const childnodes = contentEl.childNodes;
 
 		const textNodes = getAllTextNodes(contentEl);
+		const textNodeAtTop = textNodes[0];
+		const textNodeAtBottom = textNodes[textNodes.length - 1];
 
-		if (direction === "Up" || direction === "Left") {
-			textNodes.reverse();
-		}
+		// console.log("textNodes: ", textNodes);
+
+		// if (direction === "Up" || direction === "Left") {
+		// 	textNodes.reverse();
+		// }
 
 		const selection = window.getSelection();
-
 		if (!contentEl || !selection || selection.rangeCount === 0) {
 			return;
 		}
 
 		const { left: caretLeft } = caretRects;
 
-		const anchorPos = textNodes[0][1];
-		const _nextTextNodes = textNodes.filter((d) => d[1].top === anchorPos.top);
-		const _nextTextNode = _nextTextNodes.find((d, i, arr) => {
-			const left = i === 0 ? 0 : d[1].left;
-			const right = i === arr.length - 1 ? 999999 : d[1].right;
-			if (left <= caretLeft && right >= caretLeft) {
-				return true;
-			} else {
-				return false;
-			}
-		});
+		// const anchorPos = textNodes[0][1];
+		// const _nextTextNodes = textNodes.filter((d) => d[1].top === anchorPos.top);
+		// const _nextTextNodes = textNodes[0];
+		// console.log("_nextTextNodes: ", _nextTextNodes);
+		// const _nextTextNode = _nextTextNodes.find((d, i, arr) => {
+		// 	const left = i === 0 ? 0 : d[1].left;
+		// 	const right = i === arr.length - 1 ? 999999 : d[1].right;
+		// 	if (left <= caretLeft && right >= caretLeft) {
+		// 		return true;
+		// 	} else {
+		// 		return false;
+		// 	}
+		// });
 
-		if (_nextTextNode) {
-			const nextTextNode = _nextTextNode[0];
+		const getTargetPos = (nextTextNode: Text) => {
+			console.log("nextTextNode.textContent: ", nextTextNode.textContent);
+			const bbb = JSON.stringify(nextTextNode.textContent);
+			console.log("bbb: ", bbb);
+
+			const textParts = nextTextNode.textContent.split("\n");
+			console.log("textParts : ", textParts);
+			const nextTextNodeArr = textParts.map((text) => document.createTextNode(text));
+			console.log("nextTextNodeArr: ", nextTextNodeArr);
+
 			let targetPosition = 999999;
+
 			const testRange = document.createRange();
 			testRange.selectNodeContents(nextTextNode);
 
@@ -153,18 +167,51 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 					break;
 				}
 			}
+			return targetPosition;
+		};
 
-			const valiPosition = getValidOffset(nextTextNode, targetPosition);
+		let _nextTextNode: [Text, DOMRect];
+		let targetPosition = 999999;
 
-			const range = new Range();
-			range.setStart(nextTextNode, valiPosition);
-			range.setEnd(nextTextNode, valiPosition);
-
-			selection.removeAllRanges();
-			selection.addRange(range);
-
-			event.preventDefault();
+		if (direction === "Down") {
+			_nextTextNode = textNodeAtTop;
+			targetPosition = getTargetPos(_nextTextNode[0]);
+		} else if (direction === "Right") {
+			_nextTextNode = textNodeAtTop;
+			targetPosition = 0;
+		} else if (direction === "Up") {
+			_nextTextNode = textNodeAtBottom;
+			console.log("_nextTextNode : ", _nextTextNode);
+			targetPosition = getTargetPos(_nextTextNode[0]);
 		}
+		console.log("targetPosition: ", targetPosition);
+
+		// if (direction === "Up" || direction === "Left") {
+		// 	_nextTextNode = textNodes[textNodes.length - 1];
+		// } else {
+		// 	_nextTextNode = textNodes[0];
+		// }
+
+		// console.log("_nextTextNode: ", _nextTextNode);
+
+		if (!_nextTextNode) {
+			return;
+		}
+		const nextTextNode = _nextTextNode[0];
+
+		//指定されたオフセットが対象ノードの長さを超えている場合は、その上限。超えてない場合はオフセットをそのまま返す
+		const valiPosition = getValidOffset(nextTextNode, targetPosition);
+		console.log("valiPosition: ", valiPosition);
+
+		const range = new Range();
+		range.setStart(nextTextNode, valiPosition);
+		range.setEnd(nextTextNode, valiPosition);
+
+		selection.removeAllRanges();
+		selection.addRange(range);
+
+		event.preventDefault();
+		// }
 	};
 
 	const getNextTextBlock = ({
@@ -345,105 +392,105 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		// 		}
 	};
 
-	const handleMoveCaretByUpDown = ({
-		event,
-		id,
-		blockDataArr,
-		direction,
-	}: {
-		event: KeyboardEvent<HTMLDivElement>;
-		id: string;
-		blockDataArr: OutputBlockData[];
-		direction: "Up" | "Down";
-	}) => {
-		//
-		const selection = document.getSelection();
-		if (!selection || selection.rangeCount === 0) {
-			return;
-		}
-
-		const contentEl = document.getElementById(contentId.current);
-		const topOfcontentEl = contentEl.childNodes[0];
-		const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
-
-		const range = selection.getRangeAt(0);
-		const selectContainer = range.commonAncestorContainer;
-		const selectOffset = range.startOffset;
-
-		const caretRects = range.getBoundingClientRect();
-
-		if (!api.caretPos.current) {
-			api.caretPos.current = { top: caretRects.top, left: caretRects.left };
-		}
-
-		const lineHeight = parseFloat(getComputedStyle(contentEl).lineHeight);
-
-		const _caretPosition = caretRects.top;
-		const caretPosition = _caretPosition + lineHeight / 2;
-
-		const elementRect = contentEl.getBoundingClientRect();
-		const computedStyle = window.getComputedStyle(contentEl);
-
-		const paddingTop = parseFloat(computedStyle.paddingTop);
-		const paddingBottom = parseFloat(computedStyle.paddingBottom);
-		const borderTop = parseFloat(computedStyle.borderTopWidth);
-		const borderBottom = parseFloat(computedStyle.borderBottomWidth);
-
-		const elementPositionTop = elementRect.top + paddingTop + borderTop;
-		const elementPositionBottom = elementRect.bottom - paddingBottom - borderBottom;
-
-		const blockDataIndex = blockDataArr.findIndex((d) => d.id === id);
-
-		//direction === "Up" or "Down"
-		//--toplineまたはbottomlineがtextNodeかどうか？
-		//----現在のcaret位置が,topまたはbottomかどうか？
-		//startContainerがtextNodeでtopLineまたはbottomlineがELEMENT_NODEの場合もある
-		//その場合は、  ELEMENT_NODEが親に対して一番上（下）かどうか確認し
-		if (direction === "Up") {
-			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
-			if (caretPos.top) {
-				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
-				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
-			}
-		} else if (direction === "Down") {
-			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
-
-			if (caretPos.bottom) {
-				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
-				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
-			}
-		}
-		//最初のNodeがTextNodeだった場合と要素Nodeだった場合で処理を分ける
-		// if (direction === "Up" && childnodes[0].nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
-		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
-		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
-		// } else if (
-		// 	direction === "Down" &&
-		// 	childnodes[childnodes.length - 1].nodeType === Node.TEXT_NODE &&
-		// 	elementPositionBottom - caretPosition < lineHeight * 0.9
-		// ) {
-		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
-		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
-		// } else if (direction === "Up" && childnodes[0].nodeType !== Node.TEXT_NODE && startContainer.childNodes[startOffset] === childnodes[0]) {
-		// 	console.log("uuuu");
-		// } else if (
-		// 	direction === "Down" &&
-		// 	childnodes[childnodes.length - 1].nodeType !== Node.TEXT_NODE &&
-		// 	startContainer.childNodes[startOffset] === childnodes[childnodes.length - 1]
-		// ) {
-		// 	console.log("bbbb");
-		// }
-
-		// if (caretPosition - elementPositionTop < lineHeight * 0.9 && direction === "Up") {
-		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
-		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
-		// } else if (elementPositionBottom - caretPosition < lineHeight * 0.9 && direction === "Down") {
-		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
-		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
-		// }
-
-		// scrollWithCaretPos();
-	};
+	// 	const handleMoveCaretByUpDown = ({
+	// 		event,
+	// 		id,
+	// 		blockDataArr,
+	// 		direction,
+	// 	}: {
+	// 		event: KeyboardEvent<HTMLDivElement>;
+	// 		id: string;
+	// 		blockDataArr: OutputBlockData[];
+	// 		direction: "Up" | "Down";
+	// 	}) => {
+	// 		//
+	// 		const selection = document.getSelection();
+	// 		if (!selection || selection.rangeCount === 0) {
+	// 			return;
+	// 		}
+	//
+	// 		const contentEl = document.getElementById(contentId.current);
+	// 		const topOfcontentEl = contentEl.childNodes[0];
+	// 		const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
+	//
+	// 		const range = selection.getRangeAt(0);
+	// 		const selectContainer = range.commonAncestorContainer;
+	// 		const selectOffset = range.startOffset;
+	//
+	// 		const caretRects = range.getBoundingClientRect();
+	//
+	// 		if (!api.caretPos.current) {
+	// 			api.caretPos.current = { top: caretRects.top, left: caretRects.left };
+	// 		}
+	//
+	// 		const lineHeight = parseFloat(getComputedStyle(contentEl).lineHeight);
+	//
+	// 		const _caretPosition = caretRects.top;
+	// 		const caretPosition = _caretPosition + lineHeight / 2;
+	//
+	// 		const elementRect = contentEl.getBoundingClientRect();
+	// 		const computedStyle = window.getComputedStyle(contentEl);
+	//
+	// 		const paddingTop = parseFloat(computedStyle.paddingTop);
+	// 		const paddingBottom = parseFloat(computedStyle.paddingBottom);
+	// 		const borderTop = parseFloat(computedStyle.borderTopWidth);
+	// 		const borderBottom = parseFloat(computedStyle.borderBottomWidth);
+	//
+	// 		const elementPositionTop = elementRect.top + paddingTop + borderTop;
+	// 		const elementPositionBottom = elementRect.bottom - paddingBottom - borderBottom;
+	//
+	// 		const blockDataIndex = blockDataArr.findIndex((d) => d.id === id);
+	//
+	// 		//direction === "Up" or "Down"
+	// 		//--toplineまたはbottomlineがtextNodeかどうか？
+	// 		//----現在のcaret位置が,topまたはbottomかどうか？
+	// 		//startContainerがtextNodeでtopLineまたはbottomlineがELEMENT_NODEの場合もある
+	// 		//その場合は、  ELEMENT_NODEが親に対して一番上（下）かどうか確認し
+	// 		if (direction === "Up") {
+	// 			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
+	// 			if (caretPos.top) {
+	// 				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+	// 				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
+	// 			}
+	// 		} else if (direction === "Down") {
+	// 			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
+	//
+	// 			if (caretPos.bottom) {
+	// 				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+	// 				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
+	// 			}
+	// 		}
+	// 		//最初のNodeがTextNodeだった場合と要素Nodeだった場合で処理を分ける
+	// 		// if (direction === "Up" && childnodes[0].nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
+	// 		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+	// 		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
+	// 		// } else if (
+	// 		// 	direction === "Down" &&
+	// 		// 	childnodes[childnodes.length - 1].nodeType === Node.TEXT_NODE &&
+	// 		// 	elementPositionBottom - caretPosition < lineHeight * 0.9
+	// 		// ) {
+	// 		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+	// 		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
+	// 		// } else if (direction === "Up" && childnodes[0].nodeType !== Node.TEXT_NODE && startContainer.childNodes[startOffset] === childnodes[0]) {
+	// 		// 	console.log("uuuu");
+	// 		// } else if (
+	// 		// 	direction === "Down" &&
+	// 		// 	childnodes[childnodes.length - 1].nodeType !== Node.TEXT_NODE &&
+	// 		// 	startContainer.childNodes[startOffset] === childnodes[childnodes.length - 1]
+	// 		// ) {
+	// 		// 	console.log("bbbb");
+	// 		// }
+	//
+	// 		// if (caretPosition - elementPositionTop < lineHeight * 0.9 && direction === "Up") {
+	// 		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
+	// 		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
+	// 		// } else if (elementPositionBottom - caretPosition < lineHeight * 0.9 && direction === "Down") {
+	// 		// 	const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+	// 		// 	handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
+	// 		// }
+	//
+	// 		// scrollWithCaretPos();
+	// 	};
 
 	const handleMoveCaret = ({
 		event,
@@ -463,12 +510,12 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		}
 
 		const contentEl = document.getElementById(contentId.current);
-		const topOfcontentEl = contentEl.childNodes[0];
-		const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
+		// const topOfcontentEl = contentEl.childNodes[0];
+		// const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
 
 		const range = selection.getRangeAt(0);
-		const selectContainer = range.commonAncestorContainer;
-		const selectOffset = range.startOffset;
+		// const selectContainer = range.commonAncestorContainer;
+		// const selectOffset = range.startOffset;
 
 		const caretRects = range.getBoundingClientRect();
 
@@ -476,21 +523,21 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 			api.caretPos.current = { top: caretRects.top, left: caretRects.left };
 		}
 
-		const lineHeight = parseFloat(getComputedStyle(contentEl).lineHeight);
+		// const lineHeight = parseFloat(getComputedStyle(contentEl).lineHeight);
 
-		const _caretPosition = caretRects.top;
-		const caretPosition = _caretPosition + lineHeight / 2;
+		// const _caretPosition = caretRects.top;
+		// const caretPosition = _caretPosition + lineHeight / 2;
 
-		const elementRect = contentEl.getBoundingClientRect();
-		const computedStyle = window.getComputedStyle(contentEl);
+		// const elementRect = contentEl.getBoundingClientRect();
+		// const computedStyle = window.getComputedStyle(contentEl);
 
-		const paddingTop = parseFloat(computedStyle.paddingTop);
-		const paddingBottom = parseFloat(computedStyle.paddingBottom);
-		const borderTop = parseFloat(computedStyle.borderTopWidth);
-		const borderBottom = parseFloat(computedStyle.borderBottomWidth);
+		// const paddingTop = parseFloat(computedStyle.paddingTop);
+		// const paddingBottom = parseFloat(computedStyle.paddingBottom);
+		// const borderTop = parseFloat(computedStyle.borderTopWidth);
+		// const borderBottom = parseFloat(computedStyle.borderBottomWidth);
 
-		const elementPositionTop = elementRect.top + paddingTop + borderTop;
-		const elementPositionBottom = elementRect.bottom - paddingBottom - borderBottom;
+		// const elementPositionTop = elementRect.top + paddingTop + borderTop;
+		// const elementPositionBottom = elementRect.bottom - paddingBottom - borderBottom;
 
 		const blockDataIndex = blockDataArr.findIndex((d) => d.id === id);
 
@@ -501,21 +548,25 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		//その場合は、  ELEMENT_NODEが親に対して一番上（下）かどうか確認し
 		if (direction === "Up") {
 			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
-			if (caretPos.top) {
+			if (caretPos.isCaretAtTopLine) {
 				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: -1 });
-				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
+				handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Up" });
 			}
 		} else if (direction === "Down") {
 			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
 
-			if (caretPos.bottom) {
+			if (caretPos.isCaretAtBottomLine) {
 				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
-				// handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
+				handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Down" });
 			}
 		} else if (direction === "Left") {
 			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
 		} else if (direction === "Right") {
 			const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
+			if (caretPos.isCaretAtRightEnd) {
+				const nextBlockId = getNextTextBlock({ blockDataArr, blockDataIndex, direction: 1 });
+				handleSetCaretPos({ event, id: nextBlockId, caretRects, direction: "Right" });
+			}
 		}
 	};
 

@@ -353,8 +353,9 @@ export const useSetBlocksState = (): BlockControlType => {
 
 	const getCaretRelativePositionToContent = ({ contentEl, range }: { contentEl: Element; range: Range }) => {
 		//
-		const topOfcontentEl = contentEl.childNodes[0];
-		const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
+		// const topOfcontentEl = contentEl.childNodes[0];
+		// console.log(" topOfcontentEl: ", topOfcontentEl);
+		// const bottomOfcontentEl = contentEl.childNodes[contentEl.childNodes.length - 1];
 
 		const elementRect = contentEl.getBoundingClientRect();
 		const computedStyle = window.getComputedStyle(contentEl);
@@ -366,47 +367,77 @@ export const useSetBlocksState = (): BlockControlType => {
 
 		const caretContainer = range.startContainer;
 		const caretOffset = range.startOffset;
-		const caretElement = caretContainer.nodeType === Node.TEXT_NODE ? caretContainer : caretContainer.childNodes[caretOffset];
+
+		// let lineBreakCount: number;
+		// if (caretContainer.nodeType === Node.TEXT_NODE) {
+		// 	const textBeforeCaret = caretContainer.textContent.substring(0, caretOffset);
+		// 	const matches = textBeforeCaret.match(/\n/g);
+		// 	lineBreakCount = matches ? matches.length : 0;
+		// }
+
+		// const caretElement = caretContainer.nodeType === Node.TEXT_NODE ? caretContainer : caretContainer.childNodes[caretOffset];
+		const charBeforeCaret = caretContainer.textContent.charAt(caretOffset - 1);
+		const isPreviousCharNewline = charBeforeCaret === "\n";
 
 		const caretRects = range.getBoundingClientRect();
 
 		const lineHeight = parseFloat(getComputedStyle(contentEl).lineHeight);
-		const caretPosition = caretRects.top + lineHeight / 2;
+		let caretPosition = caretRects.top + lineHeight / 2;
+
+		if (isPreviousCharNewline) {
+			//caretの直前が\nだった場合、1行下がる
+			caretPosition = caretPosition + lineHeight;
+		}
 
 		const elementPositionTop = elementRect.top + paddingTop + borderTop;
 		const elementPositionBottom = elementRect.bottom - paddingBottom - borderBottom;
 
-		const isTextNodeAtTopinContentEl = topOfcontentEl.nodeType === Node.TEXT_NODE; //contentElementの最初の行(top)がtextNodeか他Nodeか(true/false)
-		const isTextNodeAtBottominContentEl = bottomOfcontentEl.nodeType === Node.TEXT_NODE; //contentElementの最後の行(bottom)がtextNodeか他Nodeか(true/false)
+		// const isTextNodeAtTopinContentEl = topOfcontentEl.nodeType === Node.TEXT_NODE; //contentElementの最初の行(top)がtextNodeか他Nodeか(true/false)
+		// const isTextNodeAtBottominContentEl = bottomOfcontentEl.nodeType === Node.TEXT_NODE; //contentElementの最後の行(bottom)がtextNodeか他Nodeか(true/false)
 
-		const isTextNodeAtSelection = caretContainer.nodeType === Node.TEXT_NODE;
+		// const isTextNodeAtSelection = caretContainer.nodeType === Node.TEXT_NODE;
 
 		const endIndex = caretContainer.childNodes.length;
+
+		let textBeforeCaret = "";
+		let textAfterCaret = "";
+
+		if (caretContainer.nodeType === Node.TEXT_NODE) {
+			textBeforeCaret = caretContainer.textContent.substring(0, caretOffset);
+			textAfterCaret = caretContainer.textContent.substring(caretOffset);
+		}
 
 		let isCaretAtTopLine = false;
 		let isCaretAtBottomLine = false;
 
-		console.log("caretPosition: ", caretPosition);
-		console.log("elementPositionTop: ", elementPositionTop);
-		console.log("lineHeight * 0.9: ", lineHeight * 0.9);
+		// console.log("elementPositionTop: ", elementPositionTop);
+		// console.log("lineHeight * 0.9: ", lineHeight * 0.9);
 		if (caretContainer.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
 			isCaretAtTopLine = true;
 		}
-		if (caretContainer.nodeType !== Node.TEXT_NODE && caretContainer.childNodes[caretOffset] === topOfcontentEl) {
-			isCaretAtTopLine = true;
+
+		if (caretContainer.nodeType !== Node.TEXT_NODE) {
+			console.log("caretContainer.nodeTypeがtextNodeでありません、このパターンの処理は実装されていません");
 		}
+
+		// if (caretContainer.nodeType !== Node.TEXT_NODE && caretContainer.childNodes[caretOffset] === topOfcontentEl) {
+		// 	isCaretAtTopLine = true;
+		// }
 
 		if (caretContainer.nodeType === Node.TEXT_NODE && elementPositionBottom - caretPosition < lineHeight * 0.99) {
 			isCaretAtBottomLine = true;
 		}
-		if (caretContainer.nodeType !== Node.TEXT_NODE && caretContainer.childNodes[caretOffset] === bottomOfcontentEl) {
-			isCaretAtBottomLine = true;
-		}
+		// if (caretContainer.nodeType !== Node.TEXT_NODE && caretContainer.childNodes[caretOffset] === bottomOfcontentEl) {
+		// 	isCaretAtBottomLine = true;
+		// }
 
 		let isCaretAtLeftEnd = false;
 		let isCaretAtRightEnd = false;
 
-		if (caretContainer.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9 && caretOffset === 0) {
+		// console.log("textBeforeCaret: ", textBeforeCaret);
+		// console.log("textAfterCaret: ", textAfterCaret);
+		// if (caretContainer.nodeType === Node.TEXT_NODE && isCaretAtBottomLine && caretPosition - elementPositionTop < lineHeight * 0.9 && caretOffset === 0) {
+		if (caretContainer.nodeType === Node.TEXT_NODE && isCaretAtTopLine && (textBeforeCaret === "" || textBeforeCaret === "\n")) {
 			isCaretAtLeftEnd = true;
 		}
 
@@ -414,11 +445,13 @@ export const useSetBlocksState = (): BlockControlType => {
 			isCaretAtLeftEnd = true;
 		}
 
-		if (
-			caretContainer.nodeType === Node.TEXT_NODE &&
-			elementPositionBottom - caretPosition < lineHeight * 0.99 &&
-			caretOffset === caretContainer.nodeValue.length
-		) {
+		// if (
+		// 	caretContainer.nodeType === Node.TEXT_NODE &&
+		// 	elementPositionBottom - caretPosition < lineHeight * 0.99 &&
+		// 	caretOffset === caretContainer.nodeValue.length
+		// ) {
+
+		if (caretContainer.nodeType === Node.TEXT_NODE && isCaretAtBottomLine && (textAfterCaret === "" || textAfterCaret === "\n")) {
 			isCaretAtRightEnd = true;
 		}
 
@@ -439,45 +472,47 @@ export const useSetBlocksState = (): BlockControlType => {
 		// 	isCaretAtLeftEnd,
 		// 	isCaretAtRightEnd,
 		// });
-		if (isCaretAtTopLine) {
-			console.log("isTop: ", isCaretAtTopLine);
-		}
+		// 		if (isCaretAtTopLine) {
+		// 			console.log("isTop: ", isCaretAtTopLine);
+		// 		}
+		//
+		// 		if (isCaretAtBottomLine) {
+		// 			console.log("isBottom: ", isCaretAtBottomLine);
+		// 		}
+		// 		if (isCaretAtLeftEnd) {
+		// 			console.log("isLeft: ", isCaretAtLeftEnd);
+		// 		}
+		// 		if (isCaretAtRightEnd) {
+		// 			console.log("isRight: ", isCaretAtRightEnd);
+		// 		}
 
-		if (isCaretAtBottomLine) {
-			console.log("isBottom: ", isCaretAtBottomLine);
-		}
-		if (isCaretAtLeftEnd) {
-			console.log("isLeft: ", isCaretAtLeftEnd);
-		}
-		if (isCaretAtRightEnd) {
-			console.log("isRight: ", isCaretAtRightEnd);
-		}
+		return { isCaretAtTopLine, isCaretAtBottomLine, isCaretAtLeftEnd, isCaretAtRightEnd };
 
-		const caretPos2: { top: boolean; bottom: boolean; left: boolean; right: boolean } = { top: null, bottom: null, left: null, right: null };
-		if (topOfcontentEl.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
-			caretPos2.top = true;
-		} else {
-			if (caretContainer.nodeType === Node.TEXT_NODE) {
-				if ((caretContainer.parentNode as Node) === contentEl.childNodes[0]) {
-					caretPos2.top = true;
-				}
-			}
-			if (caretContainer.childNodes[caretOffset] === topOfcontentEl) {
-				caretPos2.top = true;
-			}
-		}
-		if (bottomOfcontentEl.nodeType === Node.TEXT_NODE && elementPositionBottom - caretPosition < lineHeight * 0.9) {
-			caretPos2.bottom = true;
-		} else {
-			if (caretContainer.nodeType === Node.TEXT_NODE) {
-				if ((caretContainer.parentNode as Node) === contentEl.childNodes[contentEl.childNodes.length - 1]) {
-					caretPos2.bottom = true;
-				}
-			}
-			if (caretContainer.childNodes[caretOffset] === bottomOfcontentEl) {
-				caretPos2.top = true;
-			}
-		}
+		// const caretPos2: { top: boolean; bottom: boolean; left: boolean; right: boolean } = { top: null, bottom: null, left: null, right: null };
+		// if (topOfcontentEl.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
+		// 	caretPos2.top = true;
+		// } else {
+		// 	if (caretContainer.nodeType === Node.TEXT_NODE) {
+		// 		if ((caretContainer.parentNode as Node) === contentEl.childNodes[0]) {
+		// 			caretPos2.top = true;
+		// 		}
+		// 	}
+		// 	if (caretContainer.childNodes[caretOffset] === topOfcontentEl) {
+		// 		caretPos2.top = true;
+		// 	}
+		// }
+		// if (bottomOfcontentEl.nodeType === Node.TEXT_NODE && elementPositionBottom - caretPosition < lineHeight * 0.9) {
+		// 	caretPos2.bottom = true;
+		// } else {
+		// 	if (caretContainer.nodeType === Node.TEXT_NODE) {
+		// 		if ((caretContainer.parentNode as Node) === contentEl.childNodes[contentEl.childNodes.length - 1]) {
+		// 			caretPos2.bottom = true;
+		// 		}
+		// 	}
+		// 	if (caretContainer.childNodes[caretOffset] === bottomOfcontentEl) {
+		// 		caretPos2.top = true;
+		// 	}
+		// }
 		// if (topOfcontentEl.nodeType === Node.TEXT_NODE && caretPosition - elementPositionTop < lineHeight * 0.9) {
 		// 	caretPos.top = true;
 		// } else if (bottomOfcontentEl.nodeType === Node.TEXT_NODE && elementPositionBottom - caretPosition < lineHeight * 0.9) {
@@ -507,8 +542,6 @@ export const useSetBlocksState = (): BlockControlType => {
 		// 		caretPos.bottom = true;
 		// 	}
 		// }
-
-		return caretPos2;
 	};
 	const handleSetBlockDataArr = ({
 		blockDataArr,
