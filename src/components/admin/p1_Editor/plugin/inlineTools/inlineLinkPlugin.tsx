@@ -29,7 +29,7 @@ export const InlineLinkSubPalette = ({ tool, api, isActive, wrapperEl }: InlineL
 			return;
 		}
 
-		if (isActive) {
+		if (isActive && wrapperEl) {
 			wrapperEl.wrapperEl.setAttribute("href", href);
 			return;
 		}
@@ -47,7 +47,7 @@ export const InlineLinkSubPalette = ({ tool, api, isActive, wrapperEl }: InlineL
 				size="xs"
 				pr={0}
 				placeholder="https://"
-				defaultValue={wrapperEl.href}
+				defaultValue={wrapperEl?.href}
 				onChange={(e) => {
 					setValue(e.currentTarget.value);
 				}}
@@ -83,6 +83,7 @@ export const InlineLinkSubPalette = ({ tool, api, isActive, wrapperEl }: InlineL
 export const handleToInlineLink = (tool: InlineToolType, api: BlockControlType, isActive: boolean) => {
 	//
 	const { inlineSel, setInlineSubPalette } = api;
+	console.log("inlineSel: ", inlineSel);
 
 	if (!inlineSel) {
 		return;

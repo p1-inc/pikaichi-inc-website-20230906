@@ -333,6 +333,7 @@ export interface BlockControlType {
 		isCaretAtBottomLine: boolean;
 		isCaretAtLeftEnd: boolean;
 		isCaretAtRightEnd: boolean;
+		nCaretRects: DOMRect;
 	};
 
 	sanitizeBlockdata: (blockDataArr: OutputBlockData[]) => OutputBlockData[];
