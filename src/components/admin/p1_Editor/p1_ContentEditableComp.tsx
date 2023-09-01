@@ -275,7 +275,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		const thisText = nBlocks[blockIndex].data.text;
 
 		beforeEl.innerHTML = `${beforeText}${thisText}`;
-		nBlocks[blockIndex - 1].data.text = `${beforeText}<br/>${thisText}`;
+		nBlocks[blockIndex - 1].data.text = `${beforeText}${thisText}`;
 
 		nBlocks.splice(blockIndex, 1);
 

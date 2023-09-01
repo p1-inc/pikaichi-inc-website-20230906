@@ -68,7 +68,11 @@ export const useSetBlocksState = (): BlockControlType => {
 
 	useEffect(() => {
 		//inlineTune発火
-		handleSelectionChange();
+		if (selection?.toString()) {
+			handleSelectionChange();
+		} else {
+			setInlineSel(null);
+		}
 	}, [selection?.toString()]);
 
 	const hideInlineSel = () => {
@@ -168,7 +172,7 @@ export const useSetBlocksState = (): BlockControlType => {
 		}
 
 		const range = selection.getRangeAt(0);
-
+		console.log("cdscdd");
 		if (selection?.isCollapsed) {
 			const onInLineMenu = findParentWithClassNameAndPath(range.startContainer, "inlineTuneEl");
 			if (onInLineMenu.el) {
@@ -229,6 +233,10 @@ export const useSetBlocksState = (): BlockControlType => {
 		/////////////////////////////////////////////////wrappedStyles//////////////////////////////////////////////
 
 		const contentEl = _contentElement.el;
+
+		if (!contentEl) {
+			return;
+		}
 
 		const extractClassNamesWithPathsFunc = (element: Element, path: number[] = []) => {
 			const result: { classNames: string[]; path: number[] }[] = [];
