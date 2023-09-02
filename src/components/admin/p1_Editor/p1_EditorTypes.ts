@@ -322,6 +322,19 @@ export interface BlockControlType {
 
 	hideInlineSel: () => void;
 
+	getSymbolPositions: ({
+		element,
+		symbol,
+	}: {
+		element: Element;
+		symbol: string;
+	}) => {
+		innerHTML: string;
+		path: number[];
+		startOffset: number;
+		endOffset: number;
+	};
+
 	getCaretRelativePositionToContent: ({
 		contentEl,
 		range,

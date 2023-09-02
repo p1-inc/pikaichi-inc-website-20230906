@@ -8,6 +8,7 @@ import { getHotkeyHandler, useDebouncedState, useDebouncedValue, useTextSelectio
 import { config } from "./p1_EditorConfig";
 import { getValidOffset } from "./hooks/useSetBlocksState";
 import { useGetComputedStyles } from "../../../hooks/useGetComputedStyles";
+import { autoID } from "../../../util/autoID";
 
 interface P1_ContentEditableComp {
 	blockData: OutputBlockData;
@@ -274,28 +275,36 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		const beforeText = nBlocks[blockIndex - 1].data.text;
 		const thisText = nBlocks[blockIndex].data.text;
 
-		beforeEl.innerHTML = `${beforeText}${thisText}`;
+		const spCode = `_@_${autoID(10)}_@_`;
+		beforeEl.innerHTML = `${beforeText}${spCode}${thisText}`;
 		nBlocks[blockIndex - 1].data.text = `${beforeText}${thisText}`;
 
+		// const afterSel = api.setCaretPosByAtSymbol({ element: beforeEl, symbol: spCode, endText: spCode });
+
+		const pos = api.getSymbolPositions({ element: beforeEl, symbol: spCode });
+		beforeEl.innerHTML = pos.innerHTML;
 		nBlocks.splice(blockIndex, 1);
 
 		const beforeObj = nBlocks[blockIndex - 1];
 
 		const startEl = {
-			path: [0],
-			startOffset: beforeElLength,
+			path: [...pos.path],
+			startOffset: pos.startOffset,
 		};
 
 		const endEl = {
-			path: [0],
-			endOffset: beforeElLength,
+			path: [...pos.path],
+			endOffset: pos.endOffset,
 		};
 
 		const redoObj: InlineSelType = {
 			blockId: beforeObj.id,
 			collapsed: true,
 			displayInlineTune: false,
-			contentEl: null,
+			contentEl: {
+				contentId: beforeId,
+				path: pos.path,
+			},
 			startEl,
 			endEl,
 			wrappedStyles: null,
@@ -322,18 +331,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		blockData,
 		blockDataArr,
 	}: { event: KeyboardEvent<HTMLDivElement>; blockData: OutputBlockData; blockDataArr: OutputBlockData[] }) => {
-		// const selection = document.getSelection();
-		// if (!selection || selection.rangeCount === 0) {
-		// 	return;
-		// }
-		// const range = selection.getRangeAt(0);
-		// const rangeObj = api.getRangeObj(range);
-
-		// if ((rangeObj.startEl?.path?.[0] === 0 && rangeObj.startEl?.startOffset === 0) || rangeObj.startEl?.path?.length === 0) {
-		// 	//前のブロックと結合
-		// 	handleMargeByBS({ event, blockData, blockDataArr, undoObj: rangeObj });
-		// }
-
 		const contentId = `${blockData.id}-${config.p1GlobalClassName.blockContent}`;
 		const contentEl = document.getElementById(contentId);
 
@@ -346,7 +343,7 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		const rangeObj = api.getRangeObj(range);
 
 		const caretPos = api.getCaretRelativePositionToContent({ contentEl, range });
-		if (caretPos.isCaretAtLeftEnd) {
+		if (caretPos?.isCaretAtLeftEnd) {
 			//前のブロックと結合
 			handleMargeByBS({ event, blockData, blockDataArr, undoObj: rangeObj });
 		}
@@ -354,21 +351,10 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 		setDebouncedTmpInnerHTML({
 			id: blockData.id,
 			contentEl: contentEl,
-			// undoSel: rangeObj,
 		});
 		if (!debouncedndoSel) {
 			setDebouncedUndoSel(rangeObj);
 		}
-		// setTimeout(() => {
-		// 	setTmpInnerHTML({
-		// 		id: blockData.id,
-		// 		contentEl: contentEl,
-		// 		changedCount: tmpInnerHTML?.changedCount ? tmpInnerHTML.changedCount - 1 : -1,
-		// 		undoSel: rangeObj,
-		// 	});
-		// }, 0);
-
-		// setDelDebounced({ id: blockData.id, beforeInlineSel: rangeObj });
 	};
 
 	const handleOnKeyDown = getHotkeyHandler([
