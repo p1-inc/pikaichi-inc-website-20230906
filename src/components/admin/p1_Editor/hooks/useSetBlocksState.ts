@@ -985,6 +985,7 @@ export const useSetBlocksState = (): BlockControlType => {
 
 	const handleContentEditableOnChange = ({ id, contentEl, undoSel: _undoSel }: { id: string; contentEl: Element; undoSel: InlineSelType }) => {
 		//
+		contentEl.normalize();
 
 		const selection = document.getSelection();
 		if (selection.rangeCount === 0) {
@@ -1004,8 +1005,8 @@ export const useSetBlocksState = (): BlockControlType => {
 		const selObj = redoSel;
 
 		// const contentEl = document.getElementById(`${id}-${config.p1GlobalClassName.blockContent}`);
-		contentEl.normalize();
 
+		console.log("selObj: ", selObj);
 		handleAddBlockData({ id, data: { text: contentEl.innerHTML }, undoSel, redoSel, selObj });
 	};
 

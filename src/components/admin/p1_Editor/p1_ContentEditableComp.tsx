@@ -347,7 +347,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 			//前のブロックと結合
 			handleMargeByBS({ event, blockData, blockDataArr, undoObj: rangeObj });
 		}
-
 		setDebouncedTmpInnerHTML({
 			id: blockData.id,
 			contentEl: contentEl,
@@ -481,9 +480,6 @@ export const P1_ContentEditableComp = <T,>({ blockData, blockTool, api, pureBloc
 							id: blockData.id,
 							contentEl: e.currentTarget,
 						});
-
-						// const text = bufferText + inputEvent.data;
-						// setBufferText(text);
 					}
 					// console.log("通常のキーボード入力");
 				} else {
