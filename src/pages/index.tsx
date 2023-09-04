@@ -27,10 +27,6 @@ export default function Home() {
 		offset: 60,
 	});
 
-	const rootSize = css`
-        font-size: 1rem;
-    `;
-
 	const [openFlyerSample, toggleOpenFlyerSample] = useToggle([false, true]);
 
 	return (
@@ -55,7 +51,7 @@ export default function Home() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main css={rootSize}>
+			<Box component="main" fz="1rem">
 				<BackgoundIllustration>
 					<Topview scrollIntoView={scrollIntoView} contactRef={contactRef} />
 					<Price />
@@ -83,7 +79,7 @@ export default function Home() {
 				>
 					<SlideFlyerSample setWinOpen={openFlyerSample} />
 				</Modal>
-			</main>
+			</Box>
 		</div>
 	);
 }
