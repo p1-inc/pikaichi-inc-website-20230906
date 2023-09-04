@@ -190,7 +190,6 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 
 			setCanPublic(Boolean(post.canPublic));
 			setPin(Boolean(post.pin));
-			// setIsDraft(Boolean(post.isDraft));
 
 			setCategoryList(post_categorySort);
 
@@ -490,6 +489,7 @@ export default function EditPost({ id, isDuplicate, readOnly = false }: EditPost
 						borderRadius: "0.2em",
 						padding: "3em 2em",
 						marginBottom: "20em",
+						minHeight: "40em",
 					}}
 				>
 					<P1_EditorContainer api={api} readOnly={readOnly} maw="40em" />
