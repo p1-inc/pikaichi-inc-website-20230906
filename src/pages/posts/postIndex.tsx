@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 import { useState, useEffect, useRef, MutableRefObject } from "react";
 import Image from "next/future/image";
@@ -56,7 +57,6 @@ export default function PostIndex({ categoryList, shopInfoData, menuList, genera
 			const bData = b.updatedAt.replace(/-/g, "");
 			return Number(bData) - Number(aData);
 		});
-		console.log("sort : ", sort);
 		setNPostData(sort);
 	}, [postData]);
 
@@ -169,6 +169,20 @@ export default function PostIndex({ categoryList, shopInfoData, menuList, genera
 
 	return (
 		<Box sx={mainContainer}>
+			<Head>
+				<title>ヨガ専門webサイト・チラシ制作 || ブログリスト</title>
+				<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+				<meta name="description" content="ヨガ専門webサイト・チラシ制作 || ブログリスト" />
+				<meta property="og:url" content="https://pick-yoga.com/posts/postIndex" />
+				<meta property="og:title" content="ヨガ専門webサイト・チラシ制作 || ブログリスト" />
+				<meta property="og:site_name" content="ヨガ専門webサイト・チラシ制作 " />
+				<meta property="og:description" content="ヨガ専門webサイト・チラシ制作 || ブログリスト" />
+				<meta property="og:type" content="website" />
+				<meta property="og:image" content="https://pick-yoga.com/img/ogpImage.png" />
+				<meta name="twitter:card" content="summary_large_image" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+
 			<Box sx={header}>
 				<Button
 					mr="3%"
