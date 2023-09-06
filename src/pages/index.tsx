@@ -54,7 +54,7 @@ export default function Home() {
 			<Box component="main" fz="1rem">
 				<BackgoundIllustration>
 					<Topview scrollIntoView={scrollIntoView} contactRef={contactRef} />
-					<Price />
+					{/* <Price />
 					<Sample toggleOpenFlyerSample={toggleOpenFlyerSample} />
 					<WhatIs />
 					<Workflow />
@@ -64,7 +64,7 @@ export default function Home() {
 
 					<Box ref={contactRef}>
 						<Contact />
-					</Box>
+					</Box> */}
 					<Footer />
 				</BackgoundIllustration>
 				<Modal
