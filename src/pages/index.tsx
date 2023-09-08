@@ -1,44 +1,63 @@
-/** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
+import fs from "fs";
+import path from "path";
+import sizeOf from "image-size";
 
 import { Carousel } from "@mantine/carousel";
+import { Transition } from "@mantine/core";
 import Head from "next/head";
 import NextImage from "next/future/image";
 import Topview from "../components/Topview";
 
 import Footer from "../components/Footer";
-import { Box, Modal } from "@mantine/core";
+import { Box, Modal, createStyles, getStylesRef, rem, keyframes } from "@mantine/core";
 import { useScrollIntoView, useToggle } from "@mantine/hooks";
 import P1_Slider from "../components/P1_Slider";
 import { useEffect, useState } from "react";
 import { MediaLib } from "../types/types";
-// import { AlertComp, BigDialog, BigDialog2, ConfirmComp } from "../components/commonComponents/alertComp";
-import topImageJSON from "../data/works.json";
 
-const worksPaths = [
-	"/img/works/image1.jpg",
-	"/img/image2.jpg",
-	// ... その他の画像パス
-];
-const worksImgPath = "/img/works/";
+export const bounce = keyframes({
+	"0%": {
+		transform: "scale(1)",
+	},
+	"50%": {
+		transform: "scale(1.5)",
+	},
+	"100%": {
+		transform: "scale(1)",
+	},
+});
 
-export default function Home() {
+type wordImageDataType = {
+	fileName: string;
+	src: string;
+	width: number;
+	height: number;
+};
+export default function Home({ workImageData }: { workImageData: wordImageDataType[] }) {
 	//
-	const [topImageData, setTopImageData] = useState<MediaLib[]>();
 	const { scrollIntoView, targetRef: contactRef } = useScrollIntoView<HTMLDivElement>({
 		offset: 60,
 	});
-	const [worksPaths, setWorksPaths] = useState<string[]>([]);
 
-	const [imagesArr, setImagesArr] = useState<MediaLib[]>([]);
+	// const [imgSize, setImgSize] = useState(100);
 
-	useEffect(() => {
-		const worksData = topImageJSON.map((d) => {
-			return { ...d, src: `${worksImgPath}${d.id}.jpg` };
-		});
+	// 	useEffect(() => {
+	// 		// インターバルを設定して5秒ごとにステートを変更
+	// 		const interval = setInterval(() => {
+	// 			setImgSize((prevWidth) => (prevWidth === 100 ? 150 : 100));
+	// 		}, 5000);
+	//
+	// 		// コンポーネントのクリーンアップ時にインターバルをクリア
+	// 		return () => clearInterval(interval);
+	// 	}, []);
 
-		setTopImageData(worksData);
-	}, []);
+	const useStyles = createStyles((theme) => ({
+		workImgAnimation: {
+			animation: `${bounce} 10s ease-in-out infinite`,
+		},
+	}));
+
+	const { classes } = useStyles();
 
 	return (
 		<div>
@@ -65,19 +84,21 @@ export default function Home() {
 			<Box component="main" fz="1rem">
 				{/* <P1_Slider images={topImageData} /> */}
 				<Carousel loop mx="auto" withIndicators w="100%" height="100vh" mah="50em" sx={{ overflow: "hidden" }}>
-					{topImageData.map((image, index) => (
-						<Carousel.Slide>
-							<Box
-								component={NextImage}
-								src={image.src}
-								alt="Picture of the author"
-								w="100%"
-								h="100%"
-								mah="50em"
-								width={image.width}
-								height={image.height}
-								sx={{ objectFit: "cover" }}
-							/>
+					{workImageData.map((image, index) => (
+						<Carousel.Slide key={image.fileName}>
+							<Box className={classes.workImgAnimation}>
+								<Box
+									component={NextImage}
+									src={image.src}
+									alt="Picture of the author"
+									w="100%"
+									h="100%"
+									mah="50em"
+									width={image.width}
+									height={image.height}
+									sx={{ objectFit: "cover" }}
+								/>
+							</Box>
 						</Carousel.Slide>
 					))}
 				</Carousel>
@@ -88,4 +109,28 @@ export default function Home() {
 			</Box>
 		</div>
 	);
+}
+
+export async function getStaticProps() {
+	const imgPath = ["public", "img", "works"];
+	const imgDirectory = path.join(process.cwd(), ...imgPath);
+	const imageFiles = fs.readdirSync(imgDirectory);
+
+	const imagesWithSizes = imageFiles.map((file) => {
+		const fullPath = path.join(imgDirectory, file);
+		const dimensions = sizeOf(fullPath);
+
+		return {
+			fileName: file,
+			src: `/${imgPath[1]}/${imgPath[2]}/${file}`,
+			width: dimensions.width,
+			height: dimensions.height,
+		};
+	});
+
+	return {
+		props: {
+			workImageData: imagesWithSizes,
+		},
+	};
 }
