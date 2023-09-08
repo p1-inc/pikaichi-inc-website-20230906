@@ -1,11 +1,11 @@
 import NextLink from "next/link";
 
 import { AdminHeader } from "./adminHeader";
-import { deployDatabase } from "../../firebase/firebase";
-import { useDialogState } from "../../hooks/useDialogState";
+// import { deployDatabase } from "../../firebase/firebase";
+// import { useDialogState } from "../../hooks/useDialogState";
 import { Box, Button, Divider, Flex, Text } from "@mantine/core";
 import { useState } from "react";
-import { useDeploy } from "../../hooks/useDeploy";
+// import { useDeploy } from "../../hooks/useDeploy";
 import {
 	IconArticle,
 	IconBalloon,
@@ -145,7 +145,7 @@ export const adminPages: AdminPagesType = {
 
 const AdminHome = () => {
 	//
-	const { handleDeploy, loading } = useDeploy();
+	// const { handleDeploy, loading } = useDeploy();
 
 	const adminContaine = {
 		width: "90%",
@@ -243,7 +243,7 @@ const AdminHome = () => {
 						</Flex>
 					</Flex>
 
-					<Flex direction="column" w="90%" maw="50em" gap="1em">
+					{/* <Flex direction="column" w="90%" maw="50em" gap="1em">
 						<NextLink href="/admin/preview" passHref>
 							<Button w="100%" h="3em" size="sm" variant="outline">
 								プレビュー
@@ -253,7 +253,7 @@ const AdminHome = () => {
 						<Button w="100%" h="3em" size="sm" variant="filled" onClick={handleDeploy} loading={loading ? true : false}>
 							設定を反映させる
 						</Button>
-					</Flex>
+					</Flex> */}
 				</Flex>
 			</Box>
 		</div>

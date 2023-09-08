@@ -64,7 +64,7 @@ import { getStorage, ref, getDownloadURL, uploadBytesResumable, deleteObject, St
 import {
 	MediaLib,
 	TableType,
-	PostDataType,
+	// PostDataType,
 	UserType,
 	TopWordType,
 	ShopInfoType,
@@ -79,7 +79,7 @@ import {
 	CategoryType,
 	MenuType,
 	GeneralControlType,
-	PostDataInitObj,
+	// PostDataInitObj,
 } from "../types/types";
 import { toBlob } from "../util/toImage";
 
@@ -1478,73 +1478,73 @@ export const setPhotoGalleryData = async (
 // 	return result;
 // };
 
-export const getAllPostData = async () => {
-	const result: PostDataType[] = [];
-	const querySnapshot = await getDocs(collection(db, "posts"));
-	querySnapshot.forEach((doc) => {
-		result.push(doc.data() as PostDataType);
-	});
-	return result;
-};
+// export const getAllPostData = async () => {
+// 	const result: PostDataType[] = [];
+// 	const querySnapshot = await getDocs(collection(db, "posts"));
+// 	querySnapshot.forEach((doc) => {
+// 		result.push(doc.data() as PostDataType);
+// 	});
+// 	return result;
+// };
 
-export const getfilteredPostDataByCanPublic = async () => {
-	const result: PostDataType[] = [];
+// export const getfilteredPostDataByCanPublic = async () => {
+// 	const result: PostDataType[] = [];
+//
+// 	const docRef = collection(db, "posts");
+// 	const q = query(docRef, where("canPublic", "==", true));
+//
+// 	const querySnapshot = await getDocs(q);
+//
+// 	querySnapshot.forEach((doc) => {
+// 		result.push(doc.data() as PostDataType);
+// 	});
+// 	return result;
+// };
 
-	const docRef = collection(db, "posts");
-	const q = query(docRef, where("canPublic", "==", true));
+// export const getPostDataAsId = async ({ id }: { id: string }) => {
+// 	if (!id) {
+// 		return PostDataInitObj;
+// 	}
+// 	let result: PostDataType | "error";
+// 	const docRef = doc(db, "posts", id);
+// 	const docSnap = await getDoc(docRef);
+//
+// 	if (docSnap.exists()) {
+// 		result = docSnap.data() as PostDataType;
+// 	} else {
+// 		result = PostDataInitObj;
+// 		console.log("No such document!");
+// 	}
+//
+// 	return result;
+// };
 
-	const querySnapshot = await getDocs(q);
-
-	querySnapshot.forEach((doc) => {
-		result.push(doc.data() as PostDataType);
-	});
-	return result;
-};
-
-export const getPostDataAsId = async ({ id }: { id: string }) => {
-	if (!id) {
-		return PostDataInitObj;
-	}
-	let result: PostDataType | "error";
-	const docRef = doc(db, "posts", id);
-	const docSnap = await getDoc(docRef);
-
-	if (docSnap.exists()) {
-		result = docSnap.data() as PostDataType;
-	} else {
-		result = PostDataInitObj;
-		console.log("No such document!");
-	}
-
-	return result;
-};
-
-export const setPostData = async (id: string, data: PostDataType) => {
-	const batch = writeBatch(db);
-	batch.set(doc(db, "posts", id), data);
-	try {
-		await batch.commit();
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-
-	//Usageを再構築
-	const checksProp = {
-		checkMediaUsageFunc: true,
-		checkTableUsageFunc: true,
-		checkLayoutUsageFunc: true,
-	};
-
-	try {
-		const func = httpsCallable(functions, "restructureUsageDataOnCall");
-		func(checksProp);
-	} catch (error) {
-		console.log("error: ", error);
-	}
-
-	return "success";
-};
+// export const setPostData = async (id: string, data: PostDataType) => {
+// 	const batch = writeBatch(db);
+// 	batch.set(doc(db, "posts", id), data);
+// 	try {
+// 		await batch.commit();
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+//
+// 	//Usageを再構築
+// 	const checksProp = {
+// 		checkMediaUsageFunc: true,
+// 		checkTableUsageFunc: true,
+// 		checkLayoutUsageFunc: true,
+// 	};
+//
+// 	try {
+// 		const func = httpsCallable(functions, "restructureUsageDataOnCall");
+// 		func(checksProp);
+// 	} catch (error) {
+// 		console.log("error: ", error);
+// 	}
+//
+// 	return "success";
+// };
 
 // export const deletePost__old = async (arr: string[]) => {
 // 	const f = false;
@@ -1655,21 +1655,21 @@ export const deletePostAsIdArr = async (arr: string[]) => {
 	return "success";
 };
 
-export const getPostDataAsLimit = async ({ lim = 12, startNum = "" }) => {
-	const result: PostDataType[] = [];
-
-	const postsRef = collection(db, "posts");
-	const q = query(postsRef, orderBy("date"), limit(lim), startAfter(startNum));
-
-	const querySnapshot = await getDocs(q);
-
-	querySnapshot.forEach((doc) => {
-		const data = doc.data() as PostDataType;
-		result.push(data);
-	});
-
-	return result;
-};
+// export const getPostDataAsLimit = async ({ lim = 12, startNum = "" }) => {
+// 	const result: PostDataType[] = [];
+//
+// 	const postsRef = collection(db, "posts");
+// 	const q = query(postsRef, orderBy("date"), limit(lim), startAfter(startNum));
+//
+// 	const querySnapshot = await getDocs(q);
+//
+// 	querySnapshot.forEach((doc) => {
+// 		const data = doc.data() as PostDataType;
+// 		result.push(data);
+// 	});
+//
+// 	return result;
+// };
 
 export const getAllPostTag = async ({ dbName = _dbName }: { dbName?: string }) => {
 	const result: TagType[] = await getDocDataFromDB(dbName, "post_tag");
@@ -2018,235 +2018,235 @@ export const deleteComponentData = (name: string, idArr: string[], batch: WriteB
 	return result;
 };
 
-export const deployDatabase = async () => {
-	//
-	///////////////////Usageを再構築//////////////////////////
-	const checksProp = {
-		checkMediaUsageFunc: true,
-		checkTableUsageFunc: true,
-		checkLayoutUsageFunc: true,
-	};
-	try {
-		const func = httpsCallable(functions, "restructureUsageDataOnCall");
-		await func(checksProp);
-	} catch (error) {
-		console.log("error: ", error);
-		const createdAtFull = dayjs().tz("Asia/Tokyo").format("YYYY-MM-DD-hh-mm-ss");
+// export const deployDatabase = async () => {
+// 	//
+// 	///////////////////Usageを再構築//////////////////////////
+// 	const checksProp = {
+// 		checkMediaUsageFunc: true,
+// 		checkTableUsageFunc: true,
+// 		checkLayoutUsageFunc: true,
+// 	};
+// 	try {
+// 		const func = httpsCallable(functions, "restructureUsageDataOnCall");
+// 		await func(checksProp);
+// 	} catch (error) {
+// 		console.log("error: ", error);
+// 		const createdAtFull = dayjs().tz("Asia/Tokyo").format("YYYY-MM-DD-hh-mm-ss");
+//
+// 		const logData: LogType = {
+// 			code: "m104",
+// 			type: "fatal",
+// 			message: `deployに失敗しました${JSON.stringify(error)}`,
+// 			createdAt: createdAtFull,
+// 		};
+//
+// 		await setLog(logData);
+// 		return "error";
+// 	}
+// 	///////////////////Usageを読み取る//////////////////////////
+//
+// 	let _layoutUsage: string[] = [];
+// 	let tableUsage: [string, string[]][] = [];
+// 	let mediaUsage: [string, string[]][] = [];
+//
+// 	const querySnapshot = await getDocs(collection(db, "usage"));
+// 	querySnapshot.forEach((doc) => {
+// 		if (doc.id === "layout") {
+// 			_layoutUsage = doc.data()?.layout;
+// 		}
+// 		if (doc.id === "table") {
+// 			const _tableUsage = doc.data();
+// 			tableUsage = Object.entries(_tableUsage);
+// 		}
+// 		if (doc.id === "media") {
+// 			const _mediaUsage = doc.data();
+// 			mediaUsage = Object.entries(_mediaUsage);
+// 		}
+// 	});
+//
+// 	///////////////////全コンポーネントのを読み取る//////////////////////////
+// 	let result;
+//
+// 	const {
+// 		layoutData,
+// 		topImageData,
+// 		topWordData,
+// 		newsData,
+// 		tableData,
+// 		campaignData,
+// 		peopleData,
+// 		shopInfoData,
+// 		photoGallery,
+// 		footerData,
+// 		categoryList,
+// 		menuList,
+// 		generalData,
+// 		allComplist,
+// 	} = await initWebData(_dbName);
+//
+// 	const _media = await getMediaLib();
+// 	const mediaUsageList = mediaUsage.map((d) => d[0]);
+// 	const media = _media.filter((d) => mediaUsageList.includes(d.id));
+//
+// 	//////////////////postデータのblockにimageが合った場合srcを埋め込む////////
+//
+// 	const deoployData = {
+// 		layoutData: JSON.stringify(layoutData),
+// 		topImageData: JSON.stringify(media.filter((m) => topImageData.topImageList.includes(m.id))),
+// 		topWordData: JSON.stringify(topWordData),
+// 		newsData: JSON.stringify(newsData),
+// 		tableData: JSON.stringify(tableData),
+// 		campaignData: JSON.stringify(campaignData),
+// 		peopleData: JSON.stringify(peopleData),
+// 		shopInfoData: JSON.stringify(shopInfoData),
+// 		photoGallery: JSON.stringify(media.filter((m) => photoGallery[0].photoGalleryList.includes(m.id))),
+// 		footerData: JSON.stringify(footerData),
+// 		categoryList: JSON.stringify(categoryList),
+// 		menuList: JSON.stringify(menuList),
+// 		generalData: JSON.stringify(generalData),
+// 		allComplist: JSON.stringify(allComplist),
+// 		mediaLib: JSON.stringify(media),
+// 	};
+//
+// 	const batch = writeBatch(db);
+//
+// 	const deployRef = doc(db, "deploy", "deploy");
+// 	batch.set(deployRef, deoployData);
+//
+// 	try {
+// 		await batch.commit();
+// 		result = "success";
+// 	} catch (error) {
+// 		console.log(error);
+// 		result = "error";
+// 	}
+//
+// 	return result;
+// };
 
-		const logData: LogType = {
-			code: "m104",
-			type: "fatal",
-			message: `deployに失敗しました${JSON.stringify(error)}`,
-			createdAt: createdAtFull,
-		};
-
-		await setLog(logData);
-		return "error";
-	}
-	///////////////////Usageを読み取る//////////////////////////
-
-	let _layoutUsage: string[] = [];
-	let tableUsage: [string, string[]][] = [];
-	let mediaUsage: [string, string[]][] = [];
-
-	const querySnapshot = await getDocs(collection(db, "usage"));
-	querySnapshot.forEach((doc) => {
-		if (doc.id === "layout") {
-			_layoutUsage = doc.data()?.layout;
-		}
-		if (doc.id === "table") {
-			const _tableUsage = doc.data();
-			tableUsage = Object.entries(_tableUsage);
-		}
-		if (doc.id === "media") {
-			const _mediaUsage = doc.data();
-			mediaUsage = Object.entries(_mediaUsage);
-		}
-	});
-
-	///////////////////全コンポーネントのを読み取る//////////////////////////
-	let result;
-
-	const {
-		layoutData,
-		topImageData,
-		topWordData,
-		newsData,
-		tableData,
-		campaignData,
-		peopleData,
-		shopInfoData,
-		photoGallery,
-		footerData,
-		categoryList,
-		menuList,
-		generalData,
-		allComplist,
-	} = await initWebData(_dbName);
-
-	const _media = await getMediaLib();
-	const mediaUsageList = mediaUsage.map((d) => d[0]);
-	const media = _media.filter((d) => mediaUsageList.includes(d.id));
-
-	//////////////////postデータのblockにimageが合った場合srcを埋め込む////////
-
-	const deoployData = {
-		layoutData: JSON.stringify(layoutData),
-		topImageData: JSON.stringify(media.filter((m) => topImageData.topImageList.includes(m.id))),
-		topWordData: JSON.stringify(topWordData),
-		newsData: JSON.stringify(newsData),
-		tableData: JSON.stringify(tableData),
-		campaignData: JSON.stringify(campaignData),
-		peopleData: JSON.stringify(peopleData),
-		shopInfoData: JSON.stringify(shopInfoData),
-		photoGallery: JSON.stringify(media.filter((m) => photoGallery[0].photoGalleryList.includes(m.id))),
-		footerData: JSON.stringify(footerData),
-		categoryList: JSON.stringify(categoryList),
-		menuList: JSON.stringify(menuList),
-		generalData: JSON.stringify(generalData),
-		allComplist: JSON.stringify(allComplist),
-		mediaLib: JSON.stringify(media),
-	};
-
-	const batch = writeBatch(db);
-
-	const deployRef = doc(db, "deploy", "deploy");
-	batch.set(deployRef, deoployData);
-
-	try {
-		await batch.commit();
-		result = "success";
-	} catch (error) {
-		console.log(error);
-		result = "error";
-	}
-
-	return result;
-};
-
-export const initWebData = async (_dbName: string) => {
-	//
-	const mediaLib = await getMediaLib();
-	const topImageData = await getTopImage({ dbName: _dbName });
-
-	const layoutData = await getLayoutData({ dbName: _dbName });
-
-	const containerChild = layoutData.flatMap((d) => [...d.child]);
-
-	const allTableData = await getAllTables({ dbName: _dbName });
-	const tableIdArr = containerChild
-		.map((d) => d.match(/table_(.+)/))
-		.filter((d2) => d2)
-		.map((d3) => d3[1]);
-
-	const tableData = tableIdArr.map((d) => allTableData.find((d2) => d2.id === d));
-
-	const topWords = await getTopWord({ dbName: _dbName });
-	const topWordIdArr = containerChild
-		.map((d) => d.match(/topWord_(.+)/))
-		.filter((d2) => d2)
-		.map((d3) => d3[1]);
-
-	const topWordData = topWords.filter((d) => topWordIdArr.includes(d.id));
-
-	const _shopInfoData: ShopInfoType[] = await getAllShopInfoList({});
-	const _shopInfoData2 = Object.entries(_shopInfoData).map((d) => d[1]);
-
-	const shopInfoIdArr = containerChild
-		.map((d) => d.match(/shopInfo_(.+)/))
-		.filter((d2) => d2)
-		.map((d3) => d3[1]);
-
-	const shopInfoData = _shopInfoData2.filter((d) => shopInfoIdArr.includes(d.id));
-
-	const allCampaignData: CampaignType[] = await getAllCampaignList({ dbName: _dbName });
-
-	const campaignIdArr = containerChild
-		.map((d) => d.match(/campaign_(.+)/))
-		.filter((d2) => d2)
-		.map((d3) => d3[1]);
-
-	const campaignData = allCampaignData
-		.filter((d) => campaignIdArr.includes(d.id))
-		.map((d2) => {
-			const media = mediaLib.find((m) => m.id === d2.imageId);
-			if (media?.src && media.srcHigh) {
-				return { ...d2, src: media.src, srcHigh: media.srcHigh };
-			} else {
-				return d2;
-			}
-		});
-
-	const userData: UserType[] = await getAllUserList();
-
-	const peopleData1 = await getPeopleData({});
-
-	const peopleData2 = userData.filter((d) => peopleData1[0].peopleList.includes(d.id));
-	const peopleData = peopleData2.map((d) => {
-		const imgId = d.imageId;
-		const thisMedia = mediaLib.find((media) => media.id === imgId);
-		if (thisMedia) {
-			d.src = thisMedia.src;
-			d.srcHigh = thisMedia.srcHigh;
-		}
-
-		return d;
-	});
-
-	const photoGallery = await getPhotoGalleryData({});
-
-	const _postData = await getAllPostData();
-	const postData = _postData.map((d) => {
-		const media = mediaLib.find((media) => media.id === d.mainImage);
-		if (media) {
-			return { ...d, src: media.src, srcHigh: media.srcHigh };
-		} else {
-			return d;
-		}
-	});
-	const _newsData = await getNews({});
-	const newsData = _newsData[0].newsList.map((d) => postData.find((d2) => d2.id === d));
-
-	const categoryList = await getAllPostCategory({ dbName: _dbName });
-
-	const _menuList = await getMenuList({});
-	const menuList: MenuType[] = _menuList[0];
-
-	const _footerData = await getFooterData({ dbName: _dbName });
-	const footerData = _footerData[0];
-
-	const _generalData = await getGeneralData({});
-
-	const _logoImgSrc = mediaLib.find((m) => m.id === _generalData[0].logoImg);
-
-	const generalData = { ..._generalData[0], logoImgSrc: _logoImgSrc?.srcHigh };
-	const faviconImg = mediaLib.find((d) => d.id === generalData?.favicon);
-	const logoImg = mediaLib.find((d) => d.id === generalData?.logoImg);
-	const ogImg = mediaLib.find((d) => d.id === generalData?.ogImage);
-
-	const _allComplist = await getAllComponent({});
-	const allComplist = _allComplist.filter((d) => containerChild.includes(d.id));
-
-	return {
-		layoutData,
-		topImageData,
-		topWordData,
-		newsData,
-		tableData,
-		campaignData,
-		peopleData,
-		shopInfoData,
-		photoGallery,
-		footerData,
-		categoryList,
-		menuList,
-		generalData,
-		allComplist,
-		faviconImg,
-		logoImg,
-		ogImg,
-	};
-};
+// export const initWebData = async (_dbName: string) => {
+// 	//
+// 	const mediaLib = await getMediaLib();
+// 	const topImageData = await getTopImage({ dbName: _dbName });
+//
+// 	const layoutData = await getLayoutData({ dbName: _dbName });
+//
+// 	const containerChild = layoutData.flatMap((d) => [...d.child]);
+//
+// 	const allTableData = await getAllTables({ dbName: _dbName });
+// 	const tableIdArr = containerChild
+// 		.map((d) => d.match(/table_(.+)/))
+// 		.filter((d2) => d2)
+// 		.map((d3) => d3[1]);
+//
+// 	const tableData = tableIdArr.map((d) => allTableData.find((d2) => d2.id === d));
+//
+// 	const topWords = await getTopWord({ dbName: _dbName });
+// 	const topWordIdArr = containerChild
+// 		.map((d) => d.match(/topWord_(.+)/))
+// 		.filter((d2) => d2)
+// 		.map((d3) => d3[1]);
+//
+// 	const topWordData = topWords.filter((d) => topWordIdArr.includes(d.id));
+//
+// 	const _shopInfoData: ShopInfoType[] = await getAllShopInfoList({});
+// 	const _shopInfoData2 = Object.entries(_shopInfoData).map((d) => d[1]);
+//
+// 	const shopInfoIdArr = containerChild
+// 		.map((d) => d.match(/shopInfo_(.+)/))
+// 		.filter((d2) => d2)
+// 		.map((d3) => d3[1]);
+//
+// 	const shopInfoData = _shopInfoData2.filter((d) => shopInfoIdArr.includes(d.id));
+//
+// 	const allCampaignData: CampaignType[] = await getAllCampaignList({ dbName: _dbName });
+//
+// 	const campaignIdArr = containerChild
+// 		.map((d) => d.match(/campaign_(.+)/))
+// 		.filter((d2) => d2)
+// 		.map((d3) => d3[1]);
+//
+// 	const campaignData = allCampaignData
+// 		.filter((d) => campaignIdArr.includes(d.id))
+// 		.map((d2) => {
+// 			const media = mediaLib.find((m) => m.id === d2.imageId);
+// 			if (media?.src && media.srcHigh) {
+// 				return { ...d2, src: media.src, srcHigh: media.srcHigh };
+// 			} else {
+// 				return d2;
+// 			}
+// 		});
+//
+// 	const userData: UserType[] = await getAllUserList();
+//
+// 	const peopleData1 = await getPeopleData({});
+//
+// 	const peopleData2 = userData.filter((d) => peopleData1[0].peopleList.includes(d.id));
+// 	const peopleData = peopleData2.map((d) => {
+// 		const imgId = d.imageId;
+// 		const thisMedia = mediaLib.find((media) => media.id === imgId);
+// 		if (thisMedia) {
+// 			d.src = thisMedia.src;
+// 			d.srcHigh = thisMedia.srcHigh;
+// 		}
+//
+// 		return d;
+// 	});
+//
+// 	const photoGallery = await getPhotoGalleryData({});
+//
+// 	const _postData = await getAllPostData();
+// 	const postData = _postData.map((d) => {
+// 		const media = mediaLib.find((media) => media.id === d.mainImage);
+// 		if (media) {
+// 			return { ...d, src: media.src, srcHigh: media.srcHigh };
+// 		} else {
+// 			return d;
+// 		}
+// 	});
+// 	const _newsData = await getNews({});
+// 	const newsData = _newsData[0].newsList.map((d) => postData.find((d2) => d2.id === d));
+//
+// 	const categoryList = await getAllPostCategory({ dbName: _dbName });
+//
+// 	const _menuList = await getMenuList({});
+// 	const menuList: MenuType[] = _menuList[0];
+//
+// 	const _footerData = await getFooterData({ dbName: _dbName });
+// 	const footerData = _footerData[0];
+//
+// 	const _generalData = await getGeneralData({});
+//
+// 	const _logoImgSrc = mediaLib.find((m) => m.id === _generalData[0].logoImg);
+//
+// 	const generalData = { ..._generalData[0], logoImgSrc: _logoImgSrc?.srcHigh };
+// 	const faviconImg = mediaLib.find((d) => d.id === generalData?.favicon);
+// 	const logoImg = mediaLib.find((d) => d.id === generalData?.logoImg);
+// 	const ogImg = mediaLib.find((d) => d.id === generalData?.ogImage);
+//
+// 	const _allComplist = await getAllComponent({});
+// 	const allComplist = _allComplist.filter((d) => containerChild.includes(d.id));
+//
+// 	return {
+// 		layoutData,
+// 		topImageData,
+// 		topWordData,
+// 		newsData,
+// 		tableData,
+// 		campaignData,
+// 		peopleData,
+// 		shopInfoData,
+// 		photoGallery,
+// 		footerData,
+// 		categoryList,
+// 		menuList,
+// 		generalData,
+// 		allComplist,
+// 		faviconImg,
+// 		logoImg,
+// 		ogImg,
+// 	};
+// };
 
 export const setLog = async (logData: LogType) => {
 	const docRef = await addDoc(collection(db, "log"), logData);

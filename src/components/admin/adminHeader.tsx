@@ -13,7 +13,7 @@ import { adminPages } from "./adminHome";
 import { c, cArr } from "../../styles/eStyle";
 
 import { Burger, Button, Container, Drawer, Flex, Group, Header, Menu, UnstyledButton, Navbar, NavLink, Box, Text, Divider } from "@mantine/core";
-import { useDeploy } from "../../hooks/useDeploy";
+// import { useDeploy } from "../../hooks/useDeploy";
 import { IconHome } from "@tabler/icons-react";
 
 type AdminHeaderType = {
@@ -26,7 +26,7 @@ export const AdminHeader = ({ title, color = c.defaultBlue }: AdminHeaderType) =
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [openMenu, setOpenMenu] = useState(false);
 
-	const { handleDeploy, loading } = useDeploy();
+	// const { handleDeploy, loading } = useDeploy();
 
 	const handleShowMenu = (e: { currentTarget: HTMLButtonElement }) => {
 		if (anchorEl) {
@@ -195,7 +195,7 @@ export const AdminHeader = ({ title, color = c.defaultBlue }: AdminHeaderType) =
 								</Button>
 							</NextLink>
 
-							<Button
+							{/* <Button
 								size="xs"
 								sx={{ width: "15em" }}
 								variant="filled"
@@ -206,7 +206,7 @@ export const AdminHeader = ({ title, color = c.defaultBlue }: AdminHeaderType) =
 								loading={loading ? true : false}
 							>
 								設定を反映させる
-							</Button>
+							</Button> */}
 						</Navbar.Section>
 					</Navbar>
 				</Drawer>

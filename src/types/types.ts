@@ -1,4 +1,4 @@
-import { OutputBlockData } from "../components/admin/p1_Editor/p1_EditorTypes";
+// import { OutputBlockData } from "../components/admin/p1_Editor/p1_EditorTypes";
 
 export type BlockNameType =
 	| "topImage"
@@ -66,39 +66,10 @@ export const ContainerInitObj: ContainerType = {
 export interface MediaLib {
 	id: string;
 	src: string;
-	srcHigh: string;
-	widthLow: number;
-	heightLow: number;
-	widthHigh: number;
-	heightHigh: number;
-	createdAt: string;
-	updatedAt: string;
-	contentTypeLow: string;
-	contentTypeHigh: string;
-	alt?: string;
-	caption?: string;
-	description?: string;
-	tag?: string;
-	// use: { [key: string]: string[] };
+	height: number;
+	width: number;
 }
-//TODO  型から初期化する方法::typeを定義すると同時に下記のように初期値を設置してexportしておく（型を一致させておく）
-export const MediaLibInitObj: MediaLib = {
-	id: "",
-	src: "",
-	srcHigh: "",
-	widthLow: 0,
-	heightLow: 0,
-	widthHigh: 0,
-	heightHigh: 0,
-	createdAt: "",
-	updatedAt: "",
-	contentTypeLow: "",
-	contentTypeHigh: "",
-	alt: "",
-	caption: "",
-	description: "",
-	tag: "",
-};
+
 
 export interface TopImageType {
 	id: string;
@@ -134,51 +105,51 @@ export const TopWordInit: TopWordType = {
 	usage: false,
 };
 
-export interface PostDataType {
-	id: string;
-	user: { uid: string; displayName: string }; //寄稿者
-	body: { blocks: OutputBlockData[] }; //メイン記事
-	canPublic: boolean; //公開・非公開
-	// isDraft: boolean; //下書き
-	date: string;
-	mainImage: string;
-	src?: string; //イメージのパス
-	srcHigh?: string; //イメージのパス
-	pin: boolean; //ピン留め
-	priority: number;
-	relatedArticles: string[];
-	subCopy: string;
-	category: string;
-	tag: { id: string; name: string }[];
-	title: string;
-	metaTitle: string;
-	metaDescription: string;
-	createdAt: string;
-	updatedAt: string;
-}
+// export interface PostDataType {
+// 	id: string;
+// 	user: { uid: string; displayName: string }; //寄稿者
+// 	body: { blocks: OutputBlockData[] }; //メイン記事
+// 	canPublic: boolean; //公開・非公開
+// 	// isDraft: boolean; //下書き
+// 	date: string;
+// 	mainImage: string;
+// 	src?: string; //イメージのパス
+// 	srcHigh?: string; //イメージのパス
+// 	pin: boolean; //ピン留め
+// 	priority: number;
+// 	relatedArticles: string[];
+// 	subCopy: string;
+// 	category: string;
+// 	tag: { id: string; name: string }[];
+// 	title: string;
+// 	metaTitle: string;
+// 	metaDescription: string;
+// 	createdAt: string;
+// 	updatedAt: string;
+// }
 
-export const PostDataInitObj: PostDataType = {
-	id: "",
-	user: { uid: "", displayName: "" }, //寄稿者
-	body: { blocks: [] }, //メイン記事
-	canPublic: false, //公開・非公開
-	// isDraft: true, //下書き
-	date: "",
-	mainImage: "",
-	src: "", //イメージのパス
-	srcHigh: "", //イメージのパス
-	pin: false, //ピン留め
-	priority: 0,
-	relatedArticles: [],
-	subCopy: "",
-	category: "",
-	tag: [{ id: "", name: "" }],
-	title: "",
-	metaTitle: "",
-	metaDescription: "",
-	createdAt: "",
-	updatedAt: "",
-};
+// export const PostDataInitObj: PostDataType = {
+// 	id: "",
+// 	user: { uid: "", displayName: "" }, //寄稿者
+// 	body: { blocks: [] }, //メイン記事
+// 	canPublic: false, //公開・非公開
+// 	// isDraft: true, //下書き
+// 	date: "",
+// 	mainImage: "",
+// 	src: "", //イメージのパス
+// 	srcHigh: "", //イメージのパス
+// 	pin: false, //ピン留め
+// 	priority: 0,
+// 	relatedArticles: [],
+// 	subCopy: "",
+// 	category: "",
+// 	tag: [{ id: "", name: "" }],
+// 	title: "",
+// 	metaTitle: "",
+// 	metaDescription: "",
+// 	createdAt: "",
+// 	updatedAt: "",
+// };
 
 export interface CategoryType {
 	id: string;
@@ -447,7 +418,7 @@ export interface StaticPropsType {
 	menuList: MenuType[];
 	topImageData: MediaLib[];
 	topWordData: TopWordType[];
-	newsData: PostDataType[];
+	// newsData: PostDataType[];
 	categoryList: CategoryType[];
 	tableData: TableType[];
 	campaignData: CampaignType[];

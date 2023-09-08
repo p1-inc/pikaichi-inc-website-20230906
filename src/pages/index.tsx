@@ -1,33 +1,44 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
+import { Carousel } from "@mantine/carousel";
 import Head from "next/head";
-
-import BackgoundIllustration from "../components/BackgoundIllustration";
+import NextImage from "next/future/image";
 import Topview from "../components/Topview";
-import Price from "../components/Price";
-import Sample from "../components/Sample";
-import WhatIs from "../components/WhatIs";
-import Workflow from "../components/Workflow";
-import Message2 from "../components/Message2";
-import Question from "../components/Question";
-import Quickstart from "../components/Quickstart";
 
 import Footer from "../components/Footer";
-import Contact from "../components/Contact";
 import { Box, Modal } from "@mantine/core";
-import { SlideFlyerSample } from "../components/Slide/SlideFlyerSample";
 import { useScrollIntoView, useToggle } from "@mantine/hooks";
+import P1_Slider from "../components/P1_Slider";
+import { useEffect, useState } from "react";
+import { MediaLib } from "../types/types";
 // import { AlertComp, BigDialog, BigDialog2, ConfirmComp } from "../components/commonComponents/alertComp";
+import topImageJSON from "../data/works.json";
+
+const worksPaths = [
+	"/img/works/image1.jpg",
+	"/img/image2.jpg",
+	// ... その他の画像パス
+];
+const worksImgPath = "/img/works/";
 
 export default function Home() {
 	//
-
+	const [topImageData, setTopImageData] = useState<MediaLib[]>();
 	const { scrollIntoView, targetRef: contactRef } = useScrollIntoView<HTMLDivElement>({
 		offset: 60,
 	});
+	const [worksPaths, setWorksPaths] = useState<string[]>([]);
 
-	const [openFlyerSample, toggleOpenFlyerSample] = useToggle([false, true]);
+	const [imagesArr, setImagesArr] = useState<MediaLib[]>([]);
+
+	useEffect(() => {
+		const worksData = topImageJSON.map((d) => {
+			return { ...d, src: `${worksImgPath}${d.id}.jpg` };
+		});
+
+		setTopImageData(worksData);
+	}, []);
 
 	return (
 		<div>
@@ -52,33 +63,28 @@ export default function Home() {
 			</Head>
 
 			<Box component="main" fz="1rem">
-				<BackgoundIllustration>
-					<Topview scrollIntoView={scrollIntoView} contactRef={contactRef} />
-					{/* <Price />
-					<Sample toggleOpenFlyerSample={toggleOpenFlyerSample} />
-					<WhatIs />
-					<Workflow />
-					<Message2 />
-					<Question />
-					<Quickstart toggleOpenFlyerSample={toggleOpenFlyerSample} />
+				{/* <P1_Slider images={topImageData} /> */}
+				<Carousel loop mx="auto" withIndicators w="100%" height="100vh" mah="50em" sx={{ overflow: "hidden" }}>
+					{topImageData.map((image, index) => (
+						<Carousel.Slide>
+							<Box
+								component={NextImage}
+								src={image.src}
+								alt="Picture of the author"
+								w="100%"
+								h="100%"
+								mah="50em"
+								width={image.width}
+								height={image.height}
+								sx={{ objectFit: "cover" }}
+							/>
+						</Carousel.Slide>
+					))}
+				</Carousel>
 
-					<Box ref={contactRef}>
-						<Contact />
-					</Box> */}
-					<Footer />
-				</BackgoundIllustration>
-				<Modal
-					size="xl"
-					opened={openFlyerSample}
-					onClose={() => {
-						toggleOpenFlyerSample();
-					}}
-					zIndex={99999999}
-					title="クリックして裏返す"
-					styles={{ title: { color: "#FFF" }, content: { borderRadius: 0 }, body: { backgroundColor: "#222" }, header: { backgroundColor: "#222" } }}
-				>
-					<SlideFlyerSample setWinOpen={openFlyerSample} />
-				</Modal>
+				{/* <Topview scrollIntoView={scrollIntoView} contactRef={contactRef} /> */}
+
+				<Footer />
 			</Box>
 		</div>
 	);
