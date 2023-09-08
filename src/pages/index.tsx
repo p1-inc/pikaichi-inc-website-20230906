@@ -3,6 +3,7 @@ import path from "path";
 import sizeOf from "image-size";
 
 import { Carousel } from "@mantine/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { Transition } from "@mantine/core";
 import Head from "next/head";
 import NextImage from "next/future/image";
@@ -12,7 +13,7 @@ import Footer from "../components/Footer";
 import { Box, Modal, createStyles, getStylesRef, rem, keyframes } from "@mantine/core";
 import { useScrollIntoView, useToggle } from "@mantine/hooks";
 import P1_Slider from "../components/P1_Slider";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MediaLib } from "../types/types";
 
 export const bounce = keyframes({
@@ -20,7 +21,7 @@ export const bounce = keyframes({
 		transform: "scale(1)",
 	},
 	"50%": {
-		transform: "scale(1.5)",
+		transform: "scale(1.1)",
 	},
 	"100%": {
 		transform: "scale(1)",
@@ -39,21 +40,32 @@ export default function Home({ workImageData }: { workImageData: wordImageDataTy
 		offset: 60,
 	});
 
-	// const [imgSize, setImgSize] = useState(100);
-
-	// 	useEffect(() => {
-	// 		// インターバルを設定して5秒ごとにステートを変更
-	// 		const interval = setInterval(() => {
-	// 			setImgSize((prevWidth) => (prevWidth === 100 ? 150 : 100));
-	// 		}, 5000);
+	// 	const [origin, setOrigin] = useState("50% 50%"); // 初期値は中心
 	//
-	// 		// コンポーネントのクリーンアップ時にインターバルをクリア
+	// 	useEffect(() => {
+	// 		// ランダムなtransform-originをセットする関数
+	// 		const setRandomOrigin = () => {
+	// 			const randomX = Math.floor(Math.random() * 100);
+	// 			const randomY = Math.floor(Math.random() * 100);
+	// 			setOrigin(`${randomX}% ${randomY}%`);
+	// 		};
+	//
+	// 		// 最初のランダム設定
+	// 		setRandomOrigin();
+	//
+	// 		// 10秒ごとにランダム設定を繰り返す
+	// 		const interval = setInterval(setRandomOrigin, 10000);
+	//
+	// 		// コンポーネントのアンマウント時にintervalをクリア
 	// 		return () => clearInterval(interval);
 	// 	}, []);
 
+	const autoplay = useRef(Autoplay({ delay: 10000 }));
+
 	const useStyles = createStyles((theme) => ({
 		workImgAnimation: {
-			animation: `${bounce} 10s ease-in-out infinite`,
+			transformOrigin: "80% 80%",
+			animation: `${bounce} 20s  infinite`,
 		},
 	}));
 
@@ -83,22 +95,21 @@ export default function Home({ workImageData }: { workImageData: wordImageDataTy
 
 			<Box component="main" fz="1rem">
 				{/* <P1_Slider images={topImageData} /> */}
-				<Carousel loop mx="auto" withIndicators w="100%" height="100vh" mah="50em" sx={{ overflow: "hidden" }}>
+				<Carousel loop mx="auto" withIndicators plugins={[autoplay.current]} w="100%" height="100vh" mah="50em" sx={{ overflow: "hidden" }}>
 					{workImageData.map((image, index) => (
-						<Carousel.Slide key={image.fileName}>
-							<Box className={classes.workImgAnimation}>
-								<Box
-									component={NextImage}
-									src={image.src}
-									alt="Picture of the author"
-									w="100%"
-									h="100%"
-									mah="50em"
-									width={image.width}
-									height={image.height}
-									sx={{ objectFit: "cover" }}
-								/>
-							</Box>
+						<Carousel.Slide key={image.fileName} sx={{ overflow: "hidden" }}>
+							<Box
+								component={NextImage}
+								className={classes.workImgAnimation}
+								src={image.src}
+								alt="Picture of the author"
+								w="100%"
+								h="100%"
+								mah="50em"
+								width={image.width}
+								height={image.height}
+								sx={{ objectFit: "cover" }}
+							/>
 						</Carousel.Slide>
 					))}
 				</Carousel>
