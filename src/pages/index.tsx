@@ -6,39 +6,40 @@ import { Carousel } from "@mantine/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { Transition } from "@mantine/core";
 import Head from "next/head";
-import NextImage from "next/future/image";
-import Topview from "../components/Topview";
 
 import Footer from "../components/Footer";
 import { Box, Modal, createStyles, getStylesRef, rem, keyframes } from "@mantine/core";
 import { useScrollIntoView, useToggle } from "@mantine/hooks";
-import P1_Slider from "../components/P1_Slider";
+import P1_Slider2 from "../components/P1_Slider2";
 import { useEffect, useRef, useState } from "react";
 import { MediaLib } from "../types/types";
+import { WorksCard } from "../components/worksCard";
 
-export const bounce = keyframes({
-	"0%": {
-		transform: "scale(1)",
-	},
-	"50%": {
-		transform: "scale(1.1)",
-	},
-	"100%": {
-		transform: "scale(1)",
-	},
-});
-
-type wordImageDataType = {
+export type WordImageDataType = {
 	fileName: string;
 	src: string;
 	width: number;
 	height: number;
 };
-export default function Home({ workImageData }: { workImageData: wordImageDataType[] }) {
+export default function Home({ workImageData: originalItems }: { workImageData: WordImageDataType[] }) {
 	//
 	const { scrollIntoView, targetRef: contactRef } = useScrollIntoView<HTMLDivElement>({
 		offset: 60,
 	});
+
+	const [items, setItems] = useState([]);
+
+	useEffect(() => {
+		const shuffleArray = (array: WordImageDataType[]) => {
+			for (let i = array.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[array[i], array[j]] = [array[j], array[i]];
+			}
+			return array;
+		};
+
+		setItems(shuffleArray([...originalItems]));
+	}, [originalItems]);
 
 	// 	const [origin, setOrigin] = useState("50% 50%"); // 初期値は中心
 	//
@@ -59,17 +60,6 @@ export default function Home({ workImageData }: { workImageData: wordImageDataTy
 	// 		// コンポーネントのアンマウント時にintervalをクリア
 	// 		return () => clearInterval(interval);
 	// 	}, []);
-
-	const autoplay = useRef(Autoplay({ delay: 10000 }));
-
-	const useStyles = createStyles((theme) => ({
-		workImgAnimation: {
-			transformOrigin: "80% 80%",
-			animation: `${bounce} 20s  infinite`,
-		},
-	}));
-
-	const { classes } = useStyles();
 
 	return (
 		<div>
@@ -94,8 +84,9 @@ export default function Home({ workImageData }: { workImageData: wordImageDataTy
 			</Head>
 
 			<Box component="main" fz="1rem">
-				{/* <P1_Slider images={topImageData} /> */}
-				<Carousel loop mx="auto" withIndicators plugins={[autoplay.current]} w="100%" height="100vh" mah="50em" sx={{ overflow: "hidden" }}>
+				<P1_Slider2 images={items} />
+				<WorksCard items={items} mt="1em" />
+				{/* <Carousel loop mx="auto" withIndicators plugins={[autoplay.current]} w="100%" height="100vh" mah="50em" sx={{ overflow: "hidden" }}>
 					{workImageData.map((image, index) => (
 						<Carousel.Slide key={image.fileName} sx={{ overflow: "hidden" }}>
 							<Box
@@ -112,7 +103,7 @@ export default function Home({ workImageData }: { workImageData: wordImageDataTy
 							/>
 						</Carousel.Slide>
 					))}
-				</Carousel>
+				</Carousel> */}
 
 				{/* <Topview scrollIntoView={scrollIntoView} contactRef={contactRef} /> */}
 
