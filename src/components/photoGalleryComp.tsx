@@ -2,7 +2,7 @@ import { useState, useEffect, CSSProperties } from "react";
 import Image from "next/future/image";
 
 // import { MediaLib, MediaLibInitObj } from "../../types/types";
-import { Box, Center, CSSObject, Flex, Modal, UnstyledButton } from "@mantine/core";
+import { Anchor, Box, Center, CSSObject, Flex, Modal, UnstyledButton } from "@mantine/core";
 import { useRecoilValue } from "recoil";
 import { WordImageDataType } from "../pages";
 // import { isAdminState } from "../../recoil/atoms";
@@ -27,7 +27,10 @@ export interface MediaLib {
 }
 //TODO  型から初期化する方法::typeを定義すると同時に下記のように初期値を設置してexportしておく（型を一致させておく）
 export const MediaLibInitObj: WordImageDataType = {
+	id: "",
 	fileName: "",
+	title: "",
+	stuff: {},
 	src: "",
 	width: 0,
 	height: 0,
@@ -73,7 +76,9 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 	const [photoArr, setPhotoArr] = useState<WordImageDataType[]>([]);
 
 	const [slideImages, setSlideImages] = useState<WordImageDataType[]>([]);
-	const [openSlider, setOpenSlider] = useState<boolean>(false);
+	// const [openSlider, setOpenSlider] = useState<boolean>(false);
+	const [modalData, setModalData] = useState<WordImageDataType>(null);
+
 	const [sliderStartCount, setSliderStartCount] = useState<number>(0);
 
 	useEffect(() => {
@@ -150,10 +155,6 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 		objectFit: "cover",
 	};
 
-	const handleOnclick = (id: number) => {
-		setSliderStartCount(id);
-		setOpenSlider(true);
-	};
 	return (
 		<>
 			<Flex wrap="wrap" justify="center" sx={photoWrapper}>
@@ -168,10 +169,12 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 							marginRight: "0%",
 						};
 					}
+					const href = item.fileName.replace(/(\.[^\.]+)$/, "");
+
 					if (!item.src) {
 						const colorId = index % remainderBoxcolor.length;
 						return (
-							<Box sx={[photoList, marginRight]} key={`${item.fileName}${index}`}>
+							<Box sx={[photoList, marginRight]} key={`${item.id}${index}`}>
 								<Box
 									sx={{
 										width: "1000px",
@@ -183,20 +186,53 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 						);
 					} else {
 						return (
-							<UnstyledButton
-								component="li"
+							<Anchor
+								href={`works/${href}`}
 								sx={{ ...photoList, ...marginRight }}
 								key={`${item.fileName}${index}`}
-								onClick={() => {
-									handleOnclick(index);
-								}}
+								// onClick={() => {
+								// 	setModalData(item);
+								// }}
 							>
 								<Image style={imgCoverStyle} src={item.src} width="1000" height="1000" alt="イメージ画像" />
-							</UnstyledButton>
+							</Anchor>
+
+							// <UnstyledButton
+							// 	component="li"
+							// 	sx={{ ...photoList, ...marginRight }}
+							// 	key={`${item.fileName}${index}`}
+							// 	onClick={() => {
+							// 		setModalData(item);
+							// 	}}
+							// >
+							// 	<Image style={imgCoverStyle} src={item.src} width="1000" height="1000" alt="イメージ画像" />
+							// </UnstyledButton>
 						);
 					}
 				})}
 			</Flex>
+
+			<Modal
+				size="xl"
+				opened={Boolean(modalData)}
+				onClose={() => {
+					setModalData(null);
+				}}
+			>
+				<Flex direction="column" m="0 auto" align="center" w="90%" h="50em">
+					<Box
+						component={Image}
+						sx={{ overflow: "hidden", objectFit: "contain" }}
+						src={modalData?.src}
+						w="100%"
+						h="fit-content"
+						width={modalData?.width}
+						height={modalData?.height}
+						alt="イメージ画像"
+					/>
+					{modalData?.fileName}
+				</Flex>
+			</Modal>
 		</>
 	);
 }

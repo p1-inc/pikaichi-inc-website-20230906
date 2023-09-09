@@ -15,8 +15,13 @@ import { useEffect, useRef, useState } from "react";
 import { MediaLib } from "../types/types";
 import { WorksCard } from "../components/worksCard";
 
+import worksData from "../data/worksData.json";
+
 export type WordImageDataType = {
+	id: string;
 	fileName: string;
+	title: string;
+	stuff: { [index: string]: string };
 	src: string;
 	width: number;
 	height: number;
@@ -116,23 +121,35 @@ export default function Home({ workImageData: originalItems }: { workImageData: 
 export async function getStaticProps() {
 	const imgPath = ["public", "img", "works"];
 	const imgDirectory = path.join(process.cwd(), ...imgPath);
-	const imageFiles = fs.readdirSync(imgDirectory);
+	// const imageFiles = fs.readdirSync(imgDirectory);
 
-	const imagesWithSizes = imageFiles.map((file) => {
-		const fullPath = path.join(imgDirectory, file);
+	const nWorksData = worksData.map((d) => {
+		const fullPath = path.join(imgDirectory, d.fileName);
 		const dimensions = sizeOf(fullPath);
-
+		const type = dimensions.type;
 		return {
-			fileName: file,
-			src: `/${imgPath[1]}/${imgPath[2]}/${file}`,
+			...d,
+			src: `/${imgPath[1]}/${imgPath[2]}/${d.fileName}`,
 			width: dimensions.width,
 			height: dimensions.height,
 		};
 	});
+	// 	const imagesWithSizes = imageFiles.map((file) => {
+	// 		const fullPath = path.join(imgDirectory, file);
+	// 		const dimensions = sizeOf(fullPath);
+	//
+	// 		return {
+	// 			fileName: file,
+	// 			src: `/${imgPath[1]}/${imgPath[2]}/${file}`,
+	// 			width: dimensions.width,
+	// 			height: dimensions.height,
+	// 		};
+	// 	});
 
+	// console.log("worksData: ", worksData);
 	return {
 		props: {
-			workImageData: imagesWithSizes,
+			workImageData: nWorksData,
 		},
 	};
 }
