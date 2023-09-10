@@ -7,13 +7,13 @@ import NextImage from "next/future/image";
 import { css } from "@emotion/react";
 import { MediaLib } from "../types/types";
 import { Box, Flex, Grid, UnstyledButton, createStyles, keyframes } from "@mantine/core";
-import { WordImageDataType } from "../pages";
 import { useResizeObserver } from "@mantine/hooks";
 import PhotoGalleryComp from "./photoGalleryComp";
+import { WorksDataType } from "../data/worksData";
 
-export const WorksCard = ({ items, ...props }: { items: WordImageDataType[]; [key: string]: any }) => {
+export const WorksCard = ({ items, ...props }: { items: WorksDataType[]; [key: string]: any }) => {
 	//
-	const [photoArr, setPhotoArr] = useState<WordImageDataType[]>(items);
+	const [photoArr, setPhotoArr] = useState<WorksDataType[]>(items);
 
 	const [parentRef, parentRect] = useResizeObserver();
 

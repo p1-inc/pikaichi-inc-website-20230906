@@ -1,119 +1,97 @@
-import fs from "fs";
 import path from "path";
 import sizeOf from "image-size";
 
-import { Carousel } from "@mantine/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import { Transition } from "@mantine/core";
 import Head from "next/head";
 
-import Footer from "../components/Footer";
-import { Box, Modal, createStyles, getStylesRef, rem, keyframes } from "@mantine/core";
-import { useScrollIntoView, useToggle } from "@mantine/hooks";
-import P1_Slider2 from "../components/P1_Slider2";
-import { useEffect, useRef, useState } from "react";
-import { MediaLib } from "../types/types";
-import { WorksCard } from "../components/worksCard";
+import { useScrollIntoView } from "@mantine/hooks";
+import { WorksDataType, worksData } from "../data/worksData";
 
-import worksData from "../data/worksData.json";
+import { Home } from "../components/home";
+import { ReactNode, useEffect, useState } from "react";
+import AdminLogin from "../components/admin/adminLogin";
+import { Auth, User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { initializeApp } from "firebase/app";
 
-export type WordImageDataType = {
-	id: string;
-	fileName: string;
-	title: string;
-	stuff: { [index: string]: string };
-	src: string;
-	width: number;
-	height: number;
+const firebaseConfig = {
+	apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+	authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+	projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+	storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BAKET,
+	messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
+	appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
-export default function Home({ workImageData: originalItems }: { workImageData: WordImageDataType[] }) {
-	//
-	const { scrollIntoView, targetRef: contactRef } = useScrollIntoView<HTMLDivElement>({
-		offset: 60,
-	});
 
-	const [items, setItems] = useState([]);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+
+type UserType = {
+	uid: string;
+	displayName: string;
+	email: string;
+};
+
+export default function App({ workImageData }: { workImageData: WorksDataType[] }) {
+	//
+
+	const [loading, setLoading] = useState(true);
+	const [authUser, setAuthUser] = useState<UserType>();
 
 	useEffect(() => {
-		const shuffleArray = (array: WordImageDataType[]) => {
-			for (let i = array.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				[array[i], array[j]] = [array[j], array[i]];
+		const getRole = async (user: User, auth: Auth) => {
+			if (user) {
+				const token = await user?.getIdTokenResult();
+				if (user.emailVerified && (token?.claims.role === "super" || token?.claims.role === "admin")) {
+					setAuthUser({ uid: user.uid, displayName: user.displayName, email: user.email });
+				} else {
+					try {
+						const res = await signOut(auth);
+						setAuthUser({
+							uid: "",
+							displayName: "",
+							email: "",
+						});
+					} catch (error) {
+						console.log(error);
+					}
+				}
 			}
-			return array;
+
+			setLoading(false);
+			return;
 		};
+		onAuthStateChanged(auth, (user) => {
+			getRole(user, auth);
+		});
+	}, []);
 
-		setItems(shuffleArray([...originalItems]));
-	}, [originalItems]);
-
-	// 	const [origin, setOrigin] = useState("50% 50%"); // 初期値は中心
-	//
-	// 	useEffect(() => {
-	// 		// ランダムなtransform-originをセットする関数
-	// 		const setRandomOrigin = () => {
-	// 			const randomX = Math.floor(Math.random() * 100);
-	// 			const randomY = Math.floor(Math.random() * 100);
-	// 			setOrigin(`${randomX}% ${randomY}%`);
-	// 		};
-	//
-	// 		// 最初のランダム設定
-	// 		setRandomOrigin();
-	//
-	// 		// 10秒ごとにランダム設定を繰り返す
-	// 		const interval = setInterval(setRandomOrigin, 10000);
-	//
-	// 		// コンポーネントのアンマウント時にintervalをクリア
-	// 		return () => clearInterval(interval);
-	// 	}, []);
+	const AuthWrapper = ({ children }: { children: ReactNode }) => {
+		if (!loading && authUser.uid !== "") {
+			return <>{children}</>;
+		} else if (loading || authUser.uid !== "") {
+			return;
+		} else {
+			return <AdminLogin />;
+		}
+	};
 
 	return (
 		<div>
 			<Head>
-				<title>ヨガ専門webサイト・チラシ制作 || これからスタジオを始めるインストラクターさんへ集客のお手伝い</title>
+				<title>Pikaichi inc.</title>
 				<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-				<meta
-					name="description"
-					content="これからスタジオを始めるインストラクターさんのためのヨガ専門webサイト・チラシ制作サービスです。月々4980円、初回29,980円で効果の高い集客施策をご提供"
-				/>
-				<meta property="og:url" content="https://pick-yoga.com" />
-				<meta property="og:title" content="ヨガ専門webサイト・チラシ制作 || これからスタジオを始めるインストラクターさんへ集客のお手伝い" />
-				<meta property="og:site_name" content="ヨガ専門webサイト・チラシ制作 " />
-				<meta
-					property="og:description"
-					content="これからスタジオを始めるインストラクターさんのためのヨガ専門webサイト・チラシ制作サービスです。月々4980円、初回29,980円で効果の高い集客施策をご提供"
-				/>
+				<meta name="description" content="Pikaichi inc." />
+				<meta property="og:url" content="https://pikaichi-inc.com" />
+				<meta property="og:title" content="Pikaichi inc." />
+				<meta property="og:site_name" content="Pikaichi inc." />
+				<meta property="og:description" content="Pikaichi inc." />
 				<meta property="og:type" content="website" />
-				<meta property="og:image" content="https://pick-yoga.com/img/ogpImage.png" />
+				<meta property="og:image" content="https://pikaichi-inc.com/img/ogpImage.png" />
 				<meta name="twitter:card" content="summary_large_image" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-
-			<Box component="main" fz="1rem">
-				<P1_Slider2 images={items} />
-				<WorksCard items={items} mt="1em" />
-				{/* <Carousel loop mx="auto" withIndicators plugins={[autoplay.current]} w="100%" height="100vh" mah="50em" sx={{ overflow: "hidden" }}>
-					{workImageData.map((image, index) => (
-						<Carousel.Slide key={image.fileName} sx={{ overflow: "hidden" }}>
-							<Box
-								component={NextImage}
-								className={classes.workImgAnimation}
-								src={image.src}
-								alt="Picture of the author"
-								w="100%"
-								h="100%"
-								mah="50em"
-								width={image.width}
-								height={image.height}
-								sx={{ objectFit: "cover" }}
-							/>
-						</Carousel.Slide>
-					))}
-				</Carousel> */}
-
-				{/* <Topview scrollIntoView={scrollIntoView} contactRef={contactRef} /> */}
-
-				<Footer />
-			</Box>
+			<AuthWrapper>
+				<Home workImageData={workImageData} />
+			</AuthWrapper>
 		</div>
 	);
 }
@@ -121,7 +99,6 @@ export default function Home({ workImageData: originalItems }: { workImageData: 
 export async function getStaticProps() {
 	const imgPath = ["public", "img", "works"];
 	const imgDirectory = path.join(process.cwd(), ...imgPath);
-	// const imageFiles = fs.readdirSync(imgDirectory);
 
 	const nWorksData = worksData.map((d) => {
 		const fullPath = path.join(imgDirectory, d.fileName);
@@ -134,19 +111,7 @@ export async function getStaticProps() {
 			height: dimensions.height,
 		};
 	});
-	// 	const imagesWithSizes = imageFiles.map((file) => {
-	// 		const fullPath = path.join(imgDirectory, file);
-	// 		const dimensions = sizeOf(fullPath);
-	//
-	// 		return {
-	// 			fileName: file,
-	// 			src: `/${imgPath[1]}/${imgPath[2]}/${file}`,
-	// 			width: dimensions.width,
-	// 			height: dimensions.height,
-	// 		};
-	// 	});
 
-	// console.log("worksData: ", worksData);
 	return {
 		props: {
 			workImageData: nWorksData,

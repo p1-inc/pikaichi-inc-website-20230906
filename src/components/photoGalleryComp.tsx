@@ -4,7 +4,7 @@ import Image from "next/future/image";
 // import { MediaLib, MediaLibInitObj } from "../../types/types";
 import { Anchor, Box, Center, CSSObject, Flex, Modal, UnstyledButton } from "@mantine/core";
 import { useRecoilValue } from "recoil";
-import { WordImageDataType } from "../pages";
+import { WorksDataType } from "../data/worksData";
 // import { isAdminState } from "../../recoil/atoms";
 
 export interface MediaLib {
@@ -26,11 +26,11 @@ export interface MediaLib {
 	// use: { [key: string]: string[] };
 }
 //TODO  型から初期化する方法::typeを定義すると同時に下記のように初期値を設置してexportしておく（型を一致させておく）
-export const MediaLibInitObj: WordImageDataType = {
+export const MediaLibInitObj: WorksDataType = {
 	id: "",
 	fileName: "",
 	title: "",
-	stuff: {},
+	stuff: [],
 	src: "",
 	width: 0,
 	height: 0,
@@ -62,7 +62,7 @@ export const MediaLibInitObj: WordImageDataType = {
 
 type pgType = {
 	windowWidth: number;
-	photoGalleryData: WordImageDataType[];
+	photoGalleryData: WorksDataType[];
 	bp: number[][];
 	remainderBoxcolor: string[];
 	br: string;
@@ -73,11 +73,11 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 
 	const [numberOfBox, setNumberOfBox] = useState<number>(1); //全幅に対して箱が何個入るか
 
-	const [photoArr, setPhotoArr] = useState<WordImageDataType[]>([]);
+	const [photoArr, setPhotoArr] = useState<WorksDataType[]>([]);
 
-	const [slideImages, setSlideImages] = useState<WordImageDataType[]>([]);
+	const [slideImages, setSlideImages] = useState<WorksDataType[]>([]);
 	// const [openSlider, setOpenSlider] = useState<boolean>(false);
-	const [modalData, setModalData] = useState<WordImageDataType>(null);
+	const [modalData, setModalData] = useState<WorksDataType>(null);
 
 	const [sliderStartCount, setSliderStartCount] = useState<number>(0);
 
@@ -106,14 +106,14 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 		const _remainder = numberOfBox - (photoGalleryData.length % numberOfBox);
 		const remainder = _remainder === numberOfBox ? 0 : _remainder;
 
-		const remainderArr = new Array<WordImageDataType>(remainder).fill(MediaLibInitObj).map((d, index) => {
+		const remainderArr = new Array<WorksDataType>(remainder).fill(MediaLibInitObj).map((d, index) => {
 			return { ...d, id: String(index) };
-		}) as WordImageDataType[];
+		}) as WorksDataType[];
 
 		const setData = [...photoGalleryData, ...remainderArr];
 		setPhotoArr(setData);
 
-		const slideImg: WordImageDataType[] = photoGalleryData.map((d) => ({
+		const slideImg: WorksDataType[] = photoGalleryData.map((d) => ({
 			...MediaLibInitObj,
 			fileName: d.fileName,
 			src: d.src,

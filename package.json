@@ -24,7 +24,7 @@
         "@mui/icons-material": "^5.14.1",
         "@mui/material": "^5.14.1",
         "@sendgrid/mail": "^7.7.0",
-        "@tabler/icons-react": "^2.27.0",
+        "@tabler/icons-react": "^2.34.0",
         "dayjs": "^1.11.9",
         "dompurify": "^3.0.5",
         "embla-carousel-autoplay": "^8.0.0-rc12",

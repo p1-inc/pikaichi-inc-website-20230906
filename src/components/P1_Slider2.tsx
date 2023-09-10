@@ -9,7 +9,7 @@ import { MediaLib } from "../types/types";
 import { Box, UnstyledButton, createStyles, keyframes } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import { WordImageDataType } from "../pages";
+import { WorksDataType } from "../data/worksData";
 
 export const bounce = keyframes({
 	"0%": {
@@ -23,28 +23,9 @@ export const bounce = keyframes({
 	},
 });
 
-type Props = {
-	images: MediaLib[];
-	startCount?: number;
-	thumb?: Boolean;
-	width?: string;
-	maxWidth?: string;
-};
+export default function P1_Slider2({ images = [] }: { images: WorksDataType[] }) {
+	//
 
-export default function P1_Slider2({ images = [] }: { images: WordImageDataType[] }) {
-	//
-	// 	const [images, setImages] = useState([]);
-	// 	useEffect(() => {
-	// 		const shuffleArray = (array: WordImageDataType[]) => {
-	// 			for (let i = array.length - 1; i > 0; i--) {
-	// 				const j = Math.floor(Math.random() * (i + 1));
-	// 				[array[i], array[j]] = [array[j], array[i]];
-	// 			}
-	// 			return array;
-	// 		};
-	//
-	// 		setImages(shuffleArray([...originalImages]));
-	// 	}, [originalImages]);
 	const autoplay = useRef(Autoplay({ delay: 10000 }));
 
 	const useStyles = createStyles((theme) => ({
