@@ -55,6 +55,7 @@ const AdminLogin = () => {
 
 	const handleSubmit = async (e: any) => {
 		//
+
 		e.preventDefault();
 		setLoading(true);
 
@@ -86,7 +87,7 @@ const AdminLogin = () => {
 				displayName = res.displayName;
 			}
 			setAuthUser({ uid: v.pass, displayName: displayName, email: res.email });
-			router.push("/admin/index/");
+			// router.push("/admin/index/");
 		} else if (res === "noEmailVerified") {
 			//メール未確認
 			await displayAlert("", "入力したユーザーはメール認証が完了していません。メール認証を完了してから再度ログインしてください", "");
@@ -141,7 +142,7 @@ const AdminLogin = () => {
 			});
 
 			setAuthError("");
-			router.push("/admin/index/");
+			// router.push("/admin/index/");
 		} else {
 			await displayAlert("", "失敗しました。問題が解決しない場合は、サポートまでお問い合わせください", "red");
 		}

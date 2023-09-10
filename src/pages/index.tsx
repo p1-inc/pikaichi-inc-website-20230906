@@ -6,23 +6,24 @@ import Head from "next/head";
 import { useScrollIntoView } from "@mantine/hooks";
 import { WorksDataType, worksData } from "../data/worksData";
 
-import { Home } from "../components/home";
 import { ReactNode, useEffect, useState } from "react";
 import AdminLogin from "../components/admin/adminLogin";
 import { Auth, User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
+import { useRecoilState } from "recoil";
+import { authUserState } from "../recoil/atoms";
+import { Home } from "../components/home";
 
-const firebaseConfig = {
-	apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-	authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-	projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-	storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BAKET,
-	messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
-	appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-};
+// const firebaseConfig = {
+// 	apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+// 	authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+// 	projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+// 	storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BAKET,
+// 	messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
+// 	appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+// };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+// const app = initializeApp(firebaseConfig);
 
 type UserType = {
 	uid: string;
@@ -32,47 +33,6 @@ type UserType = {
 
 export default function App({ workImageData }: { workImageData: WorksDataType[] }) {
 	//
-
-	const [loading, setLoading] = useState(true);
-	const [authUser, setAuthUser] = useState<UserType>();
-
-	useEffect(() => {
-		const getRole = async (user: User, auth: Auth) => {
-			if (user) {
-				const token = await user?.getIdTokenResult();
-				if (user.emailVerified && (token?.claims.role === "super" || token?.claims.role === "admin")) {
-					setAuthUser({ uid: user.uid, displayName: user.displayName, email: user.email });
-				} else {
-					try {
-						const res = await signOut(auth);
-						setAuthUser({
-							uid: "",
-							displayName: "",
-							email: "",
-						});
-					} catch (error) {
-						console.log(error);
-					}
-				}
-			}
-
-			setLoading(false);
-			return;
-		};
-		onAuthStateChanged(auth, (user) => {
-			getRole(user, auth);
-		});
-	}, []);
-
-	const AuthWrapper = ({ children }: { children: ReactNode }) => {
-		if (!loading && authUser.uid !== "") {
-			return <>{children}</>;
-		} else if (loading || authUser.uid !== "") {
-			return;
-		} else {
-			return <AdminLogin />;
-		}
-	};
 
 	return (
 		<div>
@@ -89,9 +49,8 @@ export default function App({ workImageData }: { workImageData: WorksDataType[] 
 				<meta name="twitter:card" content="summary_large_image" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<AuthWrapper>
-				<Home workImageData={workImageData} />
-			</AuthWrapper>
+
+			<Home workImageData={workImageData} />
 		</div>
 	);
 }
