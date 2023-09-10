@@ -5,7 +5,7 @@ import path from "path";
 import sizeOf from "image-size";
 
 import { WorksDataType, worksData } from "../../data/worksData";
-import { HeaderArea } from "../../components/header";
+import { HeaderArea } from "../../components/headerArea";
 import Footer from "../../components/Footer";
 
 export default function Post({ data }: { data: WorksDataType }) {
@@ -27,10 +27,10 @@ export default function Post({ data }: { data: WorksDataType }) {
 					sx={{ objectFit: "contain" }}
 				/>
 				<Flex direction="column" mt="2em">
-					{data.stuff.map((data) => {
+					{data.stuff.map((data, index) => {
 						const d = Object.entries(data)[0];
 						return (
-							<Flex>
+							<Flex key={`stuff-${index}`}>
 								<Text w="2.5em" align="right" mr="0.5em">
 									{d[0]}
 								</Text>

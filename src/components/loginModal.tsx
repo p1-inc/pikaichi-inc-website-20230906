@@ -61,6 +61,9 @@ export const LoginModal = () => {
 	const { displayAlert, displayAlertEX } = useDialogState();
 
 	useEffect(() => {
+		console.log("authUser: ", authUser);
+	}, [authUser]);
+	useEffect(() => {
 		const getRole = async (user: User, auth: Auth) => {
 			if (user) {
 				const token = await user?.getIdTokenResult();
@@ -156,7 +159,8 @@ export const LoginModal = () => {
 	return (
 		<Modal
 			// opened={openLoginWindow}
-			opened={Boolean(authUser.uid !== "")}
+			size="50%"
+			opened={Boolean(authUser.uid === "")}
 			onClose={() => {
 				// setOpenLoginWindow(false);
 			}}
@@ -185,7 +189,16 @@ export const LoginModal = () => {
 				<Button type="submit" w="100%" mt="2em">
 					ログイン
 				</Button>
-
+				<Flex direction="column" align="center" mt="2em" fz="10pt">
+					<Box component="p">#1104, 2-14-6, TSUKIJI, CHUO-KU,</Box>
+					<Box component="p">TOKYO, 104-0045, JAPAN</Box>
+					<Anchor href="mailto:info@pikaichi-inc.com" color="none">
+						info@pikaichi-inc.com
+					</Anchor>
+					<Box component="p" mt="1em">
+						© PIKAICHI INC, ALL RIGHTS RESERVED.
+					</Box>
+				</Flex>
 				{/* <Box w="100%" mt="2em">
 					{authError !== "" && (
 						<Button
