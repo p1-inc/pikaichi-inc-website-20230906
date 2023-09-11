@@ -13,7 +13,7 @@ import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
 export default function Works({ data }: { data: WorksDataType }) {
 	//
 	return (
-		<WorksWrapper data={data}>
+		<WorksWrapper data={data} sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
 			<WorksComponent data={data} />
 		</WorksWrapper>
 	);

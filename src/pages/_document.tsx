@@ -10,9 +10,11 @@ export default function Document() {
 
 				<link rel="preconnect" href="https://fonts.googleapis.com" />
 				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-				<link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Noto+Sans+JP&display=swap" rel="stylesheet" />
-
-				{/* <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@500&display=swap" rel="stylesheet" /> */}
+				{/* <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Noto+Sans+JP&display=swap" rel="stylesheet" /> */}
+				<link
+					href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Noto+Sans+JP:wght@100;300;400&family=Roboto&family=Ubuntu&display=swap"
+					rel="stylesheet"
+				/>
 
 				<script
 					// rome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>

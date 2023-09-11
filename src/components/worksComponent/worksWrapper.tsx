@@ -13,7 +13,7 @@ export const WorksWrapper = ({ data, children }: { data: WorksDataType; children
 	//
 	return (
 		<Box>
-			<Flex w="90%" m="0 auto" mt="1em" mb="4em">
+			<Flex w="90%" m="0 auto" mt="3em" mb="4em">
 				<HeaderArea logoWidth="10em" />
 			</Flex>
 
