@@ -42,44 +42,5 @@ export const WorksCard = ({ items, ...props }: { items: WorksDataType[]; [key: s
 		<Box sx={container} ref={parentRef} {...props}>
 			<PhotoGalleryComp windowWidth={parentRect.width} photoGalleryData={photoArr} bp={bp} remainderBoxcolor={remainderBoxcolor} br="0.5em" />
 		</Box>
-
-		// 		<Grid justify="center" grow={false}>
-		// 			{items.map((item) => {
-		// 				return (
-		// 					<Grid.Col span={3} w="20em" h="20em" sx={{ aspectRatio: "1 /1" }}>
-		// 						<Box
-		// 							key={item.fileName}
-		// 							component={NextImage}
-		// 							src={item.src}
-		// 							alt="Picture of the author"
-		// 							w="20em"
-		// 							// h="20em"
-		//
-		// 							width={item.width}
-		// 							height={item.height}
-		// 							sx={{ objectFit: "cover" }}
-		// 						/>
-		// 					</Grid.Col>
-		// 				);
-		// 			})}
-		// 		</Grid>
-
-		// <Flex w="90%" wrap="wrap" m="0 auto" gap="1em">
-		// 	{items.map((item) => {
-		// 		return (
-		// 			<Box
-		// 				key={item.fileName}
-		// 				component={NextImage}
-		// 				src={item.src}
-		// 				alt="Picture of the author"
-		// 				w="20em"
-		// 				h="20em"
-		// 				width={item.width}
-		// 				height={item.height}
-		// 				sx={{ objectFit: "cover" }}
-		// 			/>
-		// 		);
-		// 	})}
-		// </Flex>
 	);
 };

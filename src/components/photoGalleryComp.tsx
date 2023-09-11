@@ -28,12 +28,16 @@ export interface MediaLib {
 //TODO  型から初期化する方法::typeを定義すると同時に下記のように初期値を設置してexportしておく（型を一致させておく）
 export const MediaLibInitObj: WorksDataType = {
 	id: "",
-	fileName: "",
 	title: "",
 	stuff: [],
-	src: "",
-	width: 0,
-	height: 0,
+	srcPC: "",
+	srcSP: "",
+	widthPC: 0,
+	widthSP: 0,
+	heightPC: 0,
+	heightSP: 0,
+	filePathPC: "",
+	filePathSP: "",
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,11 +79,7 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 
 	const [photoArr, setPhotoArr] = useState<WorksDataType[]>([]);
 
-	const [slideImages, setSlideImages] = useState<WorksDataType[]>([]);
-	// const [openSlider, setOpenSlider] = useState<boolean>(false);
 	const [modalData, setModalData] = useState<WorksDataType>(null);
-
-	const [sliderStartCount, setSliderStartCount] = useState<number>(0);
 
 	useEffect(() => {
 		const nBreakPoint = bp.map((point, index, arr) => {
@@ -112,14 +112,6 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 
 		const setData = [...photoGalleryData, ...remainderArr];
 		setPhotoArr(setData);
-
-		const slideImg: WorksDataType[] = photoGalleryData.map((d) => ({
-			...MediaLibInitObj,
-			fileName: d.fileName,
-			src: d.src,
-		}));
-
-		setSlideImages(slideImg);
 	}, [photoGalleryData, numberOfBox]);
 
 	const photoList = {
@@ -169,9 +161,9 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 							marginRight: "0%",
 						};
 					}
-					const href = item.fileName.replace(/(\.[^\.]+)$/, "");
+					// const href = item.filePathSP.replace(/(\.[^\.]+)$/, "");
 
-					if (!item.src) {
+					if (!item.srcSP) {
 						const colorId = index % remainderBoxcolor.length;
 						return (
 							<Box sx={[photoList, marginRight]} key={`${item.id}${index}`}>
@@ -187,26 +179,15 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 					} else {
 						return (
 							<Anchor
-								href={`works/${href}`}
+								href={`works/${item.id}`}
 								sx={{ ...photoList, ...marginRight }}
-								key={`${item.fileName}${index}`}
+								key={`${item.filePathSP}${index}`}
 								// onClick={() => {
 								// 	setModalData(item);
 								// }}
 							>
-								<Image style={imgCoverStyle} src={item.src} width="1000" height="1000" alt="イメージ画像" />
+								<Image style={imgCoverStyle} src={item.srcSP} width="1000" height="1000" alt="イメージ画像" />
 							</Anchor>
-
-							// <UnstyledButton
-							// 	component="li"
-							// 	sx={{ ...photoList, ...marginRight }}
-							// 	key={`${item.fileName}${index}`}
-							// 	onClick={() => {
-							// 		setModalData(item);
-							// 	}}
-							// >
-							// 	<Image style={imgCoverStyle} src={item.src} width="1000" height="1000" alt="イメージ画像" />
-							// </UnstyledButton>
 						);
 					}
 				})}
@@ -223,14 +204,14 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 					<Box
 						component={Image}
 						sx={{ overflow: "hidden", objectFit: "contain" }}
-						src={modalData?.src}
+						src={modalData?.srcSP}
 						w="100%"
 						h="fit-content"
-						width={modalData?.width}
-						height={modalData?.height}
+						width={modalData?.widthSP}
+						height={modalData?.heightSP}
 						alt="イメージ画像"
 					/>
-					{modalData?.fileName}
+					{modalData?.filePathSP}
 				</Flex>
 			</Modal>
 		</>

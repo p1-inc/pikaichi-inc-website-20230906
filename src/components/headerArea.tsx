@@ -6,7 +6,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { useRecoilState } from "recoil";
 import { authUserState } from "../recoil/atoms";
 
-export const HeaderArea = () => {
+export const HeaderArea = ({ logoWidth = "15em" }: { logoWidth?: string }) => {
 	const [authUser, setAuthUser] = useRecoilState(authUserState);
 
 	const handleLogout = async () => {
@@ -30,7 +30,7 @@ export const HeaderArea = () => {
 					component={NextImage}
 					src="/img/pikaichi-logo-01.svg"
 					alt="Picture of the author"
-					w="15em"
+					w={logoWidth}
 					h="fit-content"
 					width="86"
 					height="14"

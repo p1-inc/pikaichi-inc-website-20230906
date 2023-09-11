@@ -1,18 +1,9 @@
-import fs from "fs";
-import path from "path";
-import sizeOf from "image-size";
-
-import { Carousel } from "@mantine/carousel";
-import Autoplay from "embla-carousel-autoplay";
 import { Flex, Transition, useMantineTheme } from "@mantine/core";
-import Head from "next/head";
 
 import Footer from "../components/Footer";
-import { Box, Modal, createStyles, getStylesRef, rem, keyframes } from "@mantine/core";
-import { useScrollIntoView, useToggle } from "@mantine/hooks";
+import { Box } from "@mantine/core";
 import P1_Slider2 from "../components/P1_Slider2";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { MediaLib } from "../types/types";
 import { WorksCard } from "../components/worksCard";
 import { WorksDataType, worksData } from "../data/worksData";
 import { PikaichistarSVG } from "../svg/pikaichistarSVG";
@@ -23,9 +14,7 @@ import { Contact } from "../components/contact";
 import { useRecoilState } from "recoil";
 import { authUserState } from "../recoil/atoms";
 import { Auth, User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import AdminLogin from "./admin/adminLogin";
 import { initializeApp } from "firebase/app";
-import { LoginModal } from "./loginModal";
 
 const firebaseConfig = {
 	apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -91,18 +80,7 @@ export const Home = ({ workImageData: originalItems }: { workImageData: WorksDat
 
 	const theme = useMantineTheme();
 
-	// const AuthWrapper = ({ children }: { children: ReactNode }) => {
-	// 	if (!loading && authUser.uid !== "") {
-	// 		return <>{children}</>;
-	// 	} else if (loading || authUser.uid !== "") {
-	// 		return;
-	// 	} else {
-	// 		return <AdminLogin />;
-	// 	}
-	// };
-
 	return (
-		// <AuthWrapper>
 		<Box component="main" fz="1rem">
 			<Flex w="90%" m="0 auto" mt="3em">
 				<HeaderArea />
@@ -126,8 +104,7 @@ export const Home = ({ workImageData: originalItems }: { workImageData: WorksDat
 				<Contact />
 			</Box>
 			<Footer mt="10em" />
-			<LoginModal />
+			{/* <LoginModal /> */}
 		</Box>
-		// </AuthWrapper>
 	);
 };

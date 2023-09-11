@@ -24,6 +24,7 @@ export const bounce = keyframes({
 });
 
 export default function P1_Slider2({ images = [] }: { images: WorksDataType[] }) {
+	console.log("images: ", images);
 	//
 
 	const autoplay = useRef(Autoplay({ delay: 10000 }));
@@ -41,17 +42,17 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 		<>
 			<Carousel loop mx="auto" withIndicators plugins={[autoplay.current]} w="100%" height="100vh" mah="50em" sx={{ overflow: "hidden" }}>
 				{images.map((image, index) => (
-					<Carousel.Slide key={image.fileName} sx={{ overflow: "hidden" }}>
+					<Carousel.Slide key={image.id} sx={{ overflow: "hidden" }}>
 						<Box
 							component={NextImage}
 							className={classes.workImgAnimation}
-							src={image.src}
+							src={image.srcPC}
 							alt="Picture of the author"
 							w="100%"
 							h="100%"
 							mah="50em"
-							width={image.width}
-							height={image.height}
+							width={image.widthPC}
+							height={image.heightPC}
 							sx={{ objectFit: "cover" }}
 						/>
 					</Carousel.Slide>

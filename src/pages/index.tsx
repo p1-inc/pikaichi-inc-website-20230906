@@ -3,33 +3,9 @@ import sizeOf from "image-size";
 
 import Head from "next/head";
 
-import { useScrollIntoView } from "@mantine/hooks";
 import { WorksDataType, worksData } from "../data/worksData";
 
-import { ReactNode, useEffect, useState } from "react";
-import AdminLogin from "../components/admin/adminLogin";
-import { Auth, User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { initializeApp } from "firebase/app";
-import { useRecoilState } from "recoil";
-import { authUserState } from "../recoil/atoms";
 import { Home } from "../components/home";
-
-// const firebaseConfig = {
-// 	apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-// 	authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-// 	projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-// 	storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BAKET,
-// 	messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
-// 	appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-// };
-
-// const app = initializeApp(firebaseConfig);
-
-type UserType = {
-	uid: string;
-	displayName: string;
-	email: string;
-};
 
 export default function App({ workImageData }: { workImageData: WorksDataType[] }) {
 	//
@@ -60,14 +36,19 @@ export async function getStaticProps() {
 	const imgDirectory = path.join(process.cwd(), ...imgPath);
 
 	const nWorksData = worksData.map((d) => {
-		const fullPath = path.join(imgDirectory, d.fileName);
-		const dimensions = sizeOf(fullPath);
-		const type = dimensions.type;
+		const fullPathPC = path.join(imgDirectory, d.filePathPC);
+		const fullPathSP = path.join(imgDirectory, d.filePathSP);
+		const dimensionsPC = sizeOf(fullPathPC);
+		const dimensionsSP = sizeOf(fullPathSP);
+
 		return {
 			...d,
-			src: `/${imgPath[1]}/${imgPath[2]}/${d.fileName}`,
-			width: dimensions.width,
-			height: dimensions.height,
+			srcPC: `/${imgPath[1]}/${imgPath[2]}/${d.filePathPC}`,
+			srcSP: `/${imgPath[1]}/${imgPath[2]}/${d.filePathSP}`,
+			widthPC: dimensionsPC.width,
+			widthSP: dimensionsSP.width,
+			heightPC: dimensionsPC.height,
+			heightSP: dimensionsSP.height,
 		};
 	});
 
