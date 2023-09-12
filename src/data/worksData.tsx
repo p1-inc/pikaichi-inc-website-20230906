@@ -301,4 +301,18 @@ export const worksData: WorksDataType[] = [
 		heightPC: null,
 		heightSP: null,
 	},
+	{
+		id: "henshu-techou",
+		filePathPC: "henshu-techou/henshu-techou_01.jpg",
+		filePathSP: "henshu-techou/henshu-techou_02.jpg",
+		title: "読売新聞 編集手帳",
+		titleEn: "Yomiuri shimbun Henshu Techou",
+		stuff: [{ CD: "Katsuya Sato" }, { AD: "Hikaru Shimzu" }, { D: "Hiromi Oshima" }, { C: "Hitoshi Ono" }],
+		srcPC: null,
+		srcSP: null,
+		widthPC: null,
+		widthSP: null,
+		heightPC: null,
+		heightSP: null,
+	},
 ];

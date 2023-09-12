@@ -20,7 +20,7 @@ export const WorksWrapper = ({ data, children }: { data: WorksDataType; children
 			<Box sx={{ backgroundColor: "#f5f5f5" }} pt="10em">
 				{children}
 				<Flex direction="column" align="center">
-					<Flex direction="column" mt="4em" fz="0.8em">
+					<Flex direction="column" mt="8em" fz="0.8em">
 						{data.stuff.map((data, index) => {
 							const d = Object.entries(data)[0];
 							return (
