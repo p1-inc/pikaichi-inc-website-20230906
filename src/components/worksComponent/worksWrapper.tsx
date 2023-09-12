@@ -39,7 +39,7 @@ export const WorksWrapper = ({ data, children }: { data: WorksDataType; children
 						})}
 					</Flex>
 					<Text mt="10em" fz="10px">
-						スタッフ記号/CD:クリエイティブディレクター、AD:アートディレクター、D:デザイナー、CMP:CMプランナー、
+						スタッフ記号/CD:クリエイティブディレクター、AD:アートディレクター、D:デザイナー、CMP:CMプランナー、Dir:演出、
 						Photo:カメラマン、St:スタイリスト、Hm:ヘアメイク、I:イラストレーター
 					</Text>
 
