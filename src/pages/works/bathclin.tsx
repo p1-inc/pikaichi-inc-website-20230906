@@ -1,34 +1,41 @@
-import { Anchor, Box, Flex, Header, Text } from "@mantine/core";
-import NextImage from "next/future/image";
-
 import path from "path";
 import sizeOf from "image-size";
 
-import { WorksDataType, worksData } from "../../data/worksData";
-import { HeaderArea } from "../../components/headerArea";
-import Footer from "../../components/Footer";
-import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
-import { DefaultComponent } from "../../components/worksComponent/defaultComponent";
+import { Box, Flex, Title } from "@mantine/core";
+import NextImage from "next/future/image";
 
-export default function Works({ data }: { data: WorksDataType }) {
+import { WorksDataType, worksData } from "../../data/worksData";
+import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
+
+const workId = "bathclin";
+export default function Bathclin({ data }: { data: WorksDataType }) {
+	console.log(" data : ", data);
 	//
+
 	return (
 		<WorksWrapper data={data}>
-			<DefaultComponent data={data} />
+			<Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
+				<Title weight="normal" fz="1.5em">
+					Bathclin Kikiyu
+				</Title>
+				<Flex direction="column" align="center" mt="2em" gap="10em">
+					<Box
+						component={NextImage}
+						src="/img/works/bathclin/bathclin_03.jpg"
+						alt="Picture of the author"
+						w="90%"
+						h="fit-content"
+						width={1080}
+						height={382}
+						sx={{ objectFit: "contain" }}
+					/>
+				</Flex>
+			</Flex>
 		</WorksWrapper>
 	);
 }
 
-export async function getStaticPaths() {
-	//
-	const paths = worksData.map((data) => ({ params: { wid: data.id } }));
-	return {
-		paths: paths,
-		fallback: false,
-	};
-}
-
-export async function getStaticProps({ params }: { params: { wid: string } }) {
+export async function getStaticProps() {
 	//
 	const imgPath = ["public", "img", "works"];
 	const imgDirectory = path.join(process.cwd(), ...imgPath);
@@ -49,7 +56,7 @@ export async function getStaticProps({ params }: { params: { wid: string } }) {
 		};
 	});
 
-	const data = nWorksData.find((d) => d.id === params.wid);
+	const data = nWorksData.find((d) => d.id === workId);
 	return {
 		props: { data: data },
 	};

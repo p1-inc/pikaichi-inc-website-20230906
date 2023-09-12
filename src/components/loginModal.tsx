@@ -61,9 +61,6 @@ export const LoginModal = () => {
 	const { displayAlert, displayAlertEX } = useDialogState();
 
 	useEffect(() => {
-		console.log("authUser: ", authUser);
-	}, [authUser]);
-	useEffect(() => {
 		const getRole = async (user: User, auth: Auth) => {
 			if (user) {
 				const token = await user?.getIdTokenResult();
@@ -159,7 +156,7 @@ export const LoginModal = () => {
 	return (
 		<Modal
 			// opened={openLoginWindow}
-			size="50%"
+			size="md"
 			opened={Boolean(authUser.uid === "")}
 			onClose={() => {
 				// setOpenLoginWindow(false);
@@ -199,36 +196,7 @@ export const LoginModal = () => {
 						© PIKAICHI INC, ALL RIGHTS RESERVED.
 					</Box>
 				</Flex>
-				{/* <Box w="100%" mt="2em">
-					{authError !== "" && (
-						<Button
-							w="100%"
-							mt="1em"
-							color="red"
-							onClick={() => {
-								handleReSendEmailVerification();
-							}}
-						>
-							認証メールを再送
-						</Button>
-					)}
 
-					<NextLink href="/auth/adminPassWordReset" passHref>
-						<Button w="100%" mt="1.5em" variant="outline">
-							パスワードをお忘れの方
-						</Button>
-					</NextLink>
-					<Button
-						w="100%"
-						mt="1em"
-						variant="outline"
-						onClick={() => {
-							handleLinkToSignup();
-						}}
-					>
-						新規アカウントを作成
-					</Button>
-				</Box> */}
 				<LoadingOverlay visible={loading} />
 			</Box>
 		</Modal>

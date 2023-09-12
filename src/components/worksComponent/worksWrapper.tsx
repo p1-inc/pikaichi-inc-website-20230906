@@ -31,7 +31,9 @@ export const WorksWrapper = ({ data, children }: { data: WorksDataType; children
 									<Text w="1em" align="center">
 										|
 									</Text>
-									<Text ml="0.5em">{d[1]}</Text>
+									<Text ml="0.5em" sx={{ whiteSpace: "pre-wrap" }}>
+										{d[1]}
+									</Text>
 								</Flex>
 							);
 						})}

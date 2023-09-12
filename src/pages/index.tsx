@@ -2,9 +2,7 @@ import path from "path";
 import sizeOf from "image-size";
 
 import Head from "next/head";
-
 import { WorksDataType, worksData } from "../data/worksData";
-
 import { Home } from "../components/home";
 
 export default function App({ workImageData }: { workImageData: WorksDataType[] }) {

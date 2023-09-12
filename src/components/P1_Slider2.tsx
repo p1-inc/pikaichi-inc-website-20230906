@@ -24,7 +24,6 @@ export const bounce = keyframes({
 });
 
 export default function P1_Slider2({ images = [] }: { images: WorksDataType[] }) {
-	console.log("images: ", images);
 	//
 
 	const autoplay = useRef(Autoplay({ delay: 10000 }));
