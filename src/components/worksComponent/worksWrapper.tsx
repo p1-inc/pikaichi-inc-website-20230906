@@ -25,7 +25,7 @@ export const WorksWrapper = ({ data, children }: { data: WorksDataType; children
 							const d = Object.entries(data)[0];
 							return (
 								<Flex key={`stuff-${index}`}>
-									<Text w="3em" align="right" mr="0.5em">
+									<Text w="4em" align="right" mr="0.5em">
 										{d[0]}
 									</Text>
 									<Text w="1em" align="center">

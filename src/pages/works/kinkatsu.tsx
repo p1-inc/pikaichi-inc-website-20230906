@@ -7,25 +7,35 @@ import NextImage from "next/future/image";
 import { WorksDataType, worksData } from "../../data/worksData";
 import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
 
-const workId = "bathclin";
-export default function Bathclin({ data }: { data: WorksDataType }) {
+const workId = "kinkatsu";
+export default function Kinkatsu({ data }: { data: WorksDataType }) {
 	//
 
 	return (
 		<WorksWrapper data={data}>
-			<Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
-				<Title weight="normal" fz="1.5em">
+			<Flex direction="column" align="center">
+				<Title weight="normal" fz="1.5em" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
 					{data.titleEn}
 				</Title>
 				<Flex direction="column" align="center" mt="2em" gap="10em">
 					<Box
 						component={NextImage}
-						src="/img/works/bathclin/bathclin_03.jpg"
+						src="/img/works/kinkatsu/kinkatsu_03.jpg"
 						alt="Picture of the author"
 						w="90%"
 						h="fit-content"
-						width={1080}
-						height={382}
+						width={1138}
+						height={780}
+						sx={{ objectFit: "contain" }}
+					/>
+					<Box
+						component={NextImage}
+						src="/img/works/kinkatsu/kinkatsu_04.jpg"
+						alt="Picture of the author"
+						w="90%"
+						h="fit-content"
+						width={2300}
+						height={528}
 						sx={{ objectFit: "contain" }}
 					/>
 				</Flex>
