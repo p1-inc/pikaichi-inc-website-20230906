@@ -105,7 +105,7 @@ export const Home = ({ workImageData: originalItems }: { workImageData: WorksDat
 				<Contact />
 			</Box>
 			<Footer mt="10em" />
-			<LoginModal />
+			{/* <LoginModal /> */}
 		</Box>
 	);
 };

@@ -501,6 +501,7 @@ type FloatingLabelInputType = {
 	m?: any;
 	mt?: any;
 	mb?: any;
+	dataAutofocus?: boolean;
 };
 export function FloatingLabelInput({
 	id = "",
@@ -564,6 +565,7 @@ export function FloatingLabelInputForPassWord({
 	m = "initial",
 	mt = "initial",
 	mb = "initial",
+	dataAutofocus = false,
 }: FloatingLabelInputType) {
 	const [focused, setFocused] = useState(false);
 	// const { classes } = useStyles({
@@ -590,6 +592,7 @@ export function FloatingLabelInputForPassWord({
 			{...form.getInputProps(id)}
 			onFocus={() => setFocused(true)}
 			onBlur={() => setFocused(false)}
+			data-autofocus={dataAutofocus}
 		/>
 	);
 }
