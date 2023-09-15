@@ -7,8 +7,8 @@ import NextImage from "next/future/image";
 import { WorksDataType, worksData } from "../../data/worksData";
 import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
 
-const workId = "aichi-banpaku";
-export default function AichiBanpaku({ data }: { data: WorksDataType }) {
+const workId = "maxell";
+export default function Maxell({ data }: { data: WorksDataType }) {
 	//
 
 	return (
@@ -20,43 +20,12 @@ export default function AichiBanpaku({ data }: { data: WorksDataType }) {
 				<Flex direction="column" align="center" mt="2em" gap="8em">
 					<Box
 						component={NextImage}
-						src="/img/works/aichi-banpaku/aichi-banpaku_03.jpg"
+						src="/img/works/maxell/maxell_03.jpg"
 						alt="Picture of the author"
 						w="90%"
 						h="fit-content"
-						width={1080}
-						height={765}
-						sx={{ objectFit: "contain" }}
-					/>
-
-					<Box
-						component={NextImage}
-						src="/img/works/aichi-banpaku/aichi-banpaku_04.jpg"
-						alt="Picture of the author"
-						w="90%"
-						h="fit-content"
-						width={1080}
-						height={765}
-						sx={{ objectFit: "contain" }}
-					/>
-					<Box
-						component={NextImage}
-						src="/img/works/aichi-banpaku/aichi-banpaku_05.jpg"
-						alt="Picture of the author"
-						w="90%"
-						h="fit-content"
-						width={1080}
-						height={765}
-						sx={{ objectFit: "contain" }}
-					/>
-					<Box
-						component={NextImage}
-						src="/img/works/aichi-banpaku/aichi-banpaku_06.jpg"
-						alt="Picture of the author"
-						w="90%"
-						h="fit-content"
-						width={1080}
-						height={765}
+						width={5199}
+						height={7705}
 						sx={{ objectFit: "contain" }}
 					/>
 				</Flex>
