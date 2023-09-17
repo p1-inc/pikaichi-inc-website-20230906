@@ -8,76 +8,57 @@ import { WorksDataType, worksData } from "../../data/worksData";
 import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
 import { DefaultComponent } from "../../components/worksComponent/defaultComponent";
 import { useState } from "react";
+import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
 
 const workId = "milkdaizu";
 export default function Milkdaizu({ data }: { data: WorksDataType }) {
 	//
-	const [detailOpened, setDetailOpened] = useState<boolean>(false);
 
 	return (
-		<WorksWrapper data={data}>
-			<DefaultComponent data={data} />
-			<Center>
-				<Button
-					w="20em"
-					mt="2em"
-					variant="subtle"
-					color="gray"
-					radius="xl"
-					compact
-					onClick={() => {
-						setDetailOpened(!detailOpened);
-					}}
-				>
-					{">>MORE.."}
-				</Button>
-			</Center>
-
-			<Collapse in={detailOpened}>
-				<Flex direction="column" align="center" mt="2em" gap="10em">
-					<Box
-						component={NextImage}
-						src="/img/works/milkdaizu/milkdaizu_03.jpg"
-						alt="Picture of the author"
-						w="50%"
-						h="fit-content"
-						width={769}
-						height={1086}
-						sx={{ objectFit: "contain" }}
-					/>
-					<Box
-						component={NextImage}
-						src="/img/works/milkdaizu/milkdaizu_04.jpg"
-						alt="Picture of the author"
-						w="50%"
-						h="fit-content"
-						width={815}
-						height={1083}
-						sx={{ objectFit: "contain" }}
-					/>
-					<Box
-						component={NextImage}
-						src="/img/works/milkdaizu/milkdaizu_05.jpg"
-						alt="Picture of the author"
-						w="50%"
-						h="fit-content"
-						width={817}
-						height={1084}
-						sx={{ objectFit: "contain" }}
-					/>
-					<Box
-						component={NextImage}
-						src="/img/works/milkdaizu/milkdaizu_06.jpg"
-						alt="Picture of the author"
-						w="80%"
-						h="fit-content"
-						width={1080}
-						height={764}
-						sx={{ objectFit: "contain" }}
-					/>
-				</Flex>
-			</Collapse>
-		</WorksWrapper>
+		<WorksWrapperWithCollapse data={data} title={data.titleEn}>
+			<Flex direction="column" align="center" mt="2em" gap="10em">
+				<Box
+					component={NextImage}
+					src="/img/works/milkdaizu/milkdaizu_03.jpg"
+					alt="Picture of the author"
+					w="50%"
+					h="fit-content"
+					width={769}
+					height={1086}
+					sx={{ objectFit: "contain" }}
+				/>
+				<Box
+					component={NextImage}
+					src="/img/works/milkdaizu/milkdaizu_04.jpg"
+					alt="Picture of the author"
+					w="50%"
+					h="fit-content"
+					width={815}
+					height={1083}
+					sx={{ objectFit: "contain" }}
+				/>
+				<Box
+					component={NextImage}
+					src="/img/works/milkdaizu/milkdaizu_05.jpg"
+					alt="Picture of the author"
+					w="50%"
+					h="fit-content"
+					width={817}
+					height={1084}
+					sx={{ objectFit: "contain" }}
+				/>
+				<Box
+					component={NextImage}
+					src="/img/works/milkdaizu/milkdaizu_06.jpg"
+					alt="Picture of the author"
+					w="80%"
+					h="fit-content"
+					width={1080}
+					height={764}
+					sx={{ objectFit: "contain" }}
+				/>
+			</Flex>
+		</WorksWrapperWithCollapse>
 	);
 }
 

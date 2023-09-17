@@ -5,19 +5,15 @@ import { Box, Flex, Title } from "@mantine/core";
 import NextImage from "next/future/image";
 
 import { WorksDataType, worksData } from "../../data/worksData";
-import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
+import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
 
 const workId = "yomikore";
 export default function Yomikore({ data }: { data: WorksDataType }) {
 	//
-
 	return (
-		<WorksWrapper data={data}>
+		<WorksWrapperWithCollapse data={data} title={data.titleEn}>
 			<Flex direction="column" align="center">
-				<Title weight="normal" fz="1.5em" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
-					{data.titleEn}
-				</Title>
-				<Flex direction="column" align="center" mt="2em" gap="5em">
+				<Flex direction="column" align="center" mt="5em" gap="5em">
 					<Box
 						component={NextImage}
 						src="/img/works/yomikore/yomikore_03.jpg"
@@ -82,7 +78,7 @@ export default function Yomikore({ data }: { data: WorksDataType }) {
 					/>
 				</Flex>
 			</Flex>
-		</WorksWrapper>
+		</WorksWrapperWithCollapse>
 	);
 }
 

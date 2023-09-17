@@ -1,4 +1,4 @@
-import { Anchor, Box, Flex, Header, Text } from "@mantine/core";
+import { Anchor, Box, Flex, Header, Text, Title } from "@mantine/core";
 import NextImage from "next/future/image";
 
 import path from "path";
@@ -9,7 +9,7 @@ import { HeaderArea } from "../../components/headerArea";
 import Footer from "../../components/Footer";
 import { ReactNode } from "react";
 
-export const WorksWrapper = ({ data, children }: { data: WorksDataType; children: ReactNode }) => {
+export const WorksWrapper = ({ data, title, children }: { data: WorksDataType; title: string; children: ReactNode }) => {
 	//
 	return (
 		<Box>
@@ -18,6 +18,9 @@ export const WorksWrapper = ({ data, children }: { data: WorksDataType; children
 			</Flex>
 
 			<Box sx={{ backgroundColor: "#f5f5f5" }} pt="10em">
+				<Title weight="normal" fz="1.5em" ta="center" mb="1em">
+					{title}
+				</Title>
 				{children}
 				<Flex direction="column" align="center">
 					<Flex direction="column" mt="8em" fz="0.8em">

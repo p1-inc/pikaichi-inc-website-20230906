@@ -6,20 +6,17 @@ import NextImage from "next/future/image";
 
 import { WorksDataType, worksData } from "../../data/worksData";
 import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
+import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
 
 const workId = "boys-and-men";
 export default function BoysAndMen({ data }: { data: WorksDataType }) {
 	//
 
 	return (
-		<WorksWrapper data={data}>
+		<WorksWrapperWithCollapse data={data} title={data.titleEn}>
 			<Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
-				<Title weight="normal" fz="1.5em">
-					{data.titleEn}
-				</Title>
-
 				<Flex direction="column" align="center" mt="2em" gap="10em">
-					<Flex align="center" mt="2em" gap="2em" w="70%">
+					<Flex align="center" mt="2em" gap="2em" w="90%">
 						<Box
 							component={NextImage}
 							src="/img/works/boys-and-men/boys-and-men_03.jpg"
@@ -65,7 +62,7 @@ export default function BoysAndMen({ data }: { data: WorksDataType }) {
 					</Flex>
 				</Flex>
 			</Flex>
-		</WorksWrapper>
+		</WorksWrapperWithCollapse>
 	);
 }
 

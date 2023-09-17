@@ -1,35 +1,18 @@
 import path from "path";
 import sizeOf from "image-size";
 
-import { Box, Flex, Title } from "@mantine/core";
+import { Box, Flex } from "@mantine/core";
 import NextImage from "next/future/image";
 
 import { WorksDataType, worksData } from "../../data/worksData";
-import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
+import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
 
 const workId = "henshu-techou";
 export default function HenshuTechou({ data }: { data: WorksDataType }) {
 	//
-
 	return (
-		<WorksWrapper data={data}>
-			<Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
-				<Title weight="normal" fz="1.5em">
-					{data.titleEn}
-				</Title>
-				<Flex direction="column" align="center" mt="1em" mb="8em">
-					<Box
-						component={NextImage}
-						src={data.srcPC}
-						alt="Picture of the author"
-						w="70%"
-						h="fit-content"
-						width={data.widthPC}
-						height={data.heightPC}
-						sx={{ objectFit: "contain" }}
-					/>
-				</Flex>
-
+		<WorksWrapperWithCollapse data={data} title={data.titleEn}>
+			<Flex direction="column" align="center" mt="2em" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
 				<Flex direction="column" align="center" mt="2em" gap="8em">
 					<Box
 						component={NextImage}
@@ -134,7 +117,7 @@ export default function HenshuTechou({ data }: { data: WorksDataType }) {
 					/>
 				</Flex>
 			</Flex>
-		</WorksWrapper>
+		</WorksWrapperWithCollapse>
 	);
 }
 

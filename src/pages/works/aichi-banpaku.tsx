@@ -6,62 +6,60 @@ import NextImage from "next/future/image";
 
 import { WorksDataType, worksData } from "../../data/worksData";
 import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
+import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
 
 const workId = "aichi-banpaku";
 export default function AichiBanpaku({ data }: { data: WorksDataType }) {
 	//
 
 	return (
-		<WorksWrapper data={data}>
-			<Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
-				<Title weight="normal" fz="1.5em">
-					{data.titleEn}
-				</Title>
-				<Flex direction="column" align="center" mt="2em" gap="8em">
-					<Box
-						component={NextImage}
-						src="/img/works/aichi-banpaku/aichi-banpaku_03.jpg"
-						alt="Picture of the author"
-						w="90%"
-						h="fit-content"
-						width={1080}
-						height={765}
-						sx={{ objectFit: "contain" }}
-					/>
+		// <WorksWrapper data={data} title={data.titleEn}>
+		// 	<Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
+		<WorksWrapperWithCollapse data={data} title={data.titleEn}>
+			<Flex direction="column" align="center" mt="2em" gap="8em">
+				{/* <Box
+					component={NextImage}
+					src="/img/works/aichi-banpaku/aichi-banpaku_03.jpg"
+					alt="Picture of the author"
+					w="75%"
+					h="fit-content"
+					width={1080}
+					height={765}
+					sx={{ objectFit: "contain" }}
+				/> */}
 
-					<Box
-						component={NextImage}
-						src="/img/works/aichi-banpaku/aichi-banpaku_04.jpg"
-						alt="Picture of the author"
-						w="90%"
-						h="fit-content"
-						width={1080}
-						height={765}
-						sx={{ objectFit: "contain" }}
-					/>
-					<Box
-						component={NextImage}
-						src="/img/works/aichi-banpaku/aichi-banpaku_05.jpg"
-						alt="Picture of the author"
-						w="90%"
-						h="fit-content"
-						width={1080}
-						height={765}
-						sx={{ objectFit: "contain" }}
-					/>
-					<Box
-						component={NextImage}
-						src="/img/works/aichi-banpaku/aichi-banpaku_06.jpg"
-						alt="Picture of the author"
-						w="90%"
-						h="fit-content"
-						width={1080}
-						height={765}
-						sx={{ objectFit: "contain" }}
-					/>
-				</Flex>
+				<Box
+					component={NextImage}
+					src="/img/works/aichi-banpaku/aichi-banpaku_04.jpg"
+					alt="Picture of the author"
+					w="75%"
+					h="fit-content"
+					width={1080}
+					height={765}
+					sx={{ objectFit: "contain" }}
+				/>
+				<Box
+					component={NextImage}
+					src="/img/works/aichi-banpaku/aichi-banpaku_05.jpg"
+					alt="Picture of the author"
+					w="75%"
+					h="fit-content"
+					width={1080}
+					height={765}
+					sx={{ objectFit: "contain" }}
+				/>
+				<Box
+					component={NextImage}
+					src="/img/works/aichi-banpaku/aichi-banpaku_06.jpg"
+					alt="Picture of the author"
+					w="75%"
+					h="fit-content"
+					width={1080}
+					height={765}
+					sx={{ objectFit: "contain" }}
+				/>
 			</Flex>
-		</WorksWrapper>
+		</WorksWrapperWithCollapse>
 	);
 }
 

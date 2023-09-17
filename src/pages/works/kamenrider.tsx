@@ -6,19 +6,18 @@ import NextImage from "next/future/image";
 
 import { WorksDataType, worksData } from "../../data/worksData";
 import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
+import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
 
 const workId = "kamenrider";
 export default function Kamenrider({ data }: { data: WorksDataType }) {
 	//
 
 	return (
-		<WorksWrapper data={data}>
+		// <WorksWrapper data={data}>
+		<WorksWrapperWithCollapse data={data} title={data.titleEn}>
 			<Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
-				<Title weight="normal" fz="1.5em">
-					{data.titleEn}
-				</Title>
-				<Flex direction="column" align="center" mt="2em" gap="10em">
-					<Box
+				<Flex direction="column" align="center" mt="4em" gap="10em">
+					{/* <Box
 						component={NextImage}
 						src="/img/works/kamenrider/kamenrider_03.jpg"
 						alt="Picture of the author"
@@ -27,7 +26,7 @@ export default function Kamenrider({ data }: { data: WorksDataType }) {
 						width={1080}
 						height={382}
 						sx={{ objectFit: "contain" }}
-					/>
+					/> */}
 					<Box
 						component={NextImage}
 						src="/img/works/kamenrider/kamenrider_04.jpg"
@@ -80,7 +79,9 @@ export default function Kamenrider({ data }: { data: WorksDataType }) {
 					/>
 				</Flex>
 			</Flex>
-		</WorksWrapper>
+		</WorksWrapperWithCollapse>
+
+		// </WorksWrapper>
 	);
 }
 

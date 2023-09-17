@@ -12,11 +12,8 @@ export default function Jagariko({ data }: { data: WorksDataType }) {
 	//
 
 	return (
-		<WorksWrapper data={data}>
+		<WorksWrapper data={data} title={data.titleEn}>
 			<Flex direction="column" align="center">
-				<Title weight="normal" fz="1.5em" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
-					{data.titleEn}
-				</Title>
 				<Flex direction="column" align="center" mt="2em" gap="10em">
 					<Box
 						component={NextImage}

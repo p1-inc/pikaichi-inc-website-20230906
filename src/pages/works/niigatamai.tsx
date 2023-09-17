@@ -7,22 +7,42 @@ import NextImage from "next/future/image";
 import { WorksDataType, worksData } from "../../data/worksData";
 import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
 
-const workId = "bathclin";
-export default function Bathclin({ data }: { data: WorksDataType }) {
+const workId = "niigatamai";
+export default function Niigatamai({ data }: { data: WorksDataType }) {
 	//
 
 	return (
 		<WorksWrapper data={data} title={data.titleEn}>
 			<Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
-				<Flex direction="column" align="center" mt="2em" gap="10em">
+				<Box
+					component={NextImage}
+					src="/img/works/niigatamai/niigatamai_01.jpg"
+					alt="Picture of the author"
+					w="90%"
+					h="fit-content"
+					width={1080}
+					height={382}
+					sx={{ objectFit: "contain" }}
+				/>
+				<Flex direction="column" align="center" mt="10em" gap="10em">
 					<Box
 						component={NextImage}
-						src="/img/works/bathclin/bathclin_03.jpg"
+						src="/img/works/niigatamai/niigatamai_03.jpg"
+						alt="Picture of the author"
+						w="50%"
+						h="fit-content"
+						width={764}
+						height={1080}
+						sx={{ objectFit: "contain" }}
+					/>
+					<Box
+						component={NextImage}
+						src="/img/works/niigatamai/niigatamai_04.jpg"
 						alt="Picture of the author"
 						w="90%"
 						h="fit-content"
-						width={1080}
-						height={382}
+						width={1280}
+						height={498}
 						sx={{ objectFit: "contain" }}
 					/>
 				</Flex>

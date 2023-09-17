@@ -12,11 +12,8 @@ export default function Budweiser2009({ data }: { data: WorksDataType }) {
 	//
 
 	return (
-		<WorksWrapper data={data}>
+		<WorksWrapper data={data} title={data.titleEn}>
 			<Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
-				<Title weight="normal" fz="1.5em">
-					{data.titleEn}
-				</Title>
 				<Flex direction="column" align="center" mt="2em" gap="8em">
 					<Box
 						component={NextImage}
