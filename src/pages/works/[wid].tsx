@@ -5,8 +5,6 @@ import path from "path";
 import sizeOf from "image-size";
 
 import { WorksDataType, worksData } from "../../data/worksData";
-import { HeaderArea } from "../../components/headerArea";
-import Footer from "../../components/Footer";
 import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
 import { DefaultComponent } from "../../components/worksComponent/defaultComponent";
 
