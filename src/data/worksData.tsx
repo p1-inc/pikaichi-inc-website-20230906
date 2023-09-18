@@ -367,4 +367,18 @@ export const worksData: WorksDataType[] = [
 		heightPC: null,
 		heightSP: null,
 	},
+	{
+		id: "fmv",
+		filePathPC: "fmv/fmv_01.jpg",
+		filePathSP: "fmv/fmv_02.jpg",
+		title: "Fujitsu FMV",
+		titleEn: "Fujitsu FMV",
+		stuff: [{ client: "富士通" }, { CD: "Masaaki Uraji" }, { AD: "Hikaru Shimzu" }, { C: "Takeshi Tsuji" }, { Photo: "Hidekazu Maiyama" }],
+		srcPC: null,
+		srcSP: null,
+		widthPC: null,
+		widthSP: null,
+		heightPC: null,
+		heightSP: null,
+	},
 ];
