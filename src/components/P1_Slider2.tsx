@@ -54,7 +54,7 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 			<Box ref={emblaRef} sx={{ overflow: "hidden" }}>
 				<Flex>
 					{images.map((image, index) => (
-						<Flex sx={{ flex: "0 0 100%", minWidth: 0, overflow: "hidden" }}>
+						<Flex key={image.id} sx={{ flex: "0 0 100%", minWidth: 0, overflow: "hidden" }}>
 							<Box
 								component={NextImage}
 								className={classes.workImgAnimation}
