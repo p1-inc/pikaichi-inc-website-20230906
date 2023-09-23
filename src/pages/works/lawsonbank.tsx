@@ -5,29 +5,38 @@ import { Box, Flex, Title } from "@mantine/core";
 import NextImage from "next/future/image";
 
 import { WorksDataType, worksData } from "../../data/worksData";
-import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
+import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
 
-const workId = "bathclin";
-export default function Bathclin({ data }: { data: WorksDataType }) {
+const workId = "lawsonbank";
+export default function lawsonbank({ data }: { data: WorksDataType }) {
+	console.log("data : ", data);
 	//
 
 	return (
-		<WorksWrapper data={data} title={data.titleEn}>
-			<Flex direction="column" align="center" mt="2em" gap="10em">
-				<Flex direction="column" align="center" mt="2em" gap="10em">
-					<Box
-						component={NextImage}
-						src="/img/works/bathclin/bathclin_03.jpg"
-						alt="Picture of the author"
-						w="90%"
-						h="fit-content"
-						width={1080}
-						height={382}
-						sx={{ objectFit: "contain" }}
-					/>
-				</Flex>
+		<WorksWrapperWithCollapse data={data} title={data.titleEn}>
+			<Flex direction="column" align="center" mt="5em" gap="5em" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
+				<Box
+					component={NextImage}
+					src="/img/works/lawsonbank/lawsonbank_03.jpg"
+					alt="Picture of the author"
+					w="50%"
+					h="fit-content"
+					width={693}
+					height={980}
+					sx={{ objectFit: "contain" }}
+				/>
+				<Box
+					component={NextImage}
+					src="/img/works/lawsonbank/lawsonbank_04.jpg"
+					alt="Picture of the author"
+					w="50%"
+					h="fit-content"
+					width={693}
+					height={980}
+					sx={{ objectFit: "contain" }}
+				/>
 			</Flex>
-		</WorksWrapper>
+		</WorksWrapperWithCollapse>
 	);
 }
 

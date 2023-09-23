@@ -1,11 +1,9 @@
 import { useState, useEffect, CSSProperties } from "react";
 import Image from "next/future/image";
 
-// import { MediaLib, MediaLibInitObj } from "../../types/types";
 import { Anchor, Box, Center, CSSObject, Flex, Modal, UnstyledButton } from "@mantine/core";
 import { useRecoilValue } from "recoil";
 import { WorksDataType } from "../data/worksData";
-// import { isAdminState } from "../../recoil/atoms";
 
 export interface MediaLib {
 	id: string;
@@ -29,6 +27,7 @@ export interface MediaLib {
 export const MediaLibInitObj: WorksDataType = {
 	id: "",
 	title: "",
+	titleEn: "",
 	stuff: [],
 	srcPC: "",
 	srcSP: "",
@@ -39,30 +38,6 @@ export const MediaLibInitObj: WorksDataType = {
 	filePathPC: "",
 	filePathSP: "",
 };
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//   photoGalleryDataには、Imageタグに渡すsrcの値を配列で渡す
-//
-//   bpはbreakpoint
-//   [全幅のpx,Boxの個数]を配列で記載
-//   例
-//    const bp = [
-//        [1100, 5],
-//        [800, 4],
-//        [500, 3],
-//        [200, 2],
-//    ];
-//
-//   remainderBoxcolorはBOXを配置したときの余った部分をどういう色で塗り分けるか
-//   例
-//   const remainderBoxcolor = ["#545554","#FFF","#7B7B7B","#D92424","#e97ab1","#E36234","#ECA71C"];
-//   配列の数はなるべく多めに、ここからランダムに使う
-//
-//   brはborderRadious
-//   角丸の指定
-//
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 type pgType = {
 	windowWidth: number;
@@ -178,14 +153,7 @@ export default function PhotoGalleryComp({ windowWidth, photoGalleryData, bp, re
 						);
 					} else {
 						return (
-							<Anchor
-								href={`works/${item.id}`}
-								sx={{ ...photoList, ...marginRight }}
-								key={`${item.filePathSP}${index}`}
-								// onClick={() => {
-								// 	setModalData(item);
-								// }}
-							>
+							<Anchor href={`works/${item.id}`} sx={{ ...photoList, ...marginRight }} key={`${item.filePathSP}${index}`}>
 								<Image style={imgCoverStyle} src={item.srcSP} width="1000" height="1000" alt="イメージ画像" />
 							</Anchor>
 						);

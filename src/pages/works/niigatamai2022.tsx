@@ -5,9 +5,6 @@ import { Box, Button, Center, Collapse, Divider, Flex, Title, UnstyledButton } f
 import NextImage from "next/future/image";
 
 import { WorksDataType, worksData } from "../../data/worksData";
-import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
-import { DefaultComponent } from "../../components/worksComponent/defaultComponent";
-import { useState } from "react";
 import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
 
 const workId = "niigatamai2022";

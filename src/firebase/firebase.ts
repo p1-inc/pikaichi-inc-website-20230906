@@ -8,7 +8,7 @@ import {
 	FooterCompInit,
 	FooterCompType,
 	GeneralControlInit,
-	MediaLibInitObj,
+	// MediaLibInitObj,
 	MenuInit,
 	NewsInit,
 	PeopleType,
@@ -239,434 +239,434 @@ export const delThumbImageFromStorage = async (docName: string, keyArr: string[]
 	return result;
 };
 
-export const getMediaUsage = async () => {
-	const docRef = doc(db, "usage", "media");
-	const docSnap = await getDoc(docRef);
-	let usageData: [string, string[][]][] = [];
-	if (docSnap.exists()) {
-		const data = docSnap.data();
-		usageData = Object.entries(data).map((d: [string, string[]]) => [d[0], d[1].map((d2) => d2.split("/"))]);
-	} else {
-		console.log("No such document!");
-	}
-
-	return usageData;
-};
-
-type SetMediaUsageType = {
-	compBlockName: BlockNameType;
-	compSubName: string;
-	mediaArr: string[];
-	batch: WriteBatch;
-};
-
-export const setMediaUsage = async ({ compBlockName, compSubName, mediaArr, batch }: SetMediaUsageType) => {
-	//
-
-	const _usageData = await getMediaUsage();
-
-	const _usageIds = _usageData.map((d) => d[0]);
-
-	const _allMedia = await getMediaLib();
-
-	const _noUsedMedia: [string, string[][]][] = _allMedia.map((d) => [d.id, []]);
-	const noUsedMedia = _noUsedMedia.filter((d) => !_usageIds.includes(d[0]));
-
-	const usageData = [...noUsedMedia, ..._usageData];
-
-	const _nUsageData: [string, string[][]][] = usageData.map((media) => {
-		//新規追加されるmediaに対するusage
-		if (mediaArr.includes(media[0])) {
-			const isExist = media[1].find((d) => d[d.length - 1] === compBlockName && d[d.length - 2] === compSubName);
-			if (isExist) {
-				return media;
-			} else {
-				const tmp = [...media[1], [compSubName, compBlockName]];
-				return [media[0], tmp];
-			}
-		} else {
-			//それ以外のmediaのusage(すでにusageに登録されているものは消去)
-			const tmp = media[1].filter((d) => !(d[d.length - 1] === compBlockName && d[d.length - 2] === compSubName));
-			if (tmp.length === media[1].length) {
-				return null;
-			} else {
-				return [media[0], tmp];
-			}
-		}
-	});
-
-	const nUsageData: [string, string[]][] = _nUsageData.filter((d) => d).map((d2) => [d2[0], d2[1].map((d3) => d3.join("/"))]);
-
-	nUsageData.forEach((media) => {
-		const docRef = doc(db, "usage", "media");
-		batch.update(docRef, {
-			[media[0]]: media[1],
-		});
-	});
-
-	return "success";
-};
-
-export const getTableUsage = async () => {
-	const docRef = doc(db, "usage", "table");
-	const docSnap = await getDoc(docRef);
-	let _usageData: [string, string[][]][] = [];
-	if (docSnap.exists()) {
-		const data = docSnap.data();
-		_usageData = Object.entries(data).map((d: [string, string[]]) => [d[0], d[1].map((d2) => d2.split("/"))]);
-	} else {
-		console.log("No such document!");
-	}
-	const usageData = _usageData.filter((d) => d[1].length > 0);
-	return usageData;
-};
-
-type SetTableUsageType = {
-	compBlockName: BlockNameType;
-	compSubName: string;
-	tableArr: string[];
-	batch: WriteBatch;
-};
-
-export const setTableUsage = async ({ compBlockName, compSubName, tableArr, batch }: SetTableUsageType) => {
-	//
-	const _usageData = await getTableUsage();
-
-	const _usageIds = _usageData.map((d) => d[0]);
-
-	const _allTable = await getAllTables({});
-
-	const _noUsedTable: [string, string[][]][] = _allTable.map((d) => [d.id, []]);
-	const noUsedTable = _noUsedTable.filter((d) => !_usageIds.includes(d[0]));
-
-	const usageData = [...noUsedTable, ..._usageData];
-
-	const _nUsageData: [string, string[][]][] = usageData.map((table) => {
-		//新規追加されるtableに対するusage
-		if (tableArr.includes(table[0])) {
-			const isExist = table[1].find((d) => d[d.length - 1] === compBlockName && d[d.length - 2] === compSubName);
-			if (isExist) {
-				return table;
-			} else {
-				const tmp = [...table[1], [compSubName, compBlockName]];
-				return [table[0], tmp];
-			}
-		} else {
-			//それ以外のmediaのusage(すでにusageに登録されているものは消去)
-			const tmp = table[1].filter((d) => !(d[d.length - 1] === compBlockName && d[d.length - 2] === compSubName));
-			if (tmp.length === table[1].length) {
-				return null;
-			} else {
-				return [table[0], tmp];
-			}
-		}
-	});
-
-	const nUsageData: [string, string[]][] = _nUsageData.filter((d) => d).map((d2) => [d2[0], d2[1].map((d3) => d3.join("/"))]);
-
-	nUsageData.forEach((table) => {
-		const docRef = doc(db, "usage", "table");
-
-		if (table[1].length > 0) {
-			batch.update(docRef, {
-				[table[0]]: table[1],
-			});
-		} else {
-			batch.update(docRef, {
-				[table[0]]: deleteField(),
-			});
-		}
-	});
-
-	return "success";
-};
-
-export const getlayoutUsage = async () => {
-	let usageData: string[];
-
-	const docRef = doc(db, "usage", "layout");
-	const docSnap = await getDoc(docRef);
-
-	if (docSnap.exists()) {
-		const data = docSnap.data();
-		if ("layout" in data) {
-			usageData = data.layout;
-		}
-	} else {
-		console.log("No such document!");
-	}
-
-	return usageData;
-};
-
-export const setlayoutUsage = (layoutList: string[], batch: WriteBatch) => {
-	const docRef = doc(db, "usage", "layout");
-	const data = { layout: layoutList };
-	batch.set(docRef, data);
-
-	return "success";
-};
-
-export const getAllCampaignList = async ({ dbName = _dbName }: { dbName?: string }) => {
-	const _result: CampaignType[] = await getDocDataFromDB(dbName, "campaign");
-	const list = await getListInLayoutUsage("campaign");
-
-	let result: CampaignType[] = [CampaignInit];
-
-	if (_result && list) {
-		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
-	}
-	return result;
-};
-
-export const setCampaign = async (data: CampaignType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
-	//
-
-	const docName = "campaign";
-	const key = data.id;
-
-	const batch = writeBatch(db);
-
-	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
-	if (blobUrl === "error") {
-		return "error";
-	}
-
-	const resSetDoc = setDocDataToDB(docName, key, data, batch);
-
-	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
-
-	if (!(resSetDoc === "success" && resSetComp === "success")) {
-		return "error";
-	}
-
-	try {
-		await batch.commit();
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-
-	//Usageを再構築
-	const checksProp = {
-		checkMediaUsageFunc: true,
-		checkTableUsageFunc: false,
-		checkLayoutUsageFunc: false,
-	};
-	try {
-		const func = httpsCallable(functions, "restructureUsageDataOnCall");
-		await func(checksProp);
-	} catch (error) {
-		console.log("error: ", error);
-	}
-
-	return "success";
-};
-
-export const deleteCampaign = async (idArr: string[]) => {
-	//
-	const list = await getAllCampaignList({});
-
-	const delArr = list.filter((d: any) => idArr.includes(d.id));
-
-	const isIncludes = delArr.length > 0;
-	if (!isIncludes) {
-		console.log("データベースと一致しませんでした");
-		return "error";
-	}
-
-	const batch = writeBatch(db);
-
-	const docName = "campaign";
-
-	const resDelThumbImage = await delThumbImageFromStorage(docName, idArr);
-	if (resDelThumbImage === "error") {
-		return "error";
-	}
-
-	const resDeleteDoc = deleteDocDataFromDB(docName, idArr, batch);
-
-	const resDeleteComp = deleteComponentData(docName, idArr, batch);
-
-	if (!(resDeleteDoc === "success" && resDeleteComp === "success")) {
-		return "error";
-	}
-
-	try {
-		await batch.commit();
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-
-	//Usageを再構築
-	const checksProp = {
-		checkMediaUsageFunc: true,
-		checkTableUsageFunc: false,
-		checkLayoutUsageFunc: false,
-	};
-	try {
-		const func = httpsCallable(functions, "restructureUsageDataOnCall");
-		await func(checksProp);
-	} catch (error) {
-		console.log("error: ", error);
-	}
-
-	return "success";
-};
-
-export const getTopImage = async ({ dbName = _dbName }) => {
-	const _result: TopImageType[] = await getDocDataFromDB(dbName, "topImage");
-	let result: TopImageType = TopImageInit;
-
-	if (_result) {
-		result = _result[0];
-	}
-	return result;
-};
-
-export const setTopImage = async <T>(
-	data: T,
-	selectedMedia: string[],
-	node: HTMLElement,
-	width: number,
-	height: number,
-	createdAt: string,
-	updatedAt: string,
-) => {
-	//
-
-	const docName = "topImage";
-	const key = "topImageList";
-
-	const batch = writeBatch(db);
-
-	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
-	if (blobUrl === "error") {
-		return "error";
-	}
-
-	const resSetDoc = setDocDataToDB(docName, key, data, batch);
-
-	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
-
-	if (!(resSetDoc === "success" && resSetComp === "success")) {
-		return "error";
-	}
-
-	try {
-		await batch.commit();
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-
-	//Usageを再構築
-	const checksProp = {
-		checkMediaUsageFunc: true,
-		checkTableUsageFunc: false,
-		checkLayoutUsageFunc: false,
-	};
-	try {
-		const func = httpsCallable(functions, "restructureUsageDataOnCall");
-		await func(checksProp);
-	} catch (error) {
-		console.log("error: ", error);
-	}
-
-	return "success";
-};
-
-export const getTopWord = async ({ dbName = _dbName }) => {
-	const _result: TopWordType[] = await getDocDataFromDB(dbName, "topWord");
-	const list = await getListInLayoutUsage("topWord");
-
-	let result: TopWordType[] = [TopWordInit];
-
-	if (_result && list) {
-		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
-	}
-
-	return result;
-};
-
-export const setTopWord = async (data: TopWordType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
-	//
-
-	const docName = "topWord";
-
-	const key = data.id;
-	const nData = { ...data };
-
-	nData.body = nData.body.replace(/\n/g, "\\n"); //改行変換
-
-	const batch = writeBatch(db);
-
-	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
-	if (blobUrl === "error") {
-		return "error";
-	}
-
-	const resSetDoc = setDocDataToDB(docName, key, nData, batch);
-
-	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
-
-	if (!(resSetDoc === "success" && resSetComp === "success")) {
-		return "error";
-	}
-
-	try {
-		await batch.commit();
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-
-	return "success";
-};
-
-export const deleteTopWord = async (idArr: string[]) => {
-	//
-
-	const list = await getTopWord({});
-
-	const delArr = list.filter((d) => idArr.includes(d.id));
-
-	const delIdArr = delArr.map((d) => d.id);
-
-	const isIncludes = [...idArr].filter((d) => delIdArr.includes(d));
-
-	if (isIncludes.length !== delIdArr.length) {
-		console.log("データベースと一致しませんでした");
-		return "error";
-	}
-
-	const batch = writeBatch(db);
-
-	const docName = "topWord";
-
-	const resDelThumbImage = await delThumbImageFromStorage(docName, idArr);
-	if (resDelThumbImage === "error") {
-		return "error";
-	}
-
-	const resDeleteDoc = deleteDocDataFromDB(docName, idArr, batch);
-
-	const resDeleteComp = deleteComponentData(docName, idArr, batch);
-
-	if (!(resDeleteDoc === "success" && resDeleteComp === "success")) {
-		return "error";
-	}
-
-	try {
-		await batch.commit();
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-
-	return "success";
-};
+// export const getMediaUsage = async () => {
+// 	const docRef = doc(db, "usage", "media");
+// 	const docSnap = await getDoc(docRef);
+// 	let usageData: [string, string[][]][] = [];
+// 	if (docSnap.exists()) {
+// 		const data = docSnap.data();
+// 		usageData = Object.entries(data).map((d: [string, string[]]) => [d[0], d[1].map((d2) => d2.split("/"))]);
+// 	} else {
+// 		console.log("No such document!");
+// 	}
+//
+// 	return usageData;
+// };
+
+// type SetMediaUsageType = {
+// 	compBlockName: BlockNameType;
+// 	compSubName: string;
+// 	mediaArr: string[];
+// 	batch: WriteBatch;
+// };
+
+// export const setMediaUsage = async ({ compBlockName, compSubName, mediaArr, batch }: SetMediaUsageType) => {
+// 	//
+//
+// 	const _usageData = await getMediaUsage();
+//
+// 	const _usageIds = _usageData.map((d) => d[0]);
+//
+// 	const _allMedia = await getMediaLib();
+//
+// 	const _noUsedMedia: [string, string[][]][] = _allMedia.map((d) => [d.id, []]);
+// 	const noUsedMedia = _noUsedMedia.filter((d) => !_usageIds.includes(d[0]));
+//
+// 	const usageData = [...noUsedMedia, ..._usageData];
+//
+// 	const _nUsageData: [string, string[][]][] = usageData.map((media) => {
+// 		//新規追加されるmediaに対するusage
+// 		if (mediaArr.includes(media[0])) {
+// 			const isExist = media[1].find((d) => d[d.length - 1] === compBlockName && d[d.length - 2] === compSubName);
+// 			if (isExist) {
+// 				return media;
+// 			} else {
+// 				const tmp = [...media[1], [compSubName, compBlockName]];
+// 				return [media[0], tmp];
+// 			}
+// 		} else {
+// 			//それ以外のmediaのusage(すでにusageに登録されているものは消去)
+// 			const tmp = media[1].filter((d) => !(d[d.length - 1] === compBlockName && d[d.length - 2] === compSubName));
+// 			if (tmp.length === media[1].length) {
+// 				return null;
+// 			} else {
+// 				return [media[0], tmp];
+// 			}
+// 		}
+// 	});
+//
+// 	const nUsageData: [string, string[]][] = _nUsageData.filter((d) => d).map((d2) => [d2[0], d2[1].map((d3) => d3.join("/"))]);
+//
+// 	nUsageData.forEach((media) => {
+// 		const docRef = doc(db, "usage", "media");
+// 		batch.update(docRef, {
+// 			[media[0]]: media[1],
+// 		});
+// 	});
+//
+// 	return "success";
+// };
+
+// export const getTableUsage = async () => {
+// 	const docRef = doc(db, "usage", "table");
+// 	const docSnap = await getDoc(docRef);
+// 	let _usageData: [string, string[][]][] = [];
+// 	if (docSnap.exists()) {
+// 		const data = docSnap.data();
+// 		_usageData = Object.entries(data).map((d: [string, string[]]) => [d[0], d[1].map((d2) => d2.split("/"))]);
+// 	} else {
+// 		console.log("No such document!");
+// 	}
+// 	const usageData = _usageData.filter((d) => d[1].length > 0);
+// 	return usageData;
+// };
+
+// type SetTableUsageType = {
+// 	compBlockName: BlockNameType;
+// 	compSubName: string;
+// 	tableArr: string[];
+// 	batch: WriteBatch;
+// };
+//
+// export const setTableUsage = async ({ compBlockName, compSubName, tableArr, batch }: SetTableUsageType) => {
+// 	//
+// 	const _usageData = await getTableUsage();
+//
+// 	const _usageIds = _usageData.map((d) => d[0]);
+//
+// 	const _allTable = await getAllTables({});
+//
+// 	const _noUsedTable: [string, string[][]][] = _allTable.map((d) => [d.id, []]);
+// 	const noUsedTable = _noUsedTable.filter((d) => !_usageIds.includes(d[0]));
+//
+// 	const usageData = [...noUsedTable, ..._usageData];
+//
+// 	const _nUsageData: [string, string[][]][] = usageData.map((table) => {
+// 		//新規追加されるtableに対するusage
+// 		if (tableArr.includes(table[0])) {
+// 			const isExist = table[1].find((d) => d[d.length - 1] === compBlockName && d[d.length - 2] === compSubName);
+// 			if (isExist) {
+// 				return table;
+// 			} else {
+// 				const tmp = [...table[1], [compSubName, compBlockName]];
+// 				return [table[0], tmp];
+// 			}
+// 		} else {
+// 			//それ以外のmediaのusage(すでにusageに登録されているものは消去)
+// 			const tmp = table[1].filter((d) => !(d[d.length - 1] === compBlockName && d[d.length - 2] === compSubName));
+// 			if (tmp.length === table[1].length) {
+// 				return null;
+// 			} else {
+// 				return [table[0], tmp];
+// 			}
+// 		}
+// 	});
+//
+// 	const nUsageData: [string, string[]][] = _nUsageData.filter((d) => d).map((d2) => [d2[0], d2[1].map((d3) => d3.join("/"))]);
+//
+// 	nUsageData.forEach((table) => {
+// 		const docRef = doc(db, "usage", "table");
+//
+// 		if (table[1].length > 0) {
+// 			batch.update(docRef, {
+// 				[table[0]]: table[1],
+// 			});
+// 		} else {
+// 			batch.update(docRef, {
+// 				[table[0]]: deleteField(),
+// 			});
+// 		}
+// 	});
+//
+// 	return "success";
+// };
+
+// export const getlayoutUsage = async () => {
+// 	let usageData: string[];
+//
+// 	const docRef = doc(db, "usage", "layout");
+// 	const docSnap = await getDoc(docRef);
+//
+// 	if (docSnap.exists()) {
+// 		const data = docSnap.data();
+// 		if ("layout" in data) {
+// 			usageData = data.layout;
+// 		}
+// 	} else {
+// 		console.log("No such document!");
+// 	}
+//
+// 	return usageData;
+// };
+
+// export const setlayoutUsage = (layoutList: string[], batch: WriteBatch) => {
+// 	const docRef = doc(db, "usage", "layout");
+// 	const data = { layout: layoutList };
+// 	batch.set(docRef, data);
+//
+// 	return "success";
+// };
+
+// export const getAllCampaignList = async ({ dbName = _dbName }: { dbName?: string }) => {
+// 	const _result: CampaignType[] = await getDocDataFromDB(dbName, "campaign");
+// 	const list = await getListInLayoutUsage("campaign");
+//
+// 	let result: CampaignType[] = [CampaignInit];
+//
+// 	if (_result && list) {
+// 		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+// 	}
+// 	return result;
+// };
+//
+// export const setCampaign = async (data: CampaignType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
+// 	//
+//
+// 	const docName = "campaign";
+// 	const key = data.id;
+//
+// 	const batch = writeBatch(db);
+//
+// 	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
+// 	if (blobUrl === "error") {
+// 		return "error";
+// 	}
+//
+// 	const resSetDoc = setDocDataToDB(docName, key, data, batch);
+//
+// 	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
+//
+// 	if (!(resSetDoc === "success" && resSetComp === "success")) {
+// 		return "error";
+// 	}
+//
+// 	try {
+// 		await batch.commit();
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+//
+// 	//Usageを再構築
+// 	const checksProp = {
+// 		checkMediaUsageFunc: true,
+// 		checkTableUsageFunc: false,
+// 		checkLayoutUsageFunc: false,
+// 	};
+// 	try {
+// 		const func = httpsCallable(functions, "restructureUsageDataOnCall");
+// 		await func(checksProp);
+// 	} catch (error) {
+// 		console.log("error: ", error);
+// 	}
+//
+// 	return "success";
+// };
+
+// export const deleteCampaign = async (idArr: string[]) => {
+// 	//
+// 	const list = await getAllCampaignList({});
+//
+// 	const delArr = list.filter((d: any) => idArr.includes(d.id));
+//
+// 	const isIncludes = delArr.length > 0;
+// 	if (!isIncludes) {
+// 		console.log("データベースと一致しませんでした");
+// 		return "error";
+// 	}
+//
+// 	const batch = writeBatch(db);
+//
+// 	const docName = "campaign";
+//
+// 	const resDelThumbImage = await delThumbImageFromStorage(docName, idArr);
+// 	if (resDelThumbImage === "error") {
+// 		return "error";
+// 	}
+//
+// 	const resDeleteDoc = deleteDocDataFromDB(docName, idArr, batch);
+//
+// 	const resDeleteComp = deleteComponentData(docName, idArr, batch);
+//
+// 	if (!(resDeleteDoc === "success" && resDeleteComp === "success")) {
+// 		return "error";
+// 	}
+//
+// 	try {
+// 		await batch.commit();
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+//
+// 	//Usageを再構築
+// 	const checksProp = {
+// 		checkMediaUsageFunc: true,
+// 		checkTableUsageFunc: false,
+// 		checkLayoutUsageFunc: false,
+// 	};
+// 	try {
+// 		const func = httpsCallable(functions, "restructureUsageDataOnCall");
+// 		await func(checksProp);
+// 	} catch (error) {
+// 		console.log("error: ", error);
+// 	}
+//
+// 	return "success";
+// };
+
+// export const getTopImage = async ({ dbName = _dbName }) => {
+// 	const _result: TopImageType[] = await getDocDataFromDB(dbName, "topImage");
+// 	let result: TopImageType = TopImageInit;
+//
+// 	if (_result) {
+// 		result = _result[0];
+// 	}
+// 	return result;
+// };
+
+// export const setTopImage = async <T>(
+// 	data: T,
+// 	selectedMedia: string[],
+// 	node: HTMLElement,
+// 	width: number,
+// 	height: number,
+// 	createdAt: string,
+// 	updatedAt: string,
+// ) => {
+// 	//
+//
+// 	const docName = "topImage";
+// 	const key = "topImageList";
+//
+// 	const batch = writeBatch(db);
+//
+// 	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
+// 	if (blobUrl === "error") {
+// 		return "error";
+// 	}
+//
+// 	const resSetDoc = setDocDataToDB(docName, key, data, batch);
+//
+// 	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
+//
+// 	if (!(resSetDoc === "success" && resSetComp === "success")) {
+// 		return "error";
+// 	}
+//
+// 	try {
+// 		await batch.commit();
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+//
+// 	//Usageを再構築
+// 	const checksProp = {
+// 		checkMediaUsageFunc: true,
+// 		checkTableUsageFunc: false,
+// 		checkLayoutUsageFunc: false,
+// 	};
+// 	try {
+// 		const func = httpsCallable(functions, "restructureUsageDataOnCall");
+// 		await func(checksProp);
+// 	} catch (error) {
+// 		console.log("error: ", error);
+// 	}
+//
+// 	return "success";
+// };
+
+// export const getTopWord = async ({ dbName = _dbName }) => {
+// 	const _result: TopWordType[] = await getDocDataFromDB(dbName, "topWord");
+// 	const list = await getListInLayoutUsage("topWord");
+//
+// 	let result: TopWordType[] = [TopWordInit];
+//
+// 	if (_result && list) {
+// 		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+// 	}
+//
+// 	return result;
+// };
+
+// export const setTopWord = async (data: TopWordType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
+// 	//
+//
+// 	const docName = "topWord";
+//
+// 	const key = data.id;
+// 	const nData = { ...data };
+//
+// 	nData.body = nData.body.replace(/\n/g, "\\n"); //改行変換
+//
+// 	const batch = writeBatch(db);
+//
+// 	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
+// 	if (blobUrl === "error") {
+// 		return "error";
+// 	}
+//
+// 	const resSetDoc = setDocDataToDB(docName, key, nData, batch);
+//
+// 	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
+//
+// 	if (!(resSetDoc === "success" && resSetComp === "success")) {
+// 		return "error";
+// 	}
+//
+// 	try {
+// 		await batch.commit();
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+//
+// 	return "success";
+// };
+
+// export const deleteTopWord = async (idArr: string[]) => {
+// 	//
+//
+// 	const list = await getTopWord({});
+//
+// 	const delArr = list.filter((d) => idArr.includes(d.id));
+//
+// 	const delIdArr = delArr.map((d) => d.id);
+//
+// 	const isIncludes = [...idArr].filter((d) => delIdArr.includes(d));
+//
+// 	if (isIncludes.length !== delIdArr.length) {
+// 		console.log("データベースと一致しませんでした");
+// 		return "error";
+// 	}
+//
+// 	const batch = writeBatch(db);
+//
+// 	const docName = "topWord";
+//
+// 	const resDelThumbImage = await delThumbImageFromStorage(docName, idArr);
+// 	if (resDelThumbImage === "error") {
+// 		return "error";
+// 	}
+//
+// 	const resDeleteDoc = deleteDocDataFromDB(docName, idArr, batch);
+//
+// 	const resDeleteComp = deleteComponentData(docName, idArr, batch);
+//
+// 	if (!(resDeleteDoc === "success" && resDeleteComp === "success")) {
+// 		return "error";
+// 	}
+//
+// 	try {
+// 		await batch.commit();
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+//
+// 	return "success";
+// };
 
 export const getAllFormList = async ({ dbName = _dbName }) => {
 	const result = await getDocDataFromDB(dbName, "form");
@@ -797,100 +797,100 @@ export const setPeopleData = async (data: SetPeopleDataType, node: HTMLElement, 
 	return "success";
 };
 
-export const getAllShopInfoList = async ({ dbName = _dbName }) => {
-	const _result: ShopInfoType[] = await getDocDataFromDB(dbName, "shopInfo");
-	const list = await getListInLayoutUsage("shopInfo");
+// export const getAllShopInfoList = async ({ dbName = _dbName }) => {
+// 	const _result: ShopInfoType[] = await getDocDataFromDB(dbName, "shopInfo");
+// 	const list = await getListInLayoutUsage("shopInfo");
+//
+// 	let result: any[] = [ShopInfoInit];
+// 	if (_result && list) {
+// 		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+// 	}
+//
+// 	return result;
+// };
 
-	let result: any[] = [ShopInfoInit];
-	if (_result && list) {
-		result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
-	}
+// export const setShopInfo = async (data: ShopInfoType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
+// 	//
+//
+// 	const docName = "shopInfo";
+// 	const key = data.id;
+//
+// 	const batch = writeBatch(db);
+//
+// 	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
+// 	if (blobUrl === "error") {
+// 		return "error";
+// 	}
+//
+// 	const resSetDoc = setDocDataToDB(docName, key, data, batch);
+//
+// 	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
+//
+// 	if (!(resSetDoc === "success" && resSetComp === "success")) {
+// 		return "error";
+// 	}
+//
+// 	try {
+// 		await batch.commit();
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+//
+// 	return "success";
+// };
 
-	return result;
-};
+// export const deleteShopInfo = async (idArr: string[]) => {
+// 	//
+//
+// 	const list = await getAllShopInfoList({});
+// 	const delArr = list.filter((d) => idArr.includes(d.id));
+//
+// 	const isIncludes = delArr.length > 0;
+// 	if (!isIncludes) {
+// 		console.log("データベースと一致しませんでした");
+// 		return "error";
+// 	}
+//
+// 	const batch = writeBatch(db);
+//
+// 	const docName = "shopInfo";
+//
+// 	const resDelThumbImage = await delThumbImageFromStorage(docName, idArr);
+// 	if (resDelThumbImage === "error") {
+// 		return "error";
+// 	}
+//
+// 	const resDeleteDoc = deleteDocDataFromDB(docName, idArr, batch);
+//
+// 	const resDeleteComp = deleteComponentData(docName, idArr, batch);
+//
+// 	if (!(resDeleteDoc === "success" && resDeleteComp === "success")) {
+// 		return "error";
+// 	}
+//
+// 	try {
+// 		await batch.commit();
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+//
+// 	return "success";
+// };
 
-export const setShopInfo = async (data: ShopInfoType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
-	//
-
-	const docName = "shopInfo";
-	const key = data.id;
-
-	const batch = writeBatch(db);
-
-	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
-	if (blobUrl === "error") {
-		return "error";
-	}
-
-	const resSetDoc = setDocDataToDB(docName, key, data, batch);
-
-	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
-
-	if (!(resSetDoc === "success" && resSetComp === "success")) {
-		return "error";
-	}
-
-	try {
-		await batch.commit();
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-
-	return "success";
-};
-
-export const deleteShopInfo = async (idArr: string[]) => {
-	//
-
-	const list = await getAllShopInfoList({});
-	const delArr = list.filter((d) => idArr.includes(d.id));
-
-	const isIncludes = delArr.length > 0;
-	if (!isIncludes) {
-		console.log("データベースと一致しませんでした");
-		return "error";
-	}
-
-	const batch = writeBatch(db);
-
-	const docName = "shopInfo";
-
-	const resDelThumbImage = await delThumbImageFromStorage(docName, idArr);
-	if (resDelThumbImage === "error") {
-		return "error";
-	}
-
-	const resDeleteDoc = deleteDocDataFromDB(docName, idArr, batch);
-
-	const resDeleteComp = deleteComponentData(docName, idArr, batch);
-
-	if (!(resDeleteDoc === "success" && resDeleteComp === "success")) {
-		return "error";
-	}
-
-	try {
-		await batch.commit();
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-
-	return "success";
-};
-
-export const getListInLayoutUsage = async (key: string) => {
-	//DB > usage > layout　の中から、　keyでfilterして、そのIDをリストにして返す
-	const layoutUsage = await getlayoutUsage();
-	if (!layoutUsage) {
-		return [];
-	}
-	const reg = new RegExp(`^${key}_(.*)`);
-	const _filterd = layoutUsage.map((d) => (d.match(reg) ? d.match(reg) : []));
-	const filterd = _filterd.flatMap((d) => (d?.[1] ? d[1] : []));
-
-	return filterd;
-};
+// export const getListInLayoutUsage = async (key: string) => {
+// 	//DB > usage > layout　の中から、　keyでfilterして、そのIDをリストにして返す
+// 	const layoutUsage = await getlayoutUsage();
+// 	if (!layoutUsage) {
+// 		return [];
+// 	}
+// 	const reg = new RegExp(`^${key}_(.*)`);
+// 	const _filterd = layoutUsage.map((d) => (d.match(reg) ? d.match(reg) : []));
+// 	const filterd = _filterd.flatMap((d) => (d?.[1] ? d[1] : []));
+//
+// 	return filterd;
+// };
 
 export const getListInTableUsage = async () => {
 	//DB > usage > tableをリストにして返す
@@ -910,56 +910,56 @@ export const getListInTableUsage = async () => {
 	return usageData;
 };
 
-export const getImageSrc = async (id: string) => {
-	//idに画像のIDを入れると、そのsrcとsrcHighを返す
-	if (!id || id === null) {
-		return {
-			id: "",
-			src: "",
-			srcHigh: "",
-		};
-	}
+// export const getImageSrc = async (id: string) => {
+// 	//idに画像のIDを入れると、そのsrcとsrcHighを返す
+// 	if (!id || id === null) {
+// 		return {
+// 			id: "",
+// 			src: "",
+// 			srcHigh: "",
+// 		};
+// 	}
+//
+// 	const mLib = await getMediaLib();
+// 	const media = mLib.find((media) => media.id === id);
+//
+// 	const result = {
+// 		id: id,
+// 		src: media?.src || "",
+// 		srcHigh: media?.srcHigh || "",
+// 	};
+//
+// 	return result;
+// };
 
-	const mLib = await getMediaLib();
-	const media = mLib.find((media) => media.id === id);
-
-	const result = {
-		id: id,
-		src: media?.src || "",
-		srcHigh: media?.srcHigh || "",
-	};
-
-	return result;
-};
-
-export const getMediaLib = async () => {
-	const mediaLib: MediaLib[] = [];
-	const querySnapshot = await getDocs(collection(db, "mediaLib"));
-	querySnapshot.forEach((doc) => {
-		const data = doc.data();
-
-		const d = {
-			id: data.id,
-			src: data.src,
-			srcHigh: data.srcHigh,
-			widthLow: data.widthLow,
-			heightLow: data.heightLow,
-			widthHigh: data.widthHigh,
-			heightHigh: data.heightHigh,
-			createdAt: data.createdAt,
-			updatedAt: data.updatedAt,
-			contentTypeHigh: data.contentTypeHigh,
-			contentTypeLow: data.contentTypeLow,
-			alt: data.alt,
-			caption: data.caption,
-			description: data.description,
-			tag: data.tag,
-		};
-		mediaLib.push(d);
-	});
-
-	return mediaLib;
-};
+// export const getMediaLib = async () => {
+// 	const mediaLib: MediaLib[] = [];
+// 	const querySnapshot = await getDocs(collection(db, "mediaLib"));
+// 	querySnapshot.forEach((doc) => {
+// 		const data = doc.data();
+//
+// 		const d = {
+// 			id: data.id,
+// 			src: data.src,
+// 			srcHigh: data.srcHigh,
+// 			widthLow: data.widthLow,
+// 			heightLow: data.heightLow,
+// 			widthHigh: data.widthHigh,
+// 			heightHigh: data.heightHigh,
+// 			createdAt: data.createdAt,
+// 			updatedAt: data.updatedAt,
+// 			contentTypeHigh: data.contentTypeHigh,
+// 			contentTypeLow: data.contentTypeLow,
+// 			alt: data.alt,
+// 			caption: data.caption,
+// 			description: data.description,
+// 			tag: data.tag,
+// 		};
+// 		mediaLib.push(d);
+// 	});
+//
+// 	return mediaLib;
+// };
 
 export const getMediaLibAsId = async ({ id }: { id: string }) => {
 	if (!id) {
@@ -980,123 +980,123 @@ export const getMediaLibAsId = async ({ id }: { id: string }) => {
 	return result;
 };
 
-export const setTempMedia = async (uploadedMediaData: [string, string, number, number, string][], canOverWrite: boolean) => {
-	//
-	const batch = writeBatch(db);
-
-	const regLow = new RegExp("__low__");
-	const regHigh = new RegExp("__high__");
-
-	type MediaforSetObjType = {
-		[id: string]: {
-			widthLow: number;
-			heightLow: number;
-			widthHigh: number;
-			heightHigh: number;
-			src: string;
-			srcHigh: string;
-			typeLow: string;
-			typeHigh: string;
-		};
-	};
-	const _mediaforSetObj: MediaforSetObjType = uploadedMediaData.reduce((acc, val, index, arr) => {
-		const _fileName = val[0].replace(/\.[^.]*$/, "").replace(regHigh, "").replace(regLow, "");
-		return {
-			...acc,
-			[_fileName]: {
-				widthLow: undefined,
-				heightLow: undefined,
-				widthHigh: undefined,
-				heightHigh: undefined,
-				src: undefined,
-				srcHigh: undefined,
-				typeLow: undefined,
-				typeHigh: undefined,
-			},
-		};
-	}, {});
-
-	uploadedMediaData.forEach((media) => {
-		const _fileName = media[0].replace(/\.[^.]*$/, "");
-
-		const isLow = _fileName.match(regLow);
-		const isHigh = _fileName.match(regHigh);
-
-		let mediaId;
-		if (isLow) {
-			mediaId = _fileName.replace(regLow, "");
-			_mediaforSetObj[mediaId].src = media[1];
-			_mediaforSetObj[mediaId].widthLow = media[2];
-			_mediaforSetObj[mediaId].heightLow = media[3];
-			_mediaforSetObj[mediaId].typeLow = media[4];
-		} else {
-			mediaId = _fileName.replace(regHigh, "");
-			_mediaforSetObj[mediaId].srcHigh = media[1];
-			_mediaforSetObj[mediaId].widthHigh = media[2];
-			_mediaforSetObj[mediaId].heightHigh = media[3];
-			_mediaforSetObj[mediaId].typeHigh = media[4];
-		}
-	});
-
-	const _mediaArr: [
-		string,
-		{
-			src: string;
-			srcHigh: string;
-			widthLow: number;
-			heightLow: number;
-			widthHigh: number;
-			heightHigh: number;
-			typeLow: string;
-			typeHigh: string;
-		},
-	][] = Object.entries(_mediaforSetObj);
-
-	const now = dayjs();
-	const day = now.format("YYYY-MM-DD-HH-mm-ss");
-
-	const tmpImgDataArr: MediaLib[] = _mediaArr.map((d) => ({
-		id: d[0],
-		src: d[1].src,
-		srcHigh: d[1].srcHigh,
-		widthLow: d[1].widthLow,
-		heightLow: d[1].heightLow,
-		widthHigh: d[1].widthHigh,
-		heightHigh: d[1].heightHigh,
-		createdAt: day,
-		updatedAt: day,
-		contentTypeLow: d[1].typeLow,
-		contentTypeHigh: d[1].typeHigh,
-		use: {},
-	}));
-
-	await setMediaToDB({ mediaArr: tmpImgDataArr, overWrite: canOverWrite, batch: batch });
-
-	try {
-		await batch.commit();
-		return tmpImgDataArr;
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-};
-type SetMediaToDBType = {
-	mediaArr: MediaLib[];
-	overWrite: boolean;
-	batch: WriteBatch;
-};
-export const setMediaToDB = async ({ mediaArr = [], overWrite = false, batch }: SetMediaToDBType) => {
-	const allMediaArr: MediaLib[] = await getMediaLib();
-
-	mediaArr.forEach((media) => {
-		const mediaIfExist = allMediaArr.find((d) => d.id === media.id);
-		if (!overWrite && mediaIfExist) {
-			return;
-		}
-		const ref = doc(db, "mediaLib", media.id);
-		batch.set(ref, media);
-	});
-};
+// export const setTempMedia = async (uploadedMediaData: [string, string, number, number, string][], canOverWrite: boolean) => {
+// 	//
+// 	const batch = writeBatch(db);
+//
+// 	const regLow = new RegExp("__low__");
+// 	const regHigh = new RegExp("__high__");
+//
+// 	type MediaforSetObjType = {
+// 		[id: string]: {
+// 			widthLow: number;
+// 			heightLow: number;
+// 			widthHigh: number;
+// 			heightHigh: number;
+// 			src: string;
+// 			srcHigh: string;
+// 			typeLow: string;
+// 			typeHigh: string;
+// 		};
+// 	};
+// 	const _mediaforSetObj: MediaforSetObjType = uploadedMediaData.reduce((acc, val, index, arr) => {
+// 		const _fileName = val[0].replace(/\.[^.]*$/, "").replace(regHigh, "").replace(regLow, "");
+// 		return {
+// 			...acc,
+// 			[_fileName]: {
+// 				widthLow: undefined,
+// 				heightLow: undefined,
+// 				widthHigh: undefined,
+// 				heightHigh: undefined,
+// 				src: undefined,
+// 				srcHigh: undefined,
+// 				typeLow: undefined,
+// 				typeHigh: undefined,
+// 			},
+// 		};
+// 	}, {});
+//
+// 	uploadedMediaData.forEach((media) => {
+// 		const _fileName = media[0].replace(/\.[^.]*$/, "");
+//
+// 		const isLow = _fileName.match(regLow);
+// 		const isHigh = _fileName.match(regHigh);
+//
+// 		let mediaId;
+// 		if (isLow) {
+// 			mediaId = _fileName.replace(regLow, "");
+// 			_mediaforSetObj[mediaId].src = media[1];
+// 			_mediaforSetObj[mediaId].widthLow = media[2];
+// 			_mediaforSetObj[mediaId].heightLow = media[3];
+// 			_mediaforSetObj[mediaId].typeLow = media[4];
+// 		} else {
+// 			mediaId = _fileName.replace(regHigh, "");
+// 			_mediaforSetObj[mediaId].srcHigh = media[1];
+// 			_mediaforSetObj[mediaId].widthHigh = media[2];
+// 			_mediaforSetObj[mediaId].heightHigh = media[3];
+// 			_mediaforSetObj[mediaId].typeHigh = media[4];
+// 		}
+// 	});
+//
+// 	const _mediaArr: [
+// 		string,
+// 		{
+// 			src: string;
+// 			srcHigh: string;
+// 			widthLow: number;
+// 			heightLow: number;
+// 			widthHigh: number;
+// 			heightHigh: number;
+// 			typeLow: string;
+// 			typeHigh: string;
+// 		},
+// 	][] = Object.entries(_mediaforSetObj);
+//
+// 	const now = dayjs();
+// 	const day = now.format("YYYY-MM-DD-HH-mm-ss");
+//
+// 	const tmpImgDataArr: MediaLib[] = _mediaArr.map((d) => ({
+// 		id: d[0],
+// 		src: d[1].src,
+// 		srcHigh: d[1].srcHigh,
+// 		widthLow: d[1].widthLow,
+// 		heightLow: d[1].heightLow,
+// 		widthHigh: d[1].widthHigh,
+// 		heightHigh: d[1].heightHigh,
+// 		createdAt: day,
+// 		updatedAt: day,
+// 		contentTypeLow: d[1].typeLow,
+// 		contentTypeHigh: d[1].typeHigh,
+// 		use: {},
+// 	}));
+//
+// 	await setMediaToDB({ mediaArr: tmpImgDataArr, overWrite: canOverWrite, batch: batch });
+//
+// 	try {
+// 		await batch.commit();
+// 		return tmpImgDataArr;
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+// };
+// type SetMediaToDBType = {
+// 	mediaArr: MediaLib[];
+// 	overWrite: boolean;
+// 	batch: WriteBatch;
+// };
+// export const setMediaToDB = async ({ mediaArr = [], overWrite = false, batch }: SetMediaToDBType) => {
+// 	const allMediaArr: MediaLib[] = await getMediaLib();
+//
+// 	mediaArr.forEach((media) => {
+// 		const mediaIfExist = allMediaArr.find((d) => d.id === media.id);
+// 		if (!overWrite && mediaIfExist) {
+// 			return;
+// 		}
+// 		const ref = doc(db, "mediaLib", media.id);
+// 		batch.set(ref, media);
+// 	});
+// };
 
 export const updateMediaToDB = async (media: MediaLib) => {
 	const _nMedia = Object.entries(media).map((d) => (d[1] === undefined ? [d[0], null] : d));
@@ -1796,101 +1796,101 @@ export const setFooterData = async (data: FooterCompType, node: HTMLElement, wid
 	return "success";
 };
 
-export const getAllFixedComponent = async ({ dbName = _dbName }) => {
-	const _result: FixedComponentType[] = await getDocDataFromDB(dbName, "fixedComponent");
-	const list = await getListInLayoutUsage("fixedComponent");
+// export const getAllFixedComponent = async ({ dbName = _dbName }) => {
+// 	const _result: FixedComponentType[] = await getDocDataFromDB(dbName, "fixedComponent");
+// 	const list = await getListInLayoutUsage("fixedComponent");
+//
+// 	const result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
+//
+// 	return result;
+// };
+//
+// export const setFixedComponent = async (data: FixedComponentType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
+// 	const docName = "fixedComponent";
+// 	const key = data.id;
+//
+// 	const batch = writeBatch(db);
+//
+// 	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
+// 	if (blobUrl === "error") {
+// 		return "error";
+// 	}
+//
+// 	const resSetDoc = setDocDataToDB(docName, key, data, batch);
+//
+// 	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
+//
+// 	const resSetMedia = await setMediaUsage({
+// 		compBlockName: docName,
+// 		compSubName: key,
+// 		mediaArr: data.imageId,
+// 		batch: batch,
+// 	});
+//
+// 	if (!(resSetDoc === "success" && resSetComp === "success" && resSetMedia === "success")) {
+// 		return "error";
+// 	}
+//
+// 	try {
+// 		await batch.commit();
+// 	} catch (error) {
+// 		console.log(error);
+// 		return "error";
+// 	}
+//
+// 	return "success";
+// };
 
-	const result = _result.map((d) => (list.includes(d.id) ? { ...d, usage: true } : { ...d, usage: false }));
-
-	return result;
-};
-
-export const setFixedComponent = async (data: FixedComponentType, node: HTMLElement, width: number, height: number, createdAt: string, updatedAt: string) => {
-	const docName = "fixedComponent";
-	const key = data.id;
-
-	const batch = writeBatch(db);
-
-	const blobUrl = await setThumbImageToStorage(node, docName, key, width, height);
-	if (blobUrl === "error") {
-		return "error";
-	}
-
-	const resSetDoc = setDocDataToDB(docName, key, data, batch);
-
-	const resSetComp = await setComponentData({ docName, key, blobUrl, width, height, createdAt, updatedAt, batch });
-
-	const resSetMedia = await setMediaUsage({
-		compBlockName: docName,
-		compSubName: key,
-		mediaArr: data.imageId,
-		batch: batch,
-	});
-
-	if (!(resSetDoc === "success" && resSetComp === "success" && resSetMedia === "success")) {
-		return "error";
-	}
-
-	try {
-		await batch.commit();
-	} catch (error) {
-		console.log(error);
-		return "error";
-	}
-
-	return "success";
-};
-
-export const deleteFixedComponent = async (idArr: string[]) => {
-	//
-	let result;
-
-	const _list = await getAllFixedComponent({});
-	const list = Object.entries(_list).map((d) => d[0]);
-
-	const isIncludes = [...idArr, ...list].filter((d) => idArr.includes(d) && list.includes(d)).length > 0;
-
-	if (!isIncludes) {
-		console.log("データベースと一致しませんでした");
-		return "error";
-	}
-	const promise: Promise<void>[] = [];
-	idArr.forEach((id) => {
-		const docRef = doc(db, _dbName, "fixedComponent");
-
-		const p = updateDoc(docRef, {
-			[id]: deleteField(),
-		});
-
-		promise.push(p);
-	});
-
-	try {
-		const res = await Promise.all(promise);
-	} catch (error) {
-		console.log(error);
-		result = "error";
-	}
-
-	///storegaeの削除
-
-	const delStoragePromise = [];
-
-	idArr.forEach((id) => {
-		const p = delThumbImageFromStorage("fixedComponent", [id]);
-		delStoragePromise.push(p);
-	});
-
-	try {
-		await Promise.all(promise);
-		result = "success";
-	} catch (error) {
-		console.log(error);
-		result = "error";
-	}
-
-	return result;
-};
+// export const deleteFixedComponent = async (idArr: string[]) => {
+// 	//
+// 	let result;
+//
+// 	const _list = await getAllFixedComponent({});
+// 	const list = Object.entries(_list).map((d) => d[0]);
+//
+// 	const isIncludes = [...idArr, ...list].filter((d) => idArr.includes(d) && list.includes(d)).length > 0;
+//
+// 	if (!isIncludes) {
+// 		console.log("データベースと一致しませんでした");
+// 		return "error";
+// 	}
+// 	const promise: Promise<void>[] = [];
+// 	idArr.forEach((id) => {
+// 		const docRef = doc(db, _dbName, "fixedComponent");
+//
+// 		const p = updateDoc(docRef, {
+// 			[id]: deleteField(),
+// 		});
+//
+// 		promise.push(p);
+// 	});
+//
+// 	try {
+// 		const res = await Promise.all(promise);
+// 	} catch (error) {
+// 		console.log(error);
+// 		result = "error";
+// 	}
+//
+// 	///storegaeの削除
+//
+// 	const delStoragePromise = [];
+//
+// 	idArr.forEach((id) => {
+// 		const p = delThumbImageFromStorage("fixedComponent", [id]);
+// 		delStoragePromise.push(p);
+// 	});
+//
+// 	try {
+// 		await Promise.all(promise);
+// 		result = "success";
+// 	} catch (error) {
+// 		console.log(error);
+// 		result = "error";
+// 	}
+//
+// 	return result;
+// };
 
 export const getGeneralData = async ({ dbName = _dbName }: { dbName?: string }) => {
 	const _result: GeneralControlType[] = await getDocDataFromDB(dbName, "generalControls");

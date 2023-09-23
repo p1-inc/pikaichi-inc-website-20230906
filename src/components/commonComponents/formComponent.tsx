@@ -6,7 +6,7 @@ import { IconAsterisk, IconLock } from "@tabler/icons-react";
 
 import { c } from "../../styles/eStyle";
 import { MediaLib } from "../../types/types";
-import { SelGeneralImageComp } from "../admin/selGeneralImageComp";
+// import { SelGeneralImageComp } from "../admin/selGeneralImageComp";
 
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
@@ -411,79 +411,79 @@ export const FormSelectFieldComponent = ({
 	);
 };
 
-type FormImageFieldComponentType = {
-	title: string;
-	placeholder?: string;
-	require?: boolean;
-	width?: string;
-	height?: string;
-	titleWidth?: string;
-	unit?: string;
-	helperText?: string;
-	image: MediaLib;
-	setImage: Dispatch<SetStateAction<MediaLib>>;
-	mediaLib: MediaLib[];
-	setMediaLib: Dispatch<SetStateAction<MediaLib[]>>;
-	type?: string;
-	trimCircle?: boolean;
-	displayHint?: boolean;
-	setDisplayHint?: Dispatch<SetStateAction<boolean>>;
-};
-export const FormImageFieldComponent = ({
-	title = "",
-	placeholder = "",
-	require = false,
-	width = "80%",
-	height = "80%",
-	titleWidth = "7em",
-	unit = "",
-	helperText = "",
-	image,
-	setImage,
-	mediaLib,
-	setMediaLib,
-	type = "pict",
-	trimCircle = false,
-	displayHint,
-	setDisplayHint,
-}: FormImageFieldComponentType) => {
-	//
-	return (
-		<Flex align="center" mb="0.9em">
-			<Box sx={titleStyle(titleWidth)}>
-				{title}
-				{displayHint !== undefined && (
-					<UnstyledButton
-						onClick={() => {
-							setDisplayHint(!displayHint);
-						}}
-					>
-						<HelpOutlineIcon />
-					</UnstyledButton>
-				)}
-			</Box>
-			<Flex direction="column">
-				<Flex align="center">
-					<SelGeneralImageComp
-						image={image}
-						setImage={setImage}
-						mediaLib={mediaLib}
-						setMediaLib={setMediaLib}
-						width={width}
-						height={height}
-						type={type}
-						trimCircle={trimCircle}
-					/>
-				</Flex>
-				{helperText && (
-					<Box component="p" ml="0.5em" mt="0.1em" fz="0.7em">
-						{helperText}
-					</Box>
-				)}
-			</Flex>
-		</Flex>
-	);
-};
+// type FormImageFieldComponentType = {
+// 	title: string;
+// 	placeholder?: string;
+// 	require?: boolean;
+// 	width?: string;
+// 	height?: string;
+// 	titleWidth?: string;
+// 	unit?: string;
+// 	helperText?: string;
+// 	image: MediaLib;
+// 	setImage: Dispatch<SetStateAction<MediaLib>>;
+// 	mediaLib: MediaLib[];
+// 	setMediaLib: Dispatch<SetStateAction<MediaLib[]>>;
+// 	type?: string;
+// 	trimCircle?: boolean;
+// 	displayHint?: boolean;
+// 	setDisplayHint?: Dispatch<SetStateAction<boolean>>;
+// };
+// export const FormImageFieldComponent = ({
+// 	title = "",
+// 	placeholder = "",
+// 	require = false,
+// 	width = "80%",
+// 	height = "80%",
+// 	titleWidth = "7em",
+// 	unit = "",
+// 	helperText = "",
+// 	image,
+// 	setImage,
+// 	mediaLib,
+// 	setMediaLib,
+// 	type = "pict",
+// 	trimCircle = false,
+// 	displayHint,
+// 	setDisplayHint,
+// }: FormImageFieldComponentType) => {
+// 	//
+// 	return (
+// 		<Flex align="center" mb="0.9em">
+// 			<Box sx={titleStyle(titleWidth)}>
+// 				{title}
+// 				{displayHint !== undefined && (
+// 					<UnstyledButton
+// 						onClick={() => {
+// 							setDisplayHint(!displayHint);
+// 						}}
+// 					>
+// 						<HelpOutlineIcon />
+// 					</UnstyledButton>
+// 				)}
+// 			</Box>
+// 			<Flex direction="column">
+// 				<Flex align="center">
+// 					<SelGeneralImageComp
+// 						image={image}
+// 						setImage={setImage}
+// 						mediaLib={mediaLib}
+// 						setMediaLib={setMediaLib}
+// 						width={width}
+// 						height={height}
+// 						type={type}
+// 						trimCircle={trimCircle}
+// 					/>
+// 				</Flex>
+// 				{helperText && (
+// 					<Box component="p" ml="0.5em" mt="0.1em" fz="0.7em">
+// 						{helperText}
+// 					</Box>
+// 				)}
+// 			</Flex>
+// 		</Flex>
+// 	);
+// };
 
 type FloatingLabelInputType = {
 	id?: string;

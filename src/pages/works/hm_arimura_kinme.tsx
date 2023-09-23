@@ -5,54 +5,54 @@ import { Box, Flex, Title } from "@mantine/core";
 import NextImage from "next/future/image";
 
 import { WorksDataType, worksData } from "../../data/worksData";
+import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
 import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
 
-const workId = "aichi-banpaku";
-export default function AichiBanpaku({ data }: { data: WorksDataType }) {
+const workId = "hm_arimura_kinme";
+export default function Hm_arimura_kinme({ data }: { data: WorksDataType }) {
 	//
 
 	return (
 		<WorksWrapperWithCollapse data={data} title={data.titleEn}>
-			<Flex direction="column" align="center" mt="2em" gap="8em">
-				{/* <Box
-					component={NextImage}
-					src="/img/works/aichi-banpaku/aichi-banpaku_03.jpg"
-					alt="Picture of the author"
-					w="75%"
-					h="fit-content"
-					width={1080}
-					height={765}
-					sx={{ objectFit: "contain" }}
-				/> */}
-
+			<Flex direction="column" align="center" mt="5em" gap="5em" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
 				<Box
 					component={NextImage}
-					src="/img/works/aichi-banpaku/aichi-banpaku_04.jpg"
+					src="/img/works/hm_arimura_kinme/hm_arimura_kinme_03.jpg"
 					alt="Picture of the author"
-					w="75%"
+					w="50%"
 					h="fit-content"
-					width={1080}
-					height={765}
+					width={693}
+					height={980}
 					sx={{ objectFit: "contain" }}
 				/>
 				<Box
 					component={NextImage}
-					src="/img/works/aichi-banpaku/aichi-banpaku_05.jpg"
+					src="/img/works/hm_arimura_kinme/hm_arimura_kinme_04.jpg"
 					alt="Picture of the author"
-					w="75%"
+					w="50%"
 					h="fit-content"
-					width={1080}
-					height={765}
+					width={693}
+					height={980}
 					sx={{ objectFit: "contain" }}
 				/>
 				<Box
 					component={NextImage}
-					src="/img/works/aichi-banpaku/aichi-banpaku_06.jpg"
+					src="/img/works/hm_arimura_kinme/hm_arimura_kinme_05.jpg"
 					alt="Picture of the author"
-					w="75%"
+					w="50%"
 					h="fit-content"
-					width={1080}
-					height={765}
+					width={693}
+					height={980}
+					sx={{ objectFit: "contain" }}
+				/>
+				<Box
+					component={NextImage}
+					src="/img/works/hm_arimura_kinme/hm_arimura_kinme_06.jpg"
+					alt="Picture of the author"
+					w="90%"
+					h="fit-content"
+					width={2160}
+					height={1390}
 					sx={{ objectFit: "contain" }}
 				/>
 			</Flex>
