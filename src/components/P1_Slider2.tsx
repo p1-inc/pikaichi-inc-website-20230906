@@ -10,6 +10,7 @@ import { Box, UnstyledButton, createStyles, keyframes } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { WorksDataType } from "../data/worksData";
+import { useRespStyles } from "../hooks/useRespStyles";
 
 export const bounce = keyframes({
 	"0%": {
@@ -25,6 +26,8 @@ export const bounce = keyframes({
 
 export default function P1_Slider2({ images = [] }: { images: WorksDataType[] }) {
 	//
+	const containerRef = useRef<HTMLDivElement>(null);
+	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
 	const autoplay = useRef<any>(Autoplay({ delay: 10000 }));
 
@@ -38,14 +41,14 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 	const { classes } = useStyles();
 
 	return (
-		<>
-			<Carousel loop mx="auto" withIndicators plugins={[autoplay.current]} w="100%" height="100vh" mah="50em" sx={{ overflow: "hidden" }}>
+		<Box ref={containerRef}>
+			<Carousel loop mx="auto" withIndicators plugins={[autoplay.current]} w="100%" height={mq.tabs ? "90vw" : "100vh"} mah="50em" sx={{ overflow: "hidden" }}>
 				{images.map((image, index) => (
 					<Carousel.Slide key={image.id} sx={{ overflow: "hidden" }}>
 						<Box
 							component={NextImage}
 							className={classes.workImgAnimation}
-							src={image.srcPC}
+							src={mq.tabs ? image.srcSP : image.srcPC}
 							alt="Picture of the author"
 							w="100%"
 							h="100%"
@@ -57,6 +60,6 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 					</Carousel.Slide>
 				))}
 			</Carousel>
-		</>
+		</Box>
 	);
 }
