@@ -26,7 +26,7 @@ export const bounce = keyframes({
 export default function P1_Slider2({ images = [] }: { images: WorksDataType[] }) {
 	//
 
-	const autoplay = useRef(Autoplay({ delay: 10000 }));
+	const autoplay = useRef<any>(Autoplay({ delay: 10000 }));
 
 	const useStyles = createStyles((theme) => ({
 		workImgAnimation: {
