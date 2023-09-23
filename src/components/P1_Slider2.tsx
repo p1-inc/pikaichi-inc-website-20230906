@@ -12,6 +12,7 @@ import { useRespStyles } from "../hooks/useRespStyles";
 import useEmblaCarousel from "embla-carousel-react";
 
 import EmblaCarousel, { EmblaCarouselType, EmblaOptionsType, EmblaPluginType, EmblaEventType } from "embla-carousel";
+// import Autoplay from "embla-carousel-autoplay/components/Autoplay";
 
 export const bounce = keyframes({
 	"0%": {
@@ -31,7 +32,7 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
 	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
-	const autoplay = useRef(Autoplay({ delay: 2000 }));
+	// const autoplay = useRef(Autoplay({ delay: 2000 }));
 	const scrollPrev = useCallback(() => {
 		if (emblaApi) emblaApi.scrollPrev();
 	}, [emblaApi]);
@@ -51,7 +52,7 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 
 	return (
 		<Box pos="relative" ref={containerRef} w="100%" h={mq.tabs ? "90vw" : "100vh"} mah="50em" sx={{ overflow: "hidden" }}>
-			<Box ref={emblaRef} sx={{ overflow: "hidden" }}>
+			<Box component="div" ref={emblaRef} sx={{ overflow: "hidden" }}>
 				<Flex>
 					{images.map((image, index) => (
 						<Flex key={image.id} sx={{ flex: "0 0 100%", minWidth: 0, overflow: "hidden" }}>
