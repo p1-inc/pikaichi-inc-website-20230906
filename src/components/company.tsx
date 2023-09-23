@@ -40,8 +40,8 @@ export const Company = ({ ...props }) => {
 			<Flex>
 				<Box sx={leftContentStyle}>{contentCompany.establishment.key}</Box>
 				<Box ml="1em">
-					{contentCompany.establishment.content.map((d) => (
-						<p>{d}</p>
+					{contentCompany.establishment.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>
@@ -50,8 +50,8 @@ export const Company = ({ ...props }) => {
 			<Flex>
 				<Box sx={leftContentStyle}>{contentCompany.companyName.key}</Box>
 				<Box ml="1em">
-					{contentCompany.companyName.content.map((d) => (
-						<p>{d}</p>
+					{contentCompany.companyName.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>
@@ -60,8 +60,8 @@ export const Company = ({ ...props }) => {
 			<Flex>
 				<Box sx={leftContentStyle}>{contentCompany.ceo.key}</Box>
 				<Box ml="1em">
-					{contentCompany.ceo.content.map((d) => (
-						<p>{d}</p>
+					{contentCompany.ceo.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>
@@ -70,8 +70,8 @@ export const Company = ({ ...props }) => {
 			<Flex>
 				<Box sx={leftContentStyle}>{contentCompany.capital.key}</Box>
 				<Box ml="1em">
-					{contentCompany.capital.content.map((d) => (
-						<p>{d}</p>
+					{contentCompany.capital.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>
@@ -80,8 +80,8 @@ export const Company = ({ ...props }) => {
 			<Flex>
 				<Box sx={leftContentStyle}>{contentCompany.address.key}</Box>
 				<Box ml="1em">
-					{contentCompany.address.content.map((d) => (
-						<p>{d}</p>
+					{contentCompany.address.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>
@@ -100,8 +100,8 @@ export const Company = ({ ...props }) => {
 			<Flex>
 				<Box sx={leftContentStyle}>{contentCompany.cliant.key}</Box>
 				<Box w={mq.sp ? "30em" : "50em"} ml="1em" fz="0.8em">
-					{contentCompany.cliant.content.map((d) => (
-						<p>{d}</p>
+					{contentCompany.cliant.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>

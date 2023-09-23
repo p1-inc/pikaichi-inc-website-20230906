@@ -38,8 +38,8 @@ export const Profile = ({ ...props }) => {
 			<Flex>
 				<Box sx={leftContentStyle}>{contentProfile.name.key}</Box>
 				<Box ml="1em">
-					{contentProfile.name.content.map((d) => (
-						<p>{d}</p>
+					{contentProfile.name.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>
@@ -48,8 +48,8 @@ export const Profile = ({ ...props }) => {
 			<Flex>
 				<Box sx={leftContentStyle}>{contentProfile.career.key}</Box>
 				<Box ml="1em">
-					{contentProfile.career.content.map((d) => (
-						<p>{d}</p>
+					{contentProfile.career.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>
@@ -58,8 +58,8 @@ export const Profile = ({ ...props }) => {
 			<Flex>
 				<Box sx={leftContentStyle}>{contentProfile.awards.key}</Box>
 				<Box ml="1em">
-					{contentProfile.awards.content.map((d) => (
-						<p>{d}</p>
+					{contentProfile.awards.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>
@@ -68,8 +68,8 @@ export const Profile = ({ ...props }) => {
 			<Flex lh="1.4em">
 				<Box sx={leftContentStyle}>{contentProfile.summary.key}</Box>
 				<Box w={mq.sp ? "30em" : "50em"} ml="1em" fz="0.8em">
-					{contentProfile.summary.content.map((d) => (
-						<p>{d}</p>
+					{contentProfile.summary.content.map((d, index) => (
+						<p key={`key${index}`}>{d}</p>
 					))}
 					<br />
 				</Box>
