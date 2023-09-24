@@ -37,7 +37,6 @@ export const HeaderArea = ({ logoWidth = "15em" }: { logoWidth?: string }) => {
 					sx={{ objectFit: "contain" }}
 				/>
 			</Anchor>
-
 			<UnstyledButton
 				component={Flex}
 				sx={{ "&:hover": { opacity: 0.7 } }}
