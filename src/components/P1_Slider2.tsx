@@ -4,13 +4,14 @@ import { useCallback, useRef } from "react";
 
 import NextImage from "next/future/image";
 
-import { Box, Button, Flex, createStyles, keyframes } from "@mantine/core";
+import { ActionIcon, Box, Button, Flex, createStyles, keyframes } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel, { EmblaCarouselType, EmblaOptionsType, EmblaPluginType, EmblaEventType, UseEmblaCarouselType } from "embla-carousel-react";
 
 import { WorksDataType } from "../data/worksData";
 import { useRespStyles } from "../hooks/useRespStyles";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 // import useEmblaCarousel from "embla-carousel-react";
 
 // import Autoplay from "embla-carousel-autoplay/components/Autoplay";
@@ -32,7 +33,7 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 	const containerRef = useRef<HTMLDivElement>(null);
 	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
-	const [emblaRef, emblaApi] = useEmblaCarousel({ active: true, loop: true }, [Autoplay()]);
+	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ active: true, delay: 10000 })]);
 	// const autoplay = useRef(Autoplay({ delay: 2000 }));
 	const scrollPrev = useCallback(() => {
 		if (emblaApi) emblaApi.scrollPrev();
@@ -73,13 +74,13 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 					))}
 				</Flex>
 			</Box>
-			<Flex align="center" justify="space-between" px="0.75rem" pos="absolute" sx={{ left: 0, right: 0, top: "calc(50% - 1.625rem / 2)" }}>
-				<Button sx={{ display: "flex", alignItems: "center", justifyContent: "center" }} onClick={scrollPrev}>
-					Prev
-				</Button>
-				<Button sx={{ display: "flex", alignItems: "center", justifyContent: "center" }} onClick={scrollNext}>
-					Next
-				</Button>
+			<Flex align="center" justify="space-between" px="0.75rem" pos="absolute" sx={{ left: 0, right: 0, top: "calc(50% - (8em / 2))" }}>
+				<ActionIcon radius="xl" sx={{ display: "flex", alignItems: "center", justifyContent: "center" }} onClick={scrollPrev}>
+					<IconChevronLeft width="2em" />
+				</ActionIcon>
+				<ActionIcon radius="xl" sx={{ display: "flex", alignItems: "center", justifyContent: "center" }} onClick={scrollNext}>
+					<IconChevronRight />
+				</ActionIcon>
 			</Flex>
 			{/* <Carousel loop mx="auto" withIndicators plugins={[autoplay.current]} w="100%" height={mq.tabs ? "90vw" : "100vh"} mah="50em" sx={{ overflow: "hidden" }}>
 				{images.map((image, index) => (
