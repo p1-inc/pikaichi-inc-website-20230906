@@ -32,7 +32,7 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 	const containerRef = useRef<HTMLDivElement>(null);
 	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
-	const [emblaRef, emblaApi] = useEmblaCarousel<any>({ loop: true }, [Autoplay()]);
+	const [emblaRef, emblaApi] = useEmblaCarousel({ active: true, loop: true }, [Autoplay()]);
 	// const autoplay = useRef(Autoplay({ delay: 2000 }));
 	const scrollPrev = useCallback(() => {
 		if (emblaApi) emblaApi.scrollPrev();
