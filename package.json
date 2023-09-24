@@ -15,7 +15,6 @@
         "@codexteam/icons": "^0.3.0",
         "@emotion/react": "^11.11.1",
         "@emotion/styled": "^11.11.0",
-        "@mantine/carousel": "^6.0.20",
         "@mantine/core": "^6.0.20",
         "@mantine/dates": "^6.0.20",
         "@mantine/form": "^6.0.20",

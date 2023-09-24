@@ -5,7 +5,6 @@ import { useCallback, useRef } from "react";
 import NextImage from "next/future/image";
 
 import { ActionIcon, Box, Button, Flex, createStyles, keyframes } from "@mantine/core";
-import { Carousel } from "@mantine/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel, { EmblaCarouselType, EmblaOptionsType, EmblaPluginType, EmblaEventType, UseEmblaCarouselType } from "embla-carousel-react";
 
@@ -33,11 +32,9 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 	const containerRef = useRef<HTMLDivElement>(null);
 	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
-	// const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ active: true, delay: 10000 })]);
 	//
 	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ active: true, delay: 10000 })]);
 
-	// const autoplay = useRef(Autoplay({ delay: 2000 }));
 	const scrollPrev = useCallback(() => {
 		if (emblaApi) emblaApi.scrollPrev();
 	}, [emblaApi]);
@@ -84,24 +81,6 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 					<IconChevronRight />
 				</ActionIcon>
 			</Flex>
-			{/* <Carousel loop mx="auto" withIndicators plugins={[autoplay.current]} w="100%" height={mq.tabs ? "90vw" : "100vh"} mah="50em" sx={{ overflow: "hidden" }}>
-				{images.map((image, index) => (
-					<Carousel.Slide key={image.id} sx={{ overflow: "hidden" }}>
-						<Box
-							component={NextImage}
-							className={classes.workImgAnimation}
-							src={mq.tabs ? image.srcSP : image.srcPC}
-							alt="Picture of the author"
-							w="100%"
-							h="100%"
-							mah="50em"
-							width={image.widthPC}
-							height={image.heightPC}
-							sx={{ objectFit: "cover" }}
-						/>
-					</Carousel.Slide>
-				))}
-			</Carousel> */}
 		</Box>
 	);
 }
