@@ -35,7 +35,7 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 
 	// const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ active: true, delay: 10000 })]);
 	//
-	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ active: true, delay: 10000 }) as any]);
+	const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ active: true, delay: 10000 })]);
 
 	// const autoplay = useRef(Autoplay({ delay: 2000 }));
 	const scrollPrev = useCallback(() => {
@@ -56,11 +56,11 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 	const { classes } = useStyles();
 
 	return (
-		<Box pos="relative" ref={containerRef} w="100%" h={mq.tabs ? "90vw" : "100vh"} mah="50em" sx={{ overflow: "hidden" }}>
+		<Box pos="relative" ref={containerRef} w="100%">
 			<Box component="div" ref={emblaRef} sx={{ overflow: "hidden" }}>
 				<Flex>
 					{images.map((image, index) => (
-						<Flex key={image.id} sx={{ flex: "0 0 100%", minWidth: 0, overflow: "hidden" }}>
+						<Flex key={image.id} w="100%" h={mq.tab ? "90vw" : "100vh"} sx={{ flex: "0 0 100%", minWidth: 0, overflow: "hidden" }}>
 							<Box
 								component={NextImage}
 								className={classes.workImgAnimation}
@@ -68,7 +68,6 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 								alt="Picture of the author"
 								w="100%"
 								h="100%"
-								mah="50em"
 								width={image.widthPC}
 								height={image.heightPC}
 								sx={{ objectFit: "cover" }}

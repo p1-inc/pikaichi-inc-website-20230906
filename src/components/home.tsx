@@ -89,11 +89,11 @@ export const Home = ({ workImageData: originalItems }: { workImageData: WorksDat
 			<Flex mt="3em">
 				<P1_Slider2 images={items} />
 			</Flex>
-			<Flex justify="center" mt="2em">
+			<Flex justify="center" mt="5em">
 				<PikaichistarSVG width="2em" />
 			</Flex>
 
-			<WorksCard items={items} mt="1em" />
+			<WorksCard items={items} mt="2em" />
 			<Flex w="80%" mx="auto" mt="3em" sx={{ overflowWrap: "break-word" }}>
 				<Profile />
 			</Flex>
