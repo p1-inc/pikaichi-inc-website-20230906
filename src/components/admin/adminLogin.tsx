@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
 
-import NextLink from "next/link";
+import Head from "next/head";
 
 import { authErrorState, authUserState } from "../../recoil/atoms";
 
@@ -127,6 +127,19 @@ const AdminLogin = () => {
 
 	return (
 		<>
+			<Head>
+				<title>Pikaichi inc.</title>
+				<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+				<meta name="description" content="Pikaichi inc." />
+				<meta property="og:url" content="https://pikaichi-inc.com" />
+				<meta property="og:title" content="Pikaichi inc." />
+				<meta property="og:site_name" content="Pikaichi inc." />
+				<meta property="og:description" content="Pikaichi inc." />
+				<meta property="og:type" content="website" />
+				<meta property="og:image" content="https://pikaichi-inc.com/img/ogpImage.png" />
+				<meta name="twitter:card" content="summary_large_image" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
 			<Modal
 				// opened={openLoginWindow}
 				size="md"

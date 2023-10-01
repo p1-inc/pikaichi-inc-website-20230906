@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react";
 
 import NextImage from "next/future/image";
 
-import { ActionIcon, Box, Button, Flex, createStyles, keyframes } from "@mantine/core";
+import { ActionIcon, Anchor, Box, Button, Flex, createStyles, keyframes } from "@mantine/core";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel, { EmblaCarouselType, EmblaOptionsType, EmblaPluginType, EmblaEventType, UseEmblaCarouselType } from "embla-carousel-react";
 
@@ -58,6 +58,7 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 				<Flex>
 					{images.map((image, index) => (
 						<Flex key={image.id} w="100%" h={mq.tab ? "90vw" : "85vh"} sx={{ flex: "0 0 100%", minWidth: 0, overflow: "hidden" }}>
+							{/* <Anchor href={`works/${image.id}`}> */}
 							<Box
 								component={NextImage}
 								className={classes.workImgAnimation}
@@ -69,6 +70,7 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 								height={image.heightPC}
 								sx={{ objectFit: "cover" }}
 							/>
+							{/* </Anchor> */}
 						</Flex>
 					))}
 				</Flex>

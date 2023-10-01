@@ -5,9 +5,14 @@ import { IconLogout } from "@tabler/icons-react";
 import { getAuth, signOut } from "firebase/auth";
 import { useRecoilState } from "recoil";
 import { authUserState } from "../recoil/atoms";
+import { useRespStyles } from "../hooks/useRespStyles";
+import { useRef } from "react";
 
 export const HeaderArea = ({ logoWidth = "15em" }: { logoWidth?: string }) => {
 	const [authUser, setAuthUser] = useRecoilState(authUserState);
+
+	const containerRef = useRef<HTMLDivElement>(null);
+	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
 	const handleLogout = async () => {
 		setAuthUser({
@@ -24,13 +29,15 @@ export const HeaderArea = ({ logoWidth = "15em" }: { logoWidth?: string }) => {
 	};
 
 	return (
-		<Flex w="100%" justify="space-between">
+		<Flex w="100%" justify="space-between" align="center" ref={containerRef}>
 			<Anchor href="/">
 				<Box
 					component={NextImage}
 					src="/img/pikaichi-logo-01.svg"
 					alt="Picture of the author"
-					w={logoWidth}
+					w="40vw"
+					maw="15em"
+					miw="9em"
 					h="fit-content"
 					width="86"
 					height="14"
@@ -44,8 +51,10 @@ export const HeaderArea = ({ logoWidth = "15em" }: { logoWidth?: string }) => {
 					handleLogout();
 				}}
 			>
-				<IconLogout color="#545554" />
-				<Text>logout</Text>
+				<IconLogout color="#7e7e7e" />
+				<Text ml="0.2em" display={mq.sps ? "none" : "block"}>
+					logout
+				</Text>
 			</UnstyledButton>
 		</Flex>
 	);

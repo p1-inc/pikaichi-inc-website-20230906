@@ -25,14 +25,17 @@ export const Company = ({ ...props }) => {
 	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
 	const leftContentStyle: CSSObject = {
-		width: mq.sp ? "5em" : "10em",
+		// width: mq.sp ? "4em" : "10em",
+		width: "10em",
 		paddingRight: "1em",
 		borderRight: "1px solid gray",
 		textAlignLast: "justify",
+		flexShrink: 0,
 	};
+
 	return (
 		<Box m="0 auto" fz={mq.sp ? "0.8em" : "1em"} pb="4em" {...props} ref={containerRef}>
-			<Flex direction="column" align="center" mt="1em" mb="2em">
+			<Flex direction="column" align="center" mt="1em" mb="2em" w="100%">
 				<PikaichistarSVG width="2em" />
 				<Box>company</Box>
 			</Flex>
@@ -99,7 +102,7 @@ export const Company = ({ ...props }) => {
 
 			<Flex>
 				<Box sx={leftContentStyle}>{contentCompany.cliant.key}</Box>
-				<Box w={mq.sp ? "30em" : "50em"} ml="1em" fz="0.8em">
+				<Box w={mq.sp ? "25em" : "50em"} ml="1em" fz="0.8em">
 					{contentCompany.cliant.content.map((d, index) => (
 						<p key={`key${index}`}>{d}</p>
 					))}

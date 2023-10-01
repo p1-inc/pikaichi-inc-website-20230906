@@ -1,5 +1,3 @@
-import Image from "next/future/image";
-
 import { Box, CSSObject, Divider, Flex, Text } from "@mantine/core";
 import { PikaichistarSVG } from "../svg/pikaichistarSVG";
 import { useRespStyles } from "../hooks/useRespStyles";
@@ -22,10 +20,12 @@ export const Profile = ({ ...props }) => {
 	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
 	const leftContentStyle: CSSObject = {
-		width: mq.sp ? "5em" : "10em",
+		// width: mq.sp ? "8em" : "10em",
+		width: "10em",
 		paddingRight: "1em",
 		borderRight: "1px solid gray",
 		textAlignLast: "justify",
+		flexShrink: 0,
 	};
 
 	return (
@@ -67,7 +67,7 @@ export const Profile = ({ ...props }) => {
 
 			<Flex lh="1.4em">
 				<Box sx={leftContentStyle}>{contentProfile.summary.key}</Box>
-				<Box w={mq.sp ? "30em" : "50em"} ml="1em" fz="0.8em">
+				<Box w={mq.sp ? "25em" : "50em"} ml="1em" fz="0.8em">
 					{contentProfile.summary.content.map((d, index) => (
 						<p key={`key${index}`}>{d}</p>
 					))}
