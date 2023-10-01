@@ -33,7 +33,7 @@ export default function Document() {
 				/>
 			</Head>
 			<body>
-				<noscript>
+				{/* <noscript>
 					<iframe
 						src={`https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
 						title="GTM"
@@ -41,7 +41,7 @@ export default function Document() {
 						width="0"
 						style={{ display: "none", visibility: "hidden" }}
 					/>
-				</noscript>
+				</noscript> */}
 				<Main />
 				<NextScript />
 			</body>
