@@ -96,12 +96,14 @@ export const Home = ({ workImageData: originalItems }: { workImageData: WorksDat
 
 			<WorksCard items={items} mt="2em" />
 
-			<Flex w="80%" mx="auto" mt="3em" sx={{ overflowWrap: "break-word" }}>
-				<Profile />
-			</Flex>
+			<Flex direction="column" align="center">
+				<Flex w="90%" maw="50em" mt="3em" sx={{ overflowWrap: "break-word", overflow: "hidden" }}>
+					<Profile />
+				</Flex>
 
-			<Flex w="80%" mx="auto" mt="3em" sx={{ overflowWrap: "break-word" }}>
-				<Company />
+				<Flex w="90%" maw="50em" mt="3em" sx={{ overflowWrap: "break-word" }}>
+					<Company />
+				</Flex>
 			</Flex>
 			<Box mt="10em">
 				<Contact />

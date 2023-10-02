@@ -58,19 +58,19 @@ export default function P1_Slider2({ images = [] }: { images: WorksDataType[] })
 				<Flex>
 					{images.map((image, index) => (
 						<Flex key={image.id} w="100%" h={mq.tab ? "90vw" : "85vh"} sx={{ flex: "0 0 100%", minWidth: 0, overflow: "hidden" }}>
-							{/* <Anchor href={`works/${image.id}`}> */}
-							<Box
-								component={NextImage}
-								className={classes.workImgAnimation}
-								src={mq.tabs ? image.srcSP : image.srcPC}
-								alt="Picture of the author"
-								w="100%"
-								h="100%"
-								width={image.widthPC}
-								height={image.heightPC}
-								sx={{ objectFit: "cover" }}
-							/>
-							{/* </Anchor> */}
+							<Anchor href={`works/${image.id}`} w="100%">
+								<Box
+									component={NextImage}
+									className={classes.workImgAnimation}
+									src={mq.tabs ? image.srcSP : image.srcPC}
+									alt="Picture of the author"
+									w="100%"
+									h="100%"
+									width={image.widthPC}
+									height={image.heightPC}
+									sx={{ objectFit: "cover", "&:hover": { opacity: 1 } }}
+								/>
+							</Anchor>
 						</Flex>
 					))}
 				</Flex>

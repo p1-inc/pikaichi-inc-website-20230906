@@ -158,7 +158,8 @@ const AdminLogin = () => {
 				<Flex direction="column" align="center">
 					<PikaichiLogo2 width="8em" />
 					<Text mt="2em" fz="0.9em" lh="1.8em">
-						こちらはPikaichi inc.のwebサイトです。 モデル、タレント、およびその他のスタッフの権利を尊重するため、広く一般には公開しておりません。
+						Pikaichi
+						inc.は広告を主としたデザイン会社です。このサイトでは弊社の作品を多数紹介していますが、モデル、タレント、およびその他のスタッフの権利を尊重するため、広く一般には公開しておりません。
 						弊社へ興味のある方やお仕事の依頼をご検討の方は、下記のアドレスまでメールをお送りください。 idおよびパスワードを発行いたします。
 					</Text>
 					<Anchor href="mailto:info@pikaichi-inc.com">info@pikaichi-inc.com</Anchor>

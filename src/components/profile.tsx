@@ -20,7 +20,6 @@ export const Profile = ({ ...props }) => {
 	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
 	const leftContentStyle: CSSObject = {
-		// width: mq.sp ? "8em" : "10em",
 		width: "10em",
 		paddingRight: "1em",
 		borderRight: "1px solid gray",
@@ -29,7 +28,7 @@ export const Profile = ({ ...props }) => {
 	};
 
 	return (
-		<Box m="0 auto" fz={mq.sp ? "0.8em" : "1em"} pb="4em" sx={{ lineHeight: "2em" }} {...props} ref={containerRef}>
+		<Box fz={mq.sp ? "0.8em" : "1em"} pb="4em" lh="2em" {...props} ref={containerRef}>
 			<Flex direction="column" align="center" mt="1em" mb="2em" w="100%">
 				<PikaichistarSVG width="2em" />
 				<Box>profile</Box>
@@ -67,7 +66,7 @@ export const Profile = ({ ...props }) => {
 
 			<Flex lh="1.4em">
 				<Box sx={leftContentStyle}>{contentProfile.summary.key}</Box>
-				<Box w={mq.sp ? "25em" : "50em"} ml="1em" fz="0.8em">
+				<Box ml="1em" fz="0.8em" ta="justify">
 					{contentProfile.summary.content.map((d, index) => (
 						<p key={`key${index}`}>{d}</p>
 					))}

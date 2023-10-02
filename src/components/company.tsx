@@ -25,7 +25,6 @@ export const Company = ({ ...props }) => {
 	const { mq, clp } = useRespStyles({ ref: containerRef, min: 599, max: 1024 });
 
 	const leftContentStyle: CSSObject = {
-		// width: mq.sp ? "4em" : "10em",
 		width: "10em",
 		paddingRight: "1em",
 		borderRight: "1px solid gray",
@@ -102,7 +101,7 @@ export const Company = ({ ...props }) => {
 
 			<Flex>
 				<Box sx={leftContentStyle}>{contentCompany.cliant.key}</Box>
-				<Box w={mq.sp ? "25em" : "50em"} ml="1em" fz="0.8em">
+				<Box ml="1em" fz="0.8em" ta="justify">
 					{contentCompany.cliant.content.map((d, index) => (
 						<p key={`key${index}`}>{d}</p>
 					))}
