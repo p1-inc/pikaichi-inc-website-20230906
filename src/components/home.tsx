@@ -18,97 +18,97 @@ import { initializeApp } from "firebase/app";
 import { LoginModal } from "./loginModal";
 
 const firebaseConfig = {
-	apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-	authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-	projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-	storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BAKET,
-	messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
-	appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BAKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 export const Home = ({ workImageData: originalItems }: { workImageData: WorksDataType[] }) => {
-	//
+    //
 
-	const [items, setItems] = useState([]);
+    const [items, setItems] = useState([]);
 
-	const [loading, setLoading] = useState(true);
-	const [authUser, setAuthUser] = useRecoilState(authUserState);
+    //     const [loading, setLoading] = useState(true);
+    //     const [authUser, setAuthUser] = useRecoilState(authUserState);
+    //
+    //     const [openLoginWindow, setOpenLoginWindow] = useState(true);
 
-	const [openLoginWindow, setOpenLoginWindow] = useState(true);
+    // 	useEffect(() => {
+    // 		const getRole = async (user: User, auth: Auth) => {
+    // 			if (user) {
+    // 				const token = await user?.getIdTokenResult();
+    // 				if (user.emailVerified && (token?.claims.role === "super" || token?.claims.role === "admin")) {
+    // 					setAuthUser({ uid: user.uid, displayName: user.displayName, email: user.email });
+    // 				} else {
+    // 					try {
+    // 						const res = await signOut(auth);
+    // 						setAuthUser({
+    // 							uid: "",
+    // 							displayName: "",
+    // 							email: "",
+    // 						});
+    // 					} catch (error) {
+    // 						console.log(error);
+    // 					}
+    // 				}
+    // 			}
+    //
+    // 			setLoading(false);
+    // 			return;
+    // 		};
+    // 		onAuthStateChanged(auth, (user) => {
+    // 			getRole(user, auth);
+    // 		});
+    // 	}, []);
 
-	useEffect(() => {
-		const getRole = async (user: User, auth: Auth) => {
-			if (user) {
-				const token = await user?.getIdTokenResult();
-				if (user.emailVerified && (token?.claims.role === "super" || token?.claims.role === "admin")) {
-					setAuthUser({ uid: user.uid, displayName: user.displayName, email: user.email });
-				} else {
-					try {
-						const res = await signOut(auth);
-						setAuthUser({
-							uid: "",
-							displayName: "",
-							email: "",
-						});
-					} catch (error) {
-						console.log(error);
-					}
-				}
-			}
+    useEffect(() => {
+        const shuffleArray = (array: WorksDataType[]) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        };
 
-			setLoading(false);
-			return;
-		};
-		onAuthStateChanged(auth, (user) => {
-			getRole(user, auth);
-		});
-	}, []);
+        setItems(shuffleArray([...originalItems]));
+    }, [originalItems]);
 
-	useEffect(() => {
-		const shuffleArray = (array: WorksDataType[]) => {
-			for (let i = array.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
-				[array[i], array[j]] = [array[j], array[i]];
-			}
-			return array;
-		};
+    // const theme = useMantineTheme();
 
-		setItems(shuffleArray([...originalItems]));
-	}, [originalItems]);
+    return (
+        <Box component="main" fz="1rem">
+            <Flex w="90%" m="0 auto" mt="3em">
+                <HeaderArea />
+            </Flex>
+            <Flex mt="3em">
+                <P1_Slider2 images={items} />
+            </Flex>
+            <Flex direction="column" align="center" mt="5em">
+                <PikaichistarSVG width="2em" />
+                <Box>works</Box>
+            </Flex>
 
-	const theme = useMantineTheme();
+            <WorksCard items={items} mt="2em" />
 
-	return (
-		<Box component="main" fz="1rem">
-			<Flex w="90%" m="0 auto" mt="3em">
-				<HeaderArea />
-			</Flex>
-			<Flex mt="3em">
-				<P1_Slider2 images={items} />
-			</Flex>
-			<Flex direction="column" align="center" mt="5em">
-				<PikaichistarSVG width="2em" />
-				<Box>works</Box>
-			</Flex>
+            <Flex direction="column" align="center">
+                <Flex w="90%" maw="50em" mt="3em" sx={{ overflowWrap: "break-word", overflow: "hidden" }}>
+                    <Profile />
+                </Flex>
 
-			<WorksCard items={items} mt="2em" />
-
-			<Flex direction="column" align="center">
-				<Flex w="90%" maw="50em" mt="3em" sx={{ overflowWrap: "break-word", overflow: "hidden" }}>
-					<Profile />
-				</Flex>
-
-				<Flex w="90%" maw="50em" mt="3em" sx={{ overflowWrap: "break-word" }}>
-					<Company />
-				</Flex>
-			</Flex>
-			<Box mt="10em">
-				<Contact />
-			</Box>
-			<Footer mt="10em" />
-		</Box>
-	);
+                <Flex w="90%" maw="50em" mt="3em" sx={{ overflowWrap: "break-word" }}>
+                    <Company />
+                </Flex>
+            </Flex>
+            <Box mt="10em">
+                <Contact />
+            </Box>
+            <Footer mt="10em" />
+        </Box>
+    );
 };

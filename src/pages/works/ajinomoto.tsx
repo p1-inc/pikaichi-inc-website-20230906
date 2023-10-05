@@ -7,6 +7,7 @@ import NextImage from "next/future/image";
 import { WorksDataType, worksData } from "../../data/worksData";
 import { WorksWrapper } from "../../components/worksComponent/worksWrapper";
 import { useState } from "react";
+import { PageAuthWrapper } from "../../components/pageAuthWrapper";
 
 const workId = "ajinomoto";
 export default function Ajinomoto({ data }: { data: WorksDataType }) {
@@ -14,63 +15,14 @@ export default function Ajinomoto({ data }: { data: WorksDataType }) {
     const [detailOpened, setDetailOpened] = useState<boolean>(false);
 
     return (
-        <WorksWrapper data={data} title={data.titleEn}>
-            <Flex direction="row" align="center" justify="center" mt="2em" gap="2vw">
-                <Box
-                    component={NextImage}
-                    src="/img/works/ajinomoto/ajinomoto_03.jpg"
-                    alt="Picture of the author"
-                    w="30%"
-                    h="fit-content"
-                    width={1486}
-                    height={2102}
-                    sx={{ objectFit: "contain" }}
-                />
-                <Box
-                    component={NextImage}
-                    src="/img/works/ajinomoto/ajinomoto_04.jpg"
-                    alt="Picture of the author"
-                    w="30%"
-                    h="fit-content"
-                    width={1486}
-                    height={2102}
-                    sx={{ objectFit: "contain" }}
-                />
-                <Box
-                    component={NextImage}
-                    src="/img/works/ajinomoto/ajinomoto_05.jpg"
-                    alt="Picture of the author"
-                    w="30%"
-                    h="fit-content"
-                    width={1486}
-                    height={2102}
-                    sx={{ objectFit: "contain" }}
-                />
-            </Flex>
-
-            <Center>
-                <Button
-                    w="20em"
-                    mt="2em"
-                    variant="outline"
-                    color="gray"
-                    radius="xl"
-                    compact
-                    onClick={() => {
-                        setDetailOpened(!detailOpened);
-                    }}
-                >
-                    {"DETAIL"}
-                </Button>
-            </Center>
-
-            <Collapse in={detailOpened}>
-                <Flex direction="column" align="center" justify="center" mt="5em" gap="2vw">
+        <PageAuthWrapper>
+            <WorksWrapper data={data} title={data.titleEn}>
+                <Flex direction="row" align="center" justify="center" mt="2em" gap="2vw">
                     <Box
                         component={NextImage}
-                        src="/img/works/ajinomoto/ajinomoto_06.jpg"
+                        src="/img/works/ajinomoto/ajinomoto_03.jpg"
                         alt="Picture of the author"
-                        w="80%"
+                        w="30%"
                         h="fit-content"
                         width={1486}
                         height={2102}
@@ -78,9 +30,9 @@ export default function Ajinomoto({ data }: { data: WorksDataType }) {
                     />
                     <Box
                         component={NextImage}
-                        src="/img/works/ajinomoto/ajinomoto_07.jpg"
+                        src="/img/works/ajinomoto/ajinomoto_04.jpg"
                         alt="Picture of the author"
-                        w="80%"
+                        w="30%"
                         h="fit-content"
                         width={1486}
                         height={2102}
@@ -88,17 +40,68 @@ export default function Ajinomoto({ data }: { data: WorksDataType }) {
                     />
                     <Box
                         component={NextImage}
-                        src="/img/works/ajinomoto/ajinomoto_08.jpg"
+                        src="/img/works/ajinomoto/ajinomoto_05.jpg"
                         alt="Picture of the author"
-                        w="80%"
+                        w="30%"
                         h="fit-content"
                         width={1486}
                         height={2102}
                         sx={{ objectFit: "contain" }}
                     />
                 </Flex>
-            </Collapse>
-        </WorksWrapper>
+
+                <Center>
+                    <Button
+                        w="20em"
+                        mt="2em"
+                        variant="outline"
+                        color="gray"
+                        radius="xl"
+                        compact
+                        onClick={() => {
+                            setDetailOpened(!detailOpened);
+                        }}
+                    >
+                        {"DETAIL"}
+                    </Button>
+                </Center>
+
+                <Collapse in={detailOpened}>
+                    <Flex direction="column" align="center" justify="center" mt="5em" gap="2vw">
+                        <Box
+                            component={NextImage}
+                            src="/img/works/ajinomoto/ajinomoto_06.jpg"
+                            alt="Picture of the author"
+                            w="80%"
+                            h="fit-content"
+                            width={1486}
+                            height={2102}
+                            sx={{ objectFit: "contain" }}
+                        />
+                        <Box
+                            component={NextImage}
+                            src="/img/works/ajinomoto/ajinomoto_07.jpg"
+                            alt="Picture of the author"
+                            w="80%"
+                            h="fit-content"
+                            width={1486}
+                            height={2102}
+                            sx={{ objectFit: "contain" }}
+                        />
+                        <Box
+                            component={NextImage}
+                            src="/img/works/ajinomoto/ajinomoto_08.jpg"
+                            alt="Picture of the author"
+                            w="80%"
+                            h="fit-content"
+                            width={1486}
+                            height={2102}
+                            sx={{ objectFit: "contain" }}
+                        />
+                    </Flex>
+                </Collapse>
+            </WorksWrapper>
+        </PageAuthWrapper>
     );
 }
 

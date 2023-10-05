@@ -6,56 +6,59 @@ import NextImage from "next/future/image";
 
 import { WorksDataType, worksData } from "../../data/worksData";
 import { WorksWrapperWithCollapse } from "../../components/worksComponent/worksWrapperWithCollapse";
+import { PageAuthWrapper } from "../../components/pageAuthWrapper";
 
 const workId = "menshokunin2015";
 export default function menshokunin2015({ data }: { data: WorksDataType }) {
     //
 
     return (
-        <WorksWrapperWithCollapse data={data} title={data.titleEn}>
-            <Flex direction="column" align="center" mt="2em" gap="8em">
-                <Box
-                    component={NextImage}
-                    src="/img/works/menshokunin2015/menshokunin2015_03.jpg"
-                    alt="Picture of the author"
-                    w="75%"
-                    h="fit-content"
-                    width={1984}
-                    height={1134}
-                    sx={{ objectFit: "contain" }}
-                />
-                <Box
-                    component={NextImage}
-                    src="/img/works/menshokunin2015/menshokunin2015_04.jpg"
-                    alt="Picture of the author"
-                    w="75%"
-                    h="fit-content"
-                    width={1984}
-                    height={1134}
-                    sx={{ objectFit: "contain" }}
-                />
-                <Box
-                    component={NextImage}
-                    src="/img/works/menshokunin2015/menshokunin2015_05.jpg"
-                    alt="Picture of the author"
-                    w="75%"
-                    h="fit-content"
-                    width={1984}
-                    height={1134}
-                    sx={{ objectFit: "contain" }}
-                />
-                <Box
-                    component={NextImage}
-                    src="/img/works/menshokunin2015/menshokunin2015_06.jpg"
-                    alt="Picture of the author"
-                    w="75%"
-                    h="fit-content"
-                    width={1984}
-                    height={1134}
-                    sx={{ objectFit: "contain" }}
-                />
-            </Flex>
-        </WorksWrapperWithCollapse>
+        <PageAuthWrapper>
+            <WorksWrapperWithCollapse data={data} title={data.titleEn}>
+                <Flex direction="column" align="center" mt="2em" gap="8em">
+                    <Box
+                        component={NextImage}
+                        src="/img/works/menshokunin2015/menshokunin2015_03.jpg"
+                        alt="Picture of the author"
+                        w="75%"
+                        h="fit-content"
+                        width={1984}
+                        height={1134}
+                        sx={{ objectFit: "contain" }}
+                    />
+                    <Box
+                        component={NextImage}
+                        src="/img/works/menshokunin2015/menshokunin2015_04.jpg"
+                        alt="Picture of the author"
+                        w="75%"
+                        h="fit-content"
+                        width={1984}
+                        height={1134}
+                        sx={{ objectFit: "contain" }}
+                    />
+                    <Box
+                        component={NextImage}
+                        src="/img/works/menshokunin2015/menshokunin2015_05.jpg"
+                        alt="Picture of the author"
+                        w="75%"
+                        h="fit-content"
+                        width={1984}
+                        height={1134}
+                        sx={{ objectFit: "contain" }}
+                    />
+                    <Box
+                        component={NextImage}
+                        src="/img/works/menshokunin2015/menshokunin2015_06.jpg"
+                        alt="Picture of the author"
+                        w="75%"
+                        h="fit-content"
+                        width={1984}
+                        height={1134}
+                        sx={{ objectFit: "contain" }}
+                    />
+                </Flex>
+            </WorksWrapperWithCollapse>
+        </PageAuthWrapper>
     );
 }
 
