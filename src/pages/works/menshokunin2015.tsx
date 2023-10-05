@@ -20,8 +20,8 @@ export default function menshokunin2015({ data }: { data: WorksDataType }) {
                     alt="Picture of the author"
                     w="75%"
                     h="fit-content"
-                    width={1772}
-                    height={918}
+                    width={1984}
+                    height={1134}
                     sx={{ objectFit: "contain" }}
                 />
                 <Box
@@ -30,8 +30,8 @@ export default function menshokunin2015({ data }: { data: WorksDataType }) {
                     alt="Picture of the author"
                     w="75%"
                     h="fit-content"
-                    width={1772}
-                    height={918}
+                    width={1984}
+                    height={1134}
                     sx={{ objectFit: "contain" }}
                 />
                 <Box
@@ -40,8 +40,8 @@ export default function menshokunin2015({ data }: { data: WorksDataType }) {
                     alt="Picture of the author"
                     w="75%"
                     h="fit-content"
-                    width={1772}
-                    height={918}
+                    width={1984}
+                    height={1134}
                     sx={{ objectFit: "contain" }}
                 />
                 <Box
@@ -50,8 +50,8 @@ export default function menshokunin2015({ data }: { data: WorksDataType }) {
                     alt="Picture of the author"
                     w="75%"
                     h="fit-content"
-                    width={1772}
-                    height={918}
+                    width={1984}
+                    height={1134}
                     sx={{ objectFit: "contain" }}
                 />
             </Flex>
