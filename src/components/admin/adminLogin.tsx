@@ -56,9 +56,7 @@ const AdminLogin = () => {
 	const [errMsg, setErrMsg] = useState<string>("");
 
 	const fetchLogin = async ({ adminSetObj, member }: { adminSetObj: string[][]; member: string }) => {
-		console.log("adminSetObj: ", adminSetObj);
 		const adminObj = adminSetObj.find((d) => d[0] === member) || ["wrongAltName", "wrongPass", "wrongPass"];
-		console.log("adminObj: ", adminObj);
 
 		const adminEmail = adminObj[1];
 		const adminPass = adminObj[2];
@@ -116,7 +114,6 @@ const AdminLogin = () => {
 		const aaa = adminSet.split(",");
 
 		const adminSetObj = adminSet.split(",").map((d) => d.split(":"));
-		console.log(" adminSetObj: ", adminSetObj);
 
 		setTimeout(() => {
 			fetchLogin({ adminSetObj, member: v.pass });
