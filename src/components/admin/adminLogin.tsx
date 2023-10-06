@@ -112,7 +112,11 @@ const AdminLogin = () => {
 		const v = form.values;
 
 		console.log("adminSet: ", adminSet);
+		const aaa = adminSet.split(",");
+		console.log("aaa: ", aaa);
+
 		const adminSetObj = adminSet.split(",").map((d) => d.split(":"));
+		console.log(" adminSetObj: ", adminSetObj);
 
 		setTimeout(() => {
 			fetchLogin({ adminSetObj, member: v.pass });
