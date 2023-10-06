@@ -111,6 +111,7 @@ const AdminLogin = () => {
 
 		const v = form.values;
 
+		console.log("adminSet: ", adminSet);
 		const adminSetObj = adminSet.split(",").map((d) => d.split(":"));
 
 		setTimeout(() => {
