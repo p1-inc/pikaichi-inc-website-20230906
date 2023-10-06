@@ -15,7 +15,6 @@ import { useRecoilState } from "recoil";
 import { authUserState } from "../recoil/atoms";
 import { Auth, User, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import { LoginModal } from "./loginModal";
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,

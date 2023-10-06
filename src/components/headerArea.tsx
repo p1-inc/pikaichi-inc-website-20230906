@@ -7,8 +7,11 @@ import { useRecoilState } from "recoil";
 import { authUserState } from "../recoil/atoms";
 import { useRespStyles } from "../hooks/useRespStyles";
 import { useRef } from "react";
+import { useRouter } from "next/router";
 
 export const HeaderArea = ({ logoWidth = "15em" }: { logoWidth?: string }) => {
+    const router = useRouter(); //useRouterフックを定義
+
     const [authUser, setAuthUser] = useRecoilState(authUserState);
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -23,6 +26,7 @@ export const HeaderArea = ({ logoWidth = "15em" }: { logoWidth?: string }) => {
         const auth = getAuth();
         try {
             const res = await signOut(auth);
+            router.push("/");
         } catch (error) {
             console.log(error);
         }

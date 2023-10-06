@@ -102,7 +102,7 @@ export const worksData: WorksDataType[] = [
             { CMP: "Katsuo Yonezawa\nMasaharu Osawa\nSotaro Tanaka" },
             { AD: "Hikaru Shimzu" },
             { D: "Hiromi Oshima" },
-            { Photo: "Toshinobu Kobayashi" },
+            { Photo: "Tsynaki Kuwashima" },
         ],
         srcPC: null,
         srcSP: null,

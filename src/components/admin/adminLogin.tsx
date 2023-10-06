@@ -42,9 +42,7 @@ export type FormValuesType = {
     pass: string;
 };
 
-const adminEmail: string = process.env.NEXT_PUBLIC_LOGIN_EMAIL;
-const adminAltPass: string[] = process.env.NEXT_PUBLIC_LOGIN_ALTPASS.split(",");
-const adminPass: string = process.env.NEXT_PUBLIC_LOGIN_PASS;
+const adminSet: string = process.env.NEXT_PUBLIC_LOGINSET;
 
 const AdminLogin = () => {
     //
@@ -71,25 +69,17 @@ const AdminLogin = () => {
 
     const [errMsg, setErrMsg] = useState<string>("");
 
-    // const [seconds, setSeconds] = useState(0);
-    // const interval = useInterval(() => setSeconds((s) => s + 1), 1000);
+    const fetchLogin = async ({ adminSetObj, member }: { adminSetObj: string[][]; member: string }) => {
+        const adminObj = adminSetObj.find((d) => d[0] === member) || ["wrongAltName", "wrongPass", "wrongPass"];
 
-    const theme = useMantineTheme();
-
-    const fetchLogin = async ({ isSuccess }: { isSuccess: any }) => {
-        if (!isSuccess) {
-            await displayAlert("", "ログインに失敗しました、パスワードを確認の上再度入力してください", "red");
-            setErrMsg("ログインに失敗しました、パスワードを確認の上再度入力してください");
-            setLoading(false);
-            return;
-        }
+        const adminEmail = adminObj[1];
+        const adminPass = adminObj[2];
 
         const res = await loginAsAdminFunc(adminEmail, adminPass);
         setLoading(false);
         if (!res) {
             return;
         }
-
         if (res.uid && res.emailVerified) {
             //ログイン成功
 
@@ -102,13 +92,44 @@ const AdminLogin = () => {
                 displayName = res.displayName;
             }
             setAuthUser({ uid: adminPass, displayName: displayName, email: res.email });
-            // router.push("/admin/index/");
+        } else if (res === "noEmailVerified") {
+            //メール未確認
+            await displayAlert(
+                "",
+                "入力したユーザーはメール認証が完了していません。メール認証を完了してから再度ログインしてください",
+                ""
+            );
+            setAuthError("noEmailVerified");
+        } else if (res === "noAdminRole") {
+            await displayAlert(
+                "",
+                "入力したユーザーには、管理者権限がありません。管理者に連絡して管理者権限を付与してもらってください",
+                ""
+            );
+        } else if (res === "auth/too-many-requests") {
+            await displayAlert(
+                "",
+                "ログインに何度も失敗したため、アカウントが一時的に無効になっています。しばらく経ってから再度ログインしてください",
+                ""
+            );
+
+            setErrMsg(
+                "ログインに何度も失敗したため、アカウントが一時的に無効になっています。しばらく経ってから再度ログインしてください"
+            );
+        } else {
+            //その他のエラー
+            await displayAlert(
+                "",
+                "ログインに失敗しました、メールアドレス・パスワードを確認の上再度入力してください",
+                "red"
+            );
+
+            setErrMsg("ログインに失敗しました、メールアドレス・パスワードを確認の上再度入力してください");
         }
     };
 
     const handleSubmit = async (e: any) => {
         //
-
         e.preventDefault();
         setLoading(true);
 
@@ -122,10 +143,10 @@ const AdminLogin = () => {
 
         const v = form.values;
 
-        const isSuccess = adminAltPass.includes(v.pass);
+        const adminSetObj = adminSet.split(",").map((d) => d.split(":"));
 
         setTimeout(() => {
-            fetchLogin({ isSuccess });
+            fetchLogin({ adminSetObj, member: v.pass });
         }, 1000);
     };
 
@@ -211,8 +232,8 @@ const AdminLogin = () => {
                         ログイン
                     </Button>
                     <Flex direction="column" align="center" mt="2em" fz="10pt">
-                        <Box component="p">#1104, 2-14-6, TSUKIJI, CHUO-KU,</Box>
-                        <Box component="p">TOKYO, 104-0045, JAPAN</Box>
+                        {/* <Box component="p">#1104, 2-14-6, TSUKIJI, CHUO-KU,</Box>
+                        <Box component="p">TOKYO, 104-0045, JAPAN</Box> */}
                         <Anchor href="mailto:info@pikaichi-inc.com" color="none">
                             info@pikaichi-inc.com
                         </Anchor>
@@ -243,63 +264,6 @@ const AdminLogin = () => {
                 }}
             />
         </>
-        // 		<div>
-        // 			<AdminHeader title={"ログイン"} />
-        //
-        // 			<Container size="xs">
-        // 				<Box component="form" onSubmit={handleSubmit} mt="3em" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        // 					<Flex w="3em" h="3em" m="1em" align="center" justify="center" sx={{ color: "#FFF", backgroundColor: c.skyblue, borderRadius: "50%" }}>
-        // 						<LockOutlinedIcon />
-        // 					</Flex>
-        // 					<Title fz="1.2em" fw="normal" order={1} color={c.mainBlack}>
-        // 						ログイン
-        // 					</Title>
-        //
-        // 					{errMsg && <ErrMsg msg={errMsg} />}
-        //
-        // 					<Box w="100%" sx={{ display: "flex", flexDirection: "column" }}>
-        // 						<FloatingLabelInput id="email" w="100%" mt="2em" size="md" withAsterisk={true} label="メールアドレス" placeholder="メールアドレス" form={form} />
-        //
-        // 						<FloatingLabelInputForPassWord id="pass" w="100%" mt="2em" size="md" withAsterisk={true} label="パスワード" placeholder="パスワード" form={form} />
-        // 					</Box>
-        // 					<Button type="submit" w="100%" mt="2em">
-        // 						ログイン
-        // 					</Button>
-        //
-        // 					<Box w="100%" mt="2em">
-        // 						{authError !== "" && (
-        // 							<Button
-        // 								w="100%"
-        // 								mt="1em"
-        // 								color="red"
-        // 								onClick={() => {
-        // 									handleReSendEmailVerification();
-        // 								}}
-        // 							>
-        // 								認証メールを再送
-        // 							</Button>
-        // 						)}
-        //
-        // 						<NextLink href="/auth/adminPassWordReset" passHref>
-        // 							<Button w="100%" mt="1.5em" variant="outline">
-        // 								パスワードをお忘れの方
-        // 							</Button>
-        // 						</NextLink>
-        // 						<Button
-        // 							w="100%"
-        // 							mt="1em"
-        // 							variant="outline"
-        // 							onClick={() => {
-        // 								handleLinkToSignup();
-        // 							}}
-        // 						>
-        // 							新規アカウントを作成
-        // 						</Button>
-        // 					</Box>
-        // 					<LoadingOverlay visible={loading} />
-        // 				</Box>
-        // 			</Container>
-        // 		</div>
     );
 };
 
