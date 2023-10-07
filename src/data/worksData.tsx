@@ -536,4 +536,23 @@ export const worksData: WorksDataType[] = [
         heightPC: null,
         heightSP: null,
     },
+    {
+        id: "hasekoekiden",
+        filePathPC: "hasekoekiden/hasekoekiden_01.jpg",
+        filePathSP: "hasekoekiden/hasekoekiden_02.jpg",
+        title: "HASEKO GROUP DAIGAKU EKIDEN",
+        titleEn: "HASEKO GROUP DAIGAKU EKIDEN",
+        stuff: [
+            { client: "長谷工グループ" },
+            { CD: "Isamu Nakaigawa" },
+            { AD: "Hikaru Shimzu" },
+            { D: "Hiromi Oshima" },
+        ],
+        srcPC: null,
+        srcSP: null,
+        widthPC: null,
+        widthSP: null,
+        heightPC: null,
+        heightSP: null,
+    },
 ];
