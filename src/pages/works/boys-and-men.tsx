@@ -18,36 +18,42 @@ export default function BoysAndMen({ data }: { data: WorksDataType }) {
                 <Flex direction="column" align="center" sx={{ fontFamily: "'Ubuntu', sans-serif" }}>
                     <Flex direction="column" align="center" mt="2em" gap="10em">
                         <Flex align="center" mt="2em" gap="2em" w="90%">
-                            <Box
-                                component={NextImage}
-                                src="/img/works/boys-and-men/boys-and-men_03.jpg"
-                                alt="Picture of the author"
-                                w="100%"
-                                h="fit-content"
-                                width={422}
-                                height={381}
-                                sx={{ objectFit: "contain" }}
-                            />
-                            <Box
-                                component={NextImage}
-                                src="/img/works/boys-and-men/boys-and-men_04.jpg"
-                                alt="Picture of the author"
-                                w="100%"
-                                h="fit-content"
-                                width={422}
-                                height={381}
-                                sx={{ objectFit: "contain" }}
-                            />
-                            <Box
-                                component={NextImage}
-                                src="/img/works/boys-and-men/boys-and-men_05.jpg"
-                                alt="Picture of the author"
-                                w="100%"
-                                h="fit-content"
-                                width={422}
-                                height={381}
-                                sx={{ objectFit: "contain" }}
-                            />
+                            <Flex sx={{ flexShrink: 1 }}>
+                                <Box
+                                    component={NextImage}
+                                    src="/img/works/boys-and-men/boys-and-men_03.jpg"
+                                    alt="Picture of the author"
+                                    w="100%"
+                                    h="fit-content"
+                                    width={422}
+                                    height={381}
+                                    sx={{ objectFit: "contain" }}
+                                />
+                            </Flex>
+                            <Flex sx={{ flexShrink: 1 }}>
+                                <Box
+                                    component={NextImage}
+                                    src="/img/works/boys-and-men/boys-and-men_04.jpg"
+                                    alt="Picture of the author"
+                                    w="100%"
+                                    h="fit-content"
+                                    width={422}
+                                    height={381}
+                                    sx={{ objectFit: "contain" }}
+                                />
+                            </Flex>
+                            <Flex sx={{ flexShrink: 1 }}>
+                                <Box
+                                    component={NextImage}
+                                    src="/img/works/boys-and-men/boys-and-men_05.jpg"
+                                    alt="Picture of the author"
+                                    w="100%"
+                                    h="fit-content"
+                                    width={422}
+                                    height={381}
+                                    sx={{ objectFit: "contain" }}
+                                />
+                            </Flex>
                         </Flex>
                         <Flex direction="column" align="center" mt="2em" gap="10em">
                             <Box
